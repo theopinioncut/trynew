@@ -1,0 +1,114 @@
+/* Kliquestart Metro Games — shared site styles.
+   Layout: a single metro line runs down the page; each game is a station on it. One deliberate dark look. */
+:root{
+  --ink:#0b0910;
+  --ink-2:#15111c;
+  --line:rgba(236,232,242,.13);
+  --fg:#ece8f2;
+  --muted:#a59eb3;
+  --red:#ff2e4d;
+  --blue:#2f8bff;
+  --display:"Chakra Petch","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--fg);font-family:var(--display);font-size:17px;line-height:1.55}
+img{max-width:100%;display:block}
+a{color:inherit}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{text-wrap:balance;margin:0}
+
+/* header / footer */
+.top{border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:.01em}
+.brand i{width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:15px 0 0 var(--blue);margin-right:15px}
+.brand b{color:var(--muted);font-weight:600}
+.count{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.count b{color:var(--fg);font-weight:600}
+.foot{border-top:1px solid var(--line);margin-top:72px}
+.foot .wrap{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap;padding-block:24px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.foot nav{display:flex;gap:16px;flex-wrap:wrap}
+
+/* type */
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0}
+h1{font-size:clamp(38px,7vw,68px);line-height:1.02;letter-spacing:-.01em;margin-block:10px 14px}
+.lede{font-size:19px;color:var(--muted);max-width:54ch;margin:0}
+.prose{max-width:66ch}
+.prose p{margin:0 0 14px}
+section h2{font-size:24px;margin-bottom:14px}
+
+/* buttons */
+.btn{white-space:nowrap;display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;font-size:17px;letter-spacing:.05em;text-transform:uppercase;padding:13px 24px;border-radius:4px;border:1px solid var(--line);background:rgba(236,232,242,.06)}
+.btn:hover{background:rgba(236,232,242,.12)}
+.btn.red{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 0 28px rgba(255,46,77,.35)}
+.btn.red:hover{filter:brightness(1.08)}
+
+/* home hero */
+.hero{padding-block:56px 32px}
+
+/* the metro line */
+.line{padding-block:12px}
+.line h2{display:flex;gap:12px;align-items:baseline}
+.line h2 span{font-family:var(--mono);font-size:13px;font-weight:400;color:var(--muted)}
+.stations{list-style:none;margin:18px 0 0;padding:0 0 0 30px;position:relative;display:grid;gap:18px}
+.stations::before{content:"";position:absolute;left:8px;top:24px;bottom:24px;width:4px;border-radius:2px;background:linear-gradient(var(--red),var(--blue))}
+.station{position:relative;min-width:0}
+.station::before{content:"";position:absolute;left:-30px;top:22px;width:20px;height:20px;border-radius:50%;background:var(--ink);border:4px solid var(--red)}
+.station.soon::before{border-color:var(--blue);border-style:dashed}
+.card{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);border:1px solid var(--line);background:var(--ink-2);border-radius:6px;overflow:hidden;text-decoration:none;transition:border-color .15s}
+a.card:hover{border-color:var(--red)}
+.card img{width:100%;height:100%;object-fit:cover;aspect-ratio:16/10}
+.card .body{padding:20px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card h3{font-size:30px;line-height:1.05}
+.card p{margin:0;color:var(--muted)}
+.stop{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:8px}
+.tags span{font-family:var(--mono);font-size:12px;padding:3px 8px;border:1px solid var(--line);border-radius:3px;color:var(--muted)}
+.card .go{align-self:flex-start;margin-top:6px}
+.card.ghost{display:block;padding:20px;border-style:dashed;background:none}
+.card.ghost .stop{color:var(--blue)}
+.card.ghost h3{font-size:20px;color:var(--muted);margin-top:6px}
+
+.points{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;list-style:none;margin:0;padding:0}
+.points li{border-top:2px solid var(--line);padding-top:12px;color:var(--muted)}
+.points b{display:block;color:var(--fg);font-size:18px;margin-bottom:4px}
+
+/* game page */
+.crumbs{font-family:var(--mono);font-size:13px;color:var(--muted);padding-top:22px}
+.crumbs a{text-decoration:none}.crumbs a:hover{text-decoration:underline}
+.gamehead{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:center;padding-block:20px 36px}
+.shot{position:relative;display:block;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.shot img{aspect-ratio:16/10;object-fit:cover;width:100%}
+.shot .btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:20px;padding:16px 34px}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:18px 0 22px;font-family:var(--mono);font-size:14px;font-variant-numeric:tabular-nums}
+.facts dt{color:var(--muted)}.facts dd{margin:0}
+.legend-red{color:var(--red);font-weight:700}.legend-blue{color:var(--blue);font-weight:700}
+.eras{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;counter-reset:era}
+.eras li{border:1px solid var(--line);border-radius:4px;padding:12px 14px;background:var(--ink-2)}
+.eras b{display:block}
+.eras span{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.eras em{font-style:normal;font-size:15px;color:var(--muted);display:block;margin-top:4px}
+.keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.keys div{border:1px solid var(--line);border-radius:4px;padding:16px}
+.keys h3{font-size:17px;margin-bottom:6px}
+.keys p{margin:0;color:var(--muted);font-size:15px}
+kbd{font-family:var(--mono);font-size:13px;border:1px solid var(--line);border-bottom-width:2px;border-radius:3px;padding:1px 6px;color:var(--fg)}
+.faq details{border-top:1px solid var(--line);padding-block:14px}
+.faq summary{cursor:pointer;font-weight:600;font-size:18px}
+.faq details p{margin:10px 0 0;color:var(--muted);max-width:66ch}
+.stack{display:grid;gap:44px}
+
+/* ad slots stay hidden until an ad network is switched on */
+.ad-slot{margin-block:28px;min-height:90px;display:flex;align-items:center;justify-content:center}
+.ad-slot[hidden]{display:none}
+
+@media (max-width:720px){
+  .card,.gamehead{grid-template-columns:1fr}
+  .hero{padding-block:36px 20px}
+  .lede{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}

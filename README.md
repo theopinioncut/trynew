@@ -1,33 +1,43 @@
-# Red View
+# Kliquestart Metro Games
 
-A casual metro-runner for 30–45 minute sessions. You play a packet of **red data** racing down a tunnel. Run through **blue save gates** to turn it blue (saved) before you crash.
+The home of Metro Games: quick, free browser games, live at **https://www.kliquestart.com**.
 
-**Play:** open `index.html` in any browser, on desktop or phone. It has no build step and no dependencies.
-
-## The core idea
-- **Red = data.** Collect red bits as you run. Until you save, they are at risk.
-- **Blue = saved.** Each level has 3 blue save gates plus a final save. Crossing one turns your red data blue for good.
-- **Crash** and you lose your unsaved red data plus 1 of 3 integrity bars, then restart from the last blue gate.
-- **Stars:** finishing gives 1 star, saving 60% of the level's data gives 2, and 85% gives 3.
-
-## 10 tech eras, 30 levels (~37 min of runtime, plus retries)
-| Era | Year | New mechanic |
+## Site map
+| URL | File | What it is |
 |---|---|---|
-| Punch Card | 1890 | Switch lanes to dodge |
-| Floppy Disk | 1971 | Low barriers: jump |
-| CD-ROM | 1985 | High bars: slide |
-| Hard Drive | 1995 | Read heads sweep across lanes |
-| USB Flash | 2000 | Boost pads: smash through anything |
-| LAN | 2003 | Cable runs block a lane for a long stretch |
-| Wi-Fi | 2009 | Blinking blocks that only hurt when solid |
-| Cloud | 2014 | Fog cuts how far ahead you can see |
-| Blockchain | 2019 | Dense rows |
-| Quantum | 2030 | Glitch blocks jump lanes as you get close |
+| `/` | `index.html` | Home page, listing every game as a stop on the metro line |
+| `/games/red-view/` | `games/red-view/index.html` | Red View landing page (SEO text, FAQ, Play button) |
+| `/games/red-view/play/` | `games/red-view/play/index.html` | The game itself, full screen |
+| `/privacy.html` | `privacy.html` | Privacy policy (required by AdSense) |
 
-Power-ups: **Backup shield** (absorbs one hit) and **Data magnet** (pulls in nearby bits).
+Other files: `sitemap.xml`, `robots.txt`, `CNAME` (custom domain for GitHub Pages), `site.webmanifest`, `404.html`, and `assets/` (styles, icons, social preview image).
 
-## Controls
-- **Phone:** swipe left/right to change lane, swipe up or tap to jump, swipe down to slide
-- **Keyboard:** ← → / A D to change lane, ↑ / W / Space to jump, ↓ / S to slide, P to pause
+## Going live (one-time setup)
+Hosting is GitHub Pages. It's free and deploys from the `main` branch.
 
-Levels are generated from a fixed seed, so every player gets the same layout and scores are comparable. Progress is saved in the browser's localStorage.
+1. **Merge the PR into `main`.**
+2. **Turn on Pages:** go to Settings → Pages → Build and deployment. Set Source to *Deploy from a branch*, then pick Branch `main` and folder `/ (root)`, and save.
+3. **Custom domain:** on the same page, the domain should show `www.kliquestart.com` (read from the `CNAME` file). Type it in and save if it's empty.
+4. **DNS at your domain registrar:**
+   | Type | Host / Name | Value |
+   |---|---|---|
+   | CNAME | `www` | `theopinioncut.github.io` |
+   | A | `@` | `185.199.108.153` |
+   | A | `@` | `185.199.109.153` |
+   | A | `@` | `185.199.110.153` |
+   | A | `@` | `185.199.111.153` |
+
+   Delete any existing A or CNAME records for `@` and `www` first, such as a registrar "parking" page.
+5. Once the DNS check passes, tick **Enforce HTTPS**. DNS can take from 10 minutes to a few hours.
+
+After that, every merge into `main` updates the live site in about a minute.
+
+## After launch
+- **Google Search Console:** add `www.kliquestart.com`, verify it, and submit `https://www.kliquestart.com/sitemap.xml`.
+- **Analytics:** paste the Google Analytics snippet where each page says `<!-- ANALYTICS -->`.
+- **Ads:** apply for Google AdSense. Once approved, paste their script where each page says `<!-- ADS -->`, add an `ads.txt` file at the root, and turn on the hidden `.ad-slot` blocks.
+- **Privacy page:** add a contact email to `privacy.html`.
+
+## Adding a game
+1. Put the game in `games/<name>/play/index.html` and write a landing page at `games/<name>/index.html` (copy Red View's).
+2. Add a station card on the home page, update the game count, and add the new URLs to `sitemap.xml`.

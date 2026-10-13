@@ -1,4 +1,4 @@
-# Kliquestart Metro Games
+# Metro Games by Kliquestart
 
 The home of Metro Games: quick, free browser games, live at **https://www.kliquestart.com**.
 
@@ -8,7 +8,7 @@ The home of Metro Games: quick, free browser games, live at **https://www.klique
 | `/` | `index.html` | Home page, listing every game as a stop on the metro line |
 | `/games/red-view/` | `games/red-view/index.html` | Red View landing page (SEO text, FAQ, Play button) |
 | `/games/red-view/play/` | `games/red-view/play/index.html` | The game itself, full screen |
-| `/about.html` | `about.html` | About The Opinion Cut + contact |
+| `/about.html` | `about.html` | About page |
 | `/privacy.html` | `privacy.html` | Privacy policy (required by AdSense) |
 
 Other files: `sitemap.xml`, `robots.txt`, `CNAME` (custom domain for GitHub Pages), `site.webmanifest`, `404.html`, and `assets/` (styles, icons, social preview image).

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Play Red View – Free Online Runner | Kliquestart Metro Games</title>
+<title>Play Red View – Free Online Runner | Metro Games by Kliquestart</title>
 <meta name="description" content="Play Red View now: a free metro runner where you carry red data through 10 eras of tech and save it at blue gates.">
 <link rel="canonical" href="https://www.kliquestart.com/games/red-view/play/">
 <meta name="theme-color" content="#09070d">
@@ -17,7 +17,7 @@
 <!-- ANALYTICS: paste your Google Analytics or Cloudflare Web Analytics snippet here -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
 <style>
 /* Layout: full-bleed canvas tunnel; HTML panels float over it like station signage. Single deliberate dark look. */
 :root{
@@ -29,7 +29,7 @@
   --red:#ff2e4d;            /* data, unsaved */
   --blue:#2f8bff;           /* saved */
   --gold:#f0c674;
-  --display:"Fredoka", "Nunito", "Segoe UI", system-ui, sans-serif;
+  --display:"Chakra Petch", "Segoe UI", system-ui, sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color-scheme:dark;
 }
@@ -145,7 +145,7 @@ h1,h2,h3{margin:0;text-wrap:balance}
 
 <div id="menu" class="screen">
   <div class="panel">
-    <div class="eyebrow">Kliquestart Metro Games</div>
+    <div class="eyebrow">Metro Games by Kliquestart</div>
     <h1 class="logo"><span class="r">RED</span><span class="b">VIEW</span></h1>
     <p class="tag"><span class="r">Red</span> is your data. <span class="b">Blue</span> is saved. Run it through the tunnel from punch cards to quantum chips and get it saved before you crash.</p>
     <div class="btns">
@@ -748,7 +748,7 @@ function drawGate(z,label,fog){
   box(1.72,.08,0,2.1,z,z+.2,BLUE,'#7db6ff','#1d5fb8',null);
   const r=box(0,1.8,1.85,2.15,z,z+.2,BLUE,'#7db6ff','#1d5fb8',null);
   if(r && r.h>8){ ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.font=`700 ${Math.min(r.h*.75,64)}px "Fredoka", system-ui, sans-serif`; ctx.fillText(label,r.x+r.w/2,r.y+r.h/2+1); }
+    ctx.font=`700 ${Math.min(r.h*.75,64)}px "Chakra Petch", system-ui, sans-serif`; ctx.fillText(label,r.x+r.w/2,r.y+r.h/2+1); }
   ctx.globalAlpha=1;
 }
 function drawPlayer(g){
@@ -811,7 +811,7 @@ function renderGame(){
   // particles & texts
   for(const p of g.parts){ ctx.globalAlpha=Math.max(0,p.life); ctx.fillStyle=p.col; ctx.fillRect(p.x-p.size/2,p.y-p.size/2,p.size,p.size); }
   ctx.textAlign='center'; ctx.textBaseline='middle';
-  for(const t of g.texts){ ctx.globalAlpha=Math.min(1,t.life*1.5); ctx.fillStyle=t.col; ctx.font='700 22px "Fredoka", system-ui, sans-serif'; ctx.fillText(t.text,t.x,t.y); }
+  for(const t of g.texts){ ctx.globalAlpha=Math.min(1,t.life*1.5); ctx.fillStyle=t.col; ctx.font='700 22px "Chakra Petch", system-ui, sans-serif'; ctx.fillText(t.text,t.x,t.y); }
   ctx.globalAlpha=1;
   if(g.flashT>0){ ctx.globalAlpha=g.flashT*.9; ctx.fillStyle=g.flashCol; ctx.fillRect(0,0,W,H); ctx.globalAlpha=1; }
   // intro banner
@@ -822,14 +822,14 @@ function renderGame(){
     if(g.introKind==='start'){
       ctx.fillStyle=wd.accent; ctx.font='600 14px "IBM Plex Mono", monospace';
       ctx.fillText(`ERA ${L.wi+1} · ${wd.era} · LEVEL ${code(g.li)}`,W/2,H*.35);
-      ctx.fillStyle='#ece8f2'; ctx.font=`700 ${Math.min(52,W*.11)}px "Fredoka", system-ui, sans-serif`;
+      ctx.fillStyle='#ece8f2'; ctx.font=`700 ${Math.min(52,W*.11)}px "Chakra Petch", system-ui, sans-serif`;
       ctx.fillText(wd.name.toUpperCase(),W/2,H*.41);
-      ctx.fillStyle='#b9b2c6'; ctx.font='500 15px "Fredoka", system-ui, sans-serif';
+      ctx.fillStyle='#b9b2c6'; ctx.font='500 15px "Chakra Petch", system-ui, sans-serif';
       wrapText(L.sub===0?wd.fact:wd.tip,W/2,H*.475,Math.min(520,W-40),20);
     } else {
-      ctx.fillStyle=BLUE; ctx.font=`700 ${Math.min(40,W*.09)}px "Fredoka", system-ui, sans-serif`;
+      ctx.fillStyle=BLUE; ctx.font=`700 ${Math.min(40,W*.09)}px "Chakra Petch", system-ui, sans-serif`;
       ctx.fillText(g.introKind==='resume'?'CONTINUING FROM SAVE':'RESTORED FROM SAVE',W/2,H*.41);
-      ctx.fillStyle='#b9b2c6'; ctx.font='500 15px "Fredoka", system-ui, sans-serif';
+      ctx.fillStyle='#b9b2c6'; ctx.font='500 15px "Chakra Petch", system-ui, sans-serif';
       ctx.fillText(`Integrity ${g.lives} of 3. Blue data is safe.`,W/2,H*.475);
     }
     ctx.globalAlpha=1;

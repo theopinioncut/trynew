@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Play Red View – Free Online Runner | Kliquestart Metro Games</title>
-<meta name="description" content="Play Red View now: a free metro runner where you carry red data through 10 eras of tech and save it at blue gates. No download.">
+<meta name="description" content="Play Red View now: a free metro runner where you carry red data through 10 eras of tech and save it at blue gates.">
 <link rel="canonical" href="https://www.kliquestart.com/games/red-view/play/">
 <meta name="theme-color" content="#09070d">
 <meta property="og:title" content="Play Red View – Save your data before you crash">
@@ -17,7 +17,7 @@
 <!-- ANALYTICS: paste your Google Analytics or Cloudflare Web Analytics snippet here -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
 <style>
 /* Layout: full-bleed canvas tunnel; HTML panels float over it like station signage. Single deliberate dark look. */
 :root{
@@ -29,7 +29,7 @@
   --red:#ff2e4d;            /* data, unsaved */
   --blue:#2f8bff;           /* saved */
   --gold:#f0c674;
-  --display:"Chakra Petch", "Segoe UI", system-ui, sans-serif;
+  --display:"Fredoka", "Nunito", "Segoe UI", system-ui, sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color-scheme:dark;
 }
@@ -145,11 +145,12 @@ h1,h2,h3{margin:0;text-wrap:balance}
 
 <div id="menu" class="screen">
   <div class="panel">
-    <div class="eyebrow">Data runner · 10 eras · 30 levels</div>
+    <div class="eyebrow">Kliquestart Metro Games</div>
     <h1 class="logo"><span class="r">RED</span><span class="b">VIEW</span></h1>
     <p class="tag"><span class="r">Red</span> is your data. <span class="b">Blue</span> is saved. Run it through the tunnel from punch cards to quantum chips and get it saved before you crash.</p>
     <div class="btns">
       <button id="bPlay" class="btn primary">Play</button>
+      <button id="bLevels" class="btn">Levels</button>
       <button id="bHow" class="btn">How to play</button>
       <button id="bMute" class="btn ghost" aria-pressed="false">Sound on</button>
       <a class="btn ghost" href="../../../">All games</a>
@@ -399,12 +400,20 @@ function genLevel(li){
 let state='menu', G=null, demo={dist:0, wi:0, t:0};
 const code = li => `${Math.floor(li/3)+1}-${li%3+1}`;
 
-function startLevel(li){
+function startLevel(li, fresh){
+  if(fresh && save.run && save.run.li===li){ save.run=null; persist(); }
+  const run=save.run && save.run.li===li ? save.run : null;
   const L=genLevel(li);
   G={L, li, dist:0, t:0, speed:L.speed, lane:0, px:0, py:0, vy:0, slide:0, slideQueued:false,
      shield:false, magnet:0, boost:0, inv:0, lives:3, unsaved:0, saved:0, lost:0, lastSave:0,
-     crashT:0, intro:L.sub===0?2.6:1.6, introKind:'start', flashT:0, flashCol:BLUE, shake:0,
+     crashT:0, intro:L.sub===0?2:1.3, introKind:'start', flashT:0, flashCol:BLUE, shake:0,
      saveGlow:0, parts:[], texts:[], crashes:0, hud:{}};
+  if(run){
+    Object.assign(G,{dist:run.d,lastSave:run.d,saved:run.saved,lives:run.lives,introKind:'resume',intro:1.4});
+    L.saves.forEach(s=>{ if(s.d<=run.d) s.passed=true; });
+    L.bits.forEach(b=>{ if(b.d<=run.d) b.got=true; });
+    L.items.forEach(it=>{ if(it.d<=run.d) it.got=true; });
+  }
   state='play'; show(null);
   $('hCode').textContent=code(li); $('hWorld').textContent=`${L.wd.name} · ${L.wd.era}`;
   document.querySelectorAll('#hProg b').forEach(b=>b.classList.remove('done'));
@@ -509,6 +518,7 @@ function afterCrash(){
   const g=G, L=g.L;
   g.lives--;
   if(g.lives<=0) return endLevel(false);
+  if(save.run && save.run.li===g.li){ save.run.lives=g.lives; persist(); }
   g.dist=g.lastSave;
   for(const b of L.bits) if(b.d>g.lastSave){ b.got=false; b.x=b.ox; b.y=b.oy; }
   for(const o of L.obs) if(o.d>g.lastSave){ o.dead=false; if(o.type==='glitch'){ o.jumped=false; o.x=o.ox; } }
@@ -521,11 +531,13 @@ function doSave(){
   else floatText('Checkpoint',BLUE,s.x,s.y);
   g.saved+=g.unsaved; g.unsaved=0; g.saveGlow=.7; flash(BLUE,.3); SFX.save();
   burst(s.x,s.y+30,BLUE,24,260);
+  if(g.dist<g.L.length){ save.run={li:g.li,d:g.lastSave,saved:g.saved,lives:g.lives}; persist(); }
 }
 
 function endLevel(win){
   const g=G, L=g.L, li=g.li;
   state='result';
+  save.run=null;
   save.total+=g.saved;
   let stars=0;
   const ratio=g.saved/Math.max(1,L.totalBits);
@@ -736,7 +748,7 @@ function drawGate(z,label,fog){
   box(1.72,.08,0,2.1,z,z+.2,BLUE,'#7db6ff','#1d5fb8',null);
   const r=box(0,1.8,1.85,2.15,z,z+.2,BLUE,'#7db6ff','#1d5fb8',null);
   if(r && r.h>8){ ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.font=`700 ${Math.min(r.h*.75,64)}px "Chakra Petch", system-ui, sans-serif`; ctx.fillText(label,r.x+r.w/2,r.y+r.h/2+1); }
+    ctx.font=`700 ${Math.min(r.h*.75,64)}px "Fredoka", system-ui, sans-serif`; ctx.fillText(label,r.x+r.w/2,r.y+r.h/2+1); }
   ctx.globalAlpha=1;
 }
 function drawPlayer(g){
@@ -799,7 +811,7 @@ function renderGame(){
   // particles & texts
   for(const p of g.parts){ ctx.globalAlpha=Math.max(0,p.life); ctx.fillStyle=p.col; ctx.fillRect(p.x-p.size/2,p.y-p.size/2,p.size,p.size); }
   ctx.textAlign='center'; ctx.textBaseline='middle';
-  for(const t of g.texts){ ctx.globalAlpha=Math.min(1,t.life*1.5); ctx.fillStyle=t.col; ctx.font='700 22px "Chakra Petch", system-ui, sans-serif'; ctx.fillText(t.text,t.x,t.y); }
+  for(const t of g.texts){ ctx.globalAlpha=Math.min(1,t.life*1.5); ctx.fillStyle=t.col; ctx.font='700 22px "Fredoka", system-ui, sans-serif'; ctx.fillText(t.text,t.x,t.y); }
   ctx.globalAlpha=1;
   if(g.flashT>0){ ctx.globalAlpha=g.flashT*.9; ctx.fillStyle=g.flashCol; ctx.fillRect(0,0,W,H); ctx.globalAlpha=1; }
   // intro banner
@@ -810,14 +822,14 @@ function renderGame(){
     if(g.introKind==='start'){
       ctx.fillStyle=wd.accent; ctx.font='600 14px "IBM Plex Mono", monospace';
       ctx.fillText(`ERA ${L.wi+1} · ${wd.era} · LEVEL ${code(g.li)}`,W/2,H*.35);
-      ctx.fillStyle='#ece8f2'; ctx.font=`700 ${Math.min(52,W*.11)}px "Chakra Petch", system-ui, sans-serif`;
+      ctx.fillStyle='#ece8f2'; ctx.font=`700 ${Math.min(52,W*.11)}px "Fredoka", system-ui, sans-serif`;
       ctx.fillText(wd.name.toUpperCase(),W/2,H*.41);
-      ctx.fillStyle='#b9b2c6'; ctx.font='500 15px "Chakra Petch", system-ui, sans-serif';
+      ctx.fillStyle='#b9b2c6'; ctx.font='500 15px "Fredoka", system-ui, sans-serif';
       wrapText(L.sub===0?wd.fact:wd.tip,W/2,H*.475,Math.min(520,W-40),20);
     } else {
-      ctx.fillStyle=BLUE; ctx.font=`700 ${Math.min(40,W*.09)}px "Chakra Petch", system-ui, sans-serif`;
-      ctx.fillText('RESTORED FROM SAVE',W/2,H*.41);
-      ctx.fillStyle='#b9b2c6'; ctx.font='500 15px "Chakra Petch", system-ui, sans-serif';
+      ctx.fillStyle=BLUE; ctx.font=`700 ${Math.min(40,W*.09)}px "Fredoka", system-ui, sans-serif`;
+      ctx.fillText(g.introKind==='resume'?'CONTINUING FROM SAVE':'RESTORED FROM SAVE',W/2,H*.41);
+      ctx.fillStyle='#b9b2c6'; ctx.font='500 15px "Fredoka", system-ui, sans-serif';
       ctx.fillText(`Integrity ${g.lives} of 3. Blue data is safe.`,W/2,H*.475);
     }
     ctx.globalAlpha=1;
@@ -892,7 +904,8 @@ function resume(){ state='play'; show(null); last=performance.now(); }
 function totalStars(){ return save.stars.reduce((a,b)=>a+b,0); }
 function cleared(){ return save.stars.filter(s=>s>0).length; }
 function metaText(){ return `${cleared()}/${TOTAL} levels · ${totalStars()}/${TOTAL*3} ★ · ${fmtKB(save.total)} saved`; }
-function goMenu(){ state='menu'; G=null; $('menuMeta').textContent=metaText(); $('bPlay').textContent=cleared()?'Continue':'Play'; show('menu'); }
+function nextLevel(){ return save.run ? save.run.li : Math.min(save.unlocked, TOTAL-1); }
+function goMenu(){ state='menu'; G=null; $('menuMeta').textContent=metaText(); $('bPlay').textContent=(cleared()||save.run)?`Play ${code(nextLevel())}`:'Play'; show('menu'); }
 function goMap(){
   state='map'; G=null;
   const el=$('worlds'); el.innerHTML='';
@@ -921,20 +934,21 @@ function goMap(){
 }
 function syncMute(){ $('bMute').textContent=save.muted?'Sound off':'Sound on'; $('bMute').setAttribute('aria-pressed',String(save.muted)); }
 
-$('bPlay').onclick=goMap;
+$('bPlay').onclick=()=>startLevel(nextLevel());
+$('bLevels').onclick=goMap;
 $('bHow').onclick=()=>{ state='how'; show('how'); };
 $('bHowBack').onclick=goMenu;
 $('bMapBack').onclick=goMenu;
 $('bMute').onclick=()=>{ save.muted=!save.muted; persist(); syncMute(); };
 $('bPause').onclick=pause;
 $('bResume').onclick=resume;
-$('bRestart').onclick=()=>startLevel(G.li);
+$('bRestart').onclick=()=>startLevel(G.li,true);
 $('bQuit').onclick=goMap;
 $('rNext').onclick=()=>startLevel(G.li+1);
-$('rRetry').onclick=()=>startLevel(G.li);
+$('rRetry').onclick=()=>startLevel(G.li,true);
 $('rMap').onclick=goMap;
 syncMute();
-goMenu();
+if(location.hash==='#go'){ history.replaceState(null,'',location.pathname); startLevel(nextLevel()); } else goMenu();
 </script>
 </body>
 </html>

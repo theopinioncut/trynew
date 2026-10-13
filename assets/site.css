@@ -1,4 +1,4 @@
-/* Kliquestart Metro Games — shared site styles.
+/* Metro Games by Kliquestart — shared site styles.
    Layout: a single metro line runs down the page; each game is a station on it. One deliberate dark look. */
 :root{
   --ink:#0b0910;
@@ -8,8 +8,9 @@
   --muted:#a59eb3;
   --red:#ff2e4d;
   --blue:#2f8bff;
-  --display:"Fredoka","Nunito","Segoe UI",system-ui,sans-serif;
-  --body:"Nunito","Segoe UI",system-ui,sans-serif;
+  --display:"Chakra Petch","Segoe UI",system-ui,sans-serif;
+  --body:"Chakra Petch","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -26,7 +27,8 @@ h1,h2,h3{text-wrap:balance;margin:0;font-family:var(--display);font-weight:600}
 .top{border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;font-size:21px}
-.brand img{width:34px;height:34px}
+.brand .wm{font-weight:700;letter-spacing:.02em}
+.brand .wm .r{color:var(--red)}.brand .wm .b{color:var(--blue)}
 .brand b{color:var(--muted);font-weight:500}
 .foot{border-top:1px solid var(--line);margin-top:72px}
 .foot .wrap{display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap;padding-block:24px;font-size:14px;color:var(--muted)}

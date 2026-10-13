@@ -8,6 +8,7 @@ The home of Metro Games: quick, free browser games, live at **https://www.klique
 | `/` | `index.html` | Home page, listing every game as a stop on the metro line |
 | `/games/red-view/` | `games/red-view/index.html` | Red View landing page (SEO text, FAQ, Play button) |
 | `/games/red-view/play/` | `games/red-view/play/index.html` | The game itself, full screen |
+| `/about.html` | `about.html` | About The Opinion Cut + contact |
 | `/privacy.html` | `privacy.html` | Privacy policy (required by AdSense) |
 
 Other files: `sitemap.xml`, `robots.txt`, `CNAME` (custom domain for GitHub Pages), `site.webmanifest`, `404.html`, and `assets/` (styles, icons, social preview image).
@@ -36,7 +37,6 @@ After that, every merge into `main` updates the live site in about a minute.
 - **Google Search Console:** add `www.kliquestart.com`, verify it, and submit `https://www.kliquestart.com/sitemap.xml`.
 - **Analytics:** paste the Google Analytics snippet where each page says `<!-- ANALYTICS -->`.
 - **Ads:** apply for Google AdSense. Once approved, paste their script where each page says `<!-- ADS -->`, add an `ads.txt` file at the root, and turn on the hidden `.ad-slot` blocks.
-- **Privacy page:** add a contact email to `privacy.html`.
 
 ## Adding a game
 1. Put the game in `games/<name>/play/index.html` and write a landing page at `games/<name>/index.html` (copy Red View's).

@@ -2,10 +2,11 @@
    - Pages: try the network for up to 3 seconds, then fall back to the saved copy (slow metro signal).
    - Files (CSS, fonts, images): serve the saved copy instantly and refresh it in the background.
    Bump VERSION whenever the CORE list changes. */
-const VERSION = 'ks-v1';
+const VERSION = 'ks-v2';
 const CORE = [
   '/', '/about.html', '/privacy.html', '/site.webmanifest',
-  '/assets/site.css', '/assets/fonts.css',
+  '/assets/site.css', '/assets/fonts.css', '/assets/fonts-metro.css',
+  '/assets/fonts/Teko-600-latin.woff2', '/assets/fonts/Teko-600-devanagari.woff2', '/assets/fonts/Mukta-400-latin.woff2', '/assets/fonts/Mukta-700-latin.woff2',
   '/assets/fonts/ChakraPetch-500.woff2', '/assets/fonts/ChakraPetch-600.woff2', '/assets/fonts/ChakraPetch-700.woff2',
   '/assets/fonts/IBMPlexMono-400.woff2', '/assets/fonts/IBMPlexMono-600.woff2',
   '/assets/icon-192.png', '/assets/red-view-card.jpg', '/assets/metro-game-card.jpg',

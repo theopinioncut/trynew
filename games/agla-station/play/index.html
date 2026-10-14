@@ -22,7 +22,7 @@
 }
 html,body{height:100%;margin:0;background:var(--night);color:var(--ink);overflow:hidden;font-family:var(--text);-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 [hidden]{display:none!important}
-canvas{position:fixed;inset:0;display:block;touch-action:none}
+#c{position:fixed;inset:0;display:block;touch-action:none}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 a{color:inherit}
@@ -44,6 +44,21 @@ h1,h2{margin:0;font-family:var(--head);font-weight:600;line-height:.9;text-wrap:
 .btn.primary:hover{filter:brightness(1.08)}
 .btn.ghost{border-color:transparent;color:var(--muted);padding-inline:8px;font-size:21px}
 .meta{font-size:13px;color:var(--muted)}
+/* rider screen */
+.ridercard{display:flex;gap:12px;align-items:center;text-align:left;background:#fff8ea;border:1px solid var(--rule);border-radius:6px;padding:6px 12px}
+.ridercard canvas{width:40px;height:60px}
+.ridercard small{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.ridercard b{display:block;font-family:var(--head);font-weight:600;font-size:24px;line-height:1}
+.ridercard em{font-style:normal;font-size:13px;color:var(--red);text-decoration:underline}
+.personas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.persona{background:#fff8ea;border:2px solid var(--rule);border-radius:8px;padding:8px 6px 4px;display:flex;flex-direction:column;align-items:center}
+.persona canvas{width:80px;height:120px}
+.persona b{font-family:var(--head);font-weight:600;font-size:26px;line-height:1.1}
+.persona[aria-pressed="true"]{border-color:var(--red);background:#fff}
+.namefield{display:grid;gap:4px;font-family:var(--head);font-size:19px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.namefield small{text-transform:none;letter-spacing:0;font-family:var(--text);font-size:13px}
+.namefield input{font:inherit;font-family:var(--text);font-size:18px;text-transform:none;letter-spacing:0;color:var(--ink);background:#fff;border:2px solid var(--ink);border-radius:6px;padding:6px 10px}
+.opt{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--head);font-size:21px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
 /* rider picker */
 .rider{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
 .rider .meta{width:100%;font-family:var(--head);font-size:18px;letter-spacing:.05em;text-transform:uppercase}
@@ -117,17 +132,29 @@ h1,h2{margin:0;font-family:var(--head);font-weight:600;line-height:.9;text-wrap:
     <div class="band"></div>
     <div class="kicker">Kliquestart Metro Games</div>
     <h1 class="logo"><span class="r">AGLA</span> <span class="b">STATION</span><small>Metros of India · Delhi</small></h1>
-    <p class="tag">Run through Delhi, station by station. Bazaars, tunnels, rooftops and the last train home.</p>
-    <div class="rider"><span class="meta">Your rider</span>
-      <div class="seg" role="group" aria-label="Rider"><button data-g="boy">Boy</button><button data-g="girl">Girl</button></div>
-      <div class="seg" role="group" aria-label="Ride"><button data-r="foot">On foot</button><button data-r="scooty">Scooty</button></div>
-    </div>
+    <p class="tag">Run through Delhi, station by station. Platforms, tunnels, rooftops and the last train home.</p>
+    <button class="ridercard" id="bRider"><canvas id="riderMini" width="80" height="120" aria-hidden="true"></canvas><span><small>Your rider</small><b id="riderSum">Boy · On foot</b><em>Change rider</em></span></button>
     <ol class="linemap" id="linemap"></ol>
     <div class="btns">
       <button id="bPlay" class="btn primary">Play</button>
       <button id="bMute" class="btn ghost">Sound on</button>
       <a class="btn ghost" href="../../../">All games</a>
     </div>
+  </div>
+</div>
+
+<div id="rider" class="screen" hidden>
+  <div class="panel">
+    <div class="band"></div>
+    <div class="kicker">Choose your rider</div>
+    <div class="personas">
+      <button class="persona" data-g="boy"><canvas width="160" height="240" data-pv="boy"></canvas><b>Boy</b></button>
+      <button class="persona" data-g="girl"><canvas width="160" height="240" data-pv="girl"></canvas><b>Girl</b></button>
+    </div>
+    <label class="namefield" for="riderName"><span>Your name <small>(optional)</small></span><input id="riderName" maxlength="14" autocomplete="off" placeholder="e.g. Riya"></label>
+    <div class="opt"><span>Vehicle</span><div class="seg" role="group" aria-label="Vehicle"><button data-r="foot">On foot</button><button data-r="scooty">Scooty 🛵</button></div></div>
+    <div class="opt"><span>Mode</span><div class="seg" role="group" aria-label="Mode"><button data-m="normal">Normal</button><button data-m="night">Night 🌙</button></div></div>
+    <div class="btns"><button id="bRiderDone" class="btn primary">Chalo! ▶</button></div>
   </div>
 </div>
 
@@ -139,7 +166,7 @@ h1,h2{margin:0;font-family:var(--head);font-weight:600;line-height:.9;text-wrap:
     <div class="lines" id="iLines"></div>
     <ul class="story" id="iStory"></ul>
     <p class="fact" id="iFact"></p>
-    <div class="btns"><button id="bGo" class="btn primary">Chalo! ▶</button><span class="meta" id="iCount"></span></div>
+    <div class="btns"><button id="bGo" class="btn primary">Chalo! ▶</button><button id="bIntroRider" class="btn ghost">Change rider</button><span class="meta" id="iCount"></span></div>
   </div>
 </div>
 
@@ -177,9 +204,9 @@ h1,h2{margin:0;font-family:var(--head);font-weight:600;line-height:.9;text-wrap:
 /* ================= levels ================= */
 const LEVELS = [
   { name:'Chandni Chowk', hi:'चाँदनी चौक', line:'Yellow Line', lineCols:['#f7c20b'], genre:'Rush Hour', time:'day', skyline:'old',
-    story:['Pehla din in Delhi!','Your cousin is waiting on the Chandni Chowk metro platform with hot paranthas.','Run through the bazaar, dodge the rickshaws and the cows, and catch that metro!'],
+    story:['Pehla din in Delhi!','Your cousin is waiting at Chandni Chowk with hot paranthas, and the station is packed at rush hour.','Dash down the platform, dodge the crowd and run the tunnel to the next stop!'],
     fact:'Chandni Chowk was laid out in the 1650s by Jahanara, Shah Jahan’s daughter.',
-    segs:[['street',0,.6],['tunnel',.6,1]], speed:10, length:740, gap:.95, dbl:.22, quiz:[] },
+    segs:[['station',0,.42],['tunnel',.42,1]], speed:10, length:740, gap:.95, dbl:.22, quiz:[] },
   { name:'Kashmere Gate', hi:'कश्मीरी गेट', line:'Red · Yellow · Violet', lineCols:['#e5322d','#f7c20b','#8a4fd3'], genre:'Quiz Run', time:'day', skyline:'gate',
     story:['Kashmere Gate: three metro lines meet here.','Your train climbs out of the tunnel into the open sky over Old Delhi.','Quiz boards ahead. Run into the right answer. Sahi jawab = bonus coins!'],
     fact:'Kashmere Gate was on Delhi Metro’s very first stretch, opened in December 2002.',
@@ -193,7 +220,9 @@ const LEVELS = [
     segs:[['elevated',0,.62],['tunnel',.62,1]], speed:12, length:880, gap:.95, dbl:.28, quiz:[] },
 ];
 const NEXT_UP='Qutub Minar';
-const POOL={ street:['rickshaw','rickshaw','cow','thela','thela','banner','crowd'],
+function isNight(lv){ return save.mode==='night'||lv.time==='night'; }
+const POOL={ station:['crowd','crowd','crowd','bag','bag','board'],
+             street:['rickshaw','rickshaw','cow','thela','thela','banner','crowd'],
              tunnel:['crowd','crowd','bag','bag','board','pillar'],
              elevated:['barrier','worker','cable','cable','gantry','barrier'] };
 const KIND={rickshaw:'block',cow:'block',crowd:'block',pillar:'block',barrier:'block',worker:'block',thela:'low',bag:'low',cable:'low',banner:'high',board:'high',gantry:'high'};
@@ -240,7 +269,7 @@ function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.im
 
 /* ================= storage + audio ================= */
 const SKEY='metrogame_v1';
-let save={unlocked:0,stars:LEVELS.map(()=>0),best:LEVELS.map(()=>0),muted:false,rider:'boy',ride:'foot'};
+let save={unlocked:0,stars:LEVELS.map(()=>0),best:LEVELS.map(()=>0),muted:false,rider:'boy',ride:'foot',name:'',mode:'normal'};
 try{ const s=JSON.parse(localStorage.getItem(SKEY)); if(s&&Array.isArray(s.stars)){ save=Object.assign(save,s); while(save.stars.length<LEVELS.length){save.stars.push(0);save.best.push(0);} } }catch(e){}
 function persist(){ try{ localStorage.setItem(SKEY,JSON.stringify(save)); }catch(e){} }
 let AC=null;
@@ -310,7 +339,7 @@ function showIntro(i){
   clearInterval(introTimer);
   introTimer=setInterval(()=>{ n--; if(n<=0) beginRun(); else $('iCount').textContent=`Starting in ${n}…`; },1000);
 }
-function beginRun(){ clearInterval(introTimer); if(state!=='intro') return; state='play'; show(null); SFX.chime(); if(save.ride==='scooty') setTimeout(()=>beep(90,.5,'sawtooth',.04,60),200); floatText(save.ride==='scooty'?'Vroom! Chalo!':'Chalo!','#fff',W/2,H*.4); }
+function beginRun(){ clearInterval(introTimer); if(state!=='intro') return; state='play'; show(null); SFX.chime(); if(save.ride==='scooty') setTimeout(()=>beep(90,.5,'sawtooth',.04,60),200); floatText((save.ride==='scooty'?'Vroom! ':'')+'Chalo'+(save.name?', '+save.name:'')+'!','#fff',W/2,H*.4); }
 function text(t,col){ const p=proj(G.px,1.5,PZ); floatText(t,col,p[0],p[1]); }
 function floatText(t,col,x,y){ if(G) G.texts.push({t,col,x,y,life:1.3}); }
 function burst(x,y,col,n=14,sp=220){ for(let k=0;k<n;k++){ const a=Math.random()*6.283,v=sp*(.3+Math.random()); G.parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-60,life:.6+Math.random()*.4,col,size:2+Math.random()*3}); } }
@@ -374,7 +403,7 @@ function finish(win){
   const lv=LEVELS[i], last=i+1>=LEVELS.length;
   bandStyle($('rBand'),lv);
   $('rKicker').textContent=`Station ${i+1} · ${lv.name}`;
-  $('rTitle').textContent= win ? (stars===3?'Ekdum zabardast!':stars===2?'Shabaash!':'Pahunch gaye!') : 'Arre yaar!';
+  $('rTitle').textContent= (win ? (stars===3?'Ekdum zabardast':stars===2?'Shabaash':'Pahunch gaye') : 'Arre yaar')+(save.name?', '+save.name:'')+'!';
   $('rStars').hidden=!win; $('rStars').innerHTML=[0,1,2].map(k=>`<span class="${k<stars?'on':''}">★</span>`).join('');
   $('rMsg').textContent= win
     ? (last ? `You reached ${lv.name}. Next stop: ${NEXT_UP}, coming soon.` : `Darwaze baayi taraf khulenge. Agla station: ${LEVELS[i+1].name}.`)
@@ -404,7 +433,7 @@ const KURTA=['#e94f37','#3a86ff','#ffbe0b','#8338ec','#06d6a0','#fb5607','#ff006
 const SKIN=['#c68863','#a86b48','#8d5a3b','#e0ac7e'];
 
 function drawSky(lv,t){
-  const n=lv.time==='night', S=n?SKY.night:SKY.day;
+  const n=isNight(lv), S=n?SKY.night:SKY.day;
   const g=ctx.createLinearGradient(0,0,0,horizon); g.addColorStop(0,S.top); g.addColorStop(1,S.hz); ctx.fillStyle=g; ctx.fillRect(0,0,W,horizon+2);
   ctx.fillStyle=S.ground; ctx.fillRect(0,horizon,W,H-horizon);
   if(n){ for(let k=0;k<40;k++){ ctx.globalAlpha=.4+.4*hash(k,9); ctx.fillStyle='#fff'; ctx.fillRect(hash(k,1)*W,hash(k,2)*horizon*.7,1.5,1.5); } ctx.globalAlpha=1;
@@ -417,7 +446,7 @@ function drawSky(lv,t){
       ctx.strokeStyle='rgba(60,40,30,.5)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(kx,ky+s); ctx.quadraticCurveTo(kx+5,ky+s+10,kx-3,ky+s+18); ctx.stroke(); } }
 }
 function drawSkyline(lv){
-  const n=lv.time==='night', S=n?SKY.night:SKY.day, base=horizon+2, off=-camX*18, u=Math.min(W,H);
+  const n=isNight(lv), S=n?SKY.night:SKY.day, base=horizon+2, off=-camX*18, u=Math.min(W,H);
   ctx.fillStyle=S.haze;
   for(let k=0;k<60;k++){ const x=(k/60)*W*1.3-W*.15+off*.5, w=W/38+hash(k,7)*W/40, h=u*(.02+.06*hash(k,8)); ctx.fillRect(x,base-h,w,h);
     if(hash(k,11)>.6) ctx.fillRect(x+w*.3,base-h-u*.012,w*.25,u*.012); }
@@ -454,12 +483,28 @@ function trackFloor(z0,z1,dist,col,night,stripes,lineCols){
   ctx.globalAlpha=1;
 }
 function drawSegment(s,z0,z1,dist,lv,t){
-  const night=lv.time==='night';
+  const night=isNight(lv);
   if(s.t==='elevated'){
     poly([proj(-70,-7,z0),proj(70,-7,z0),proj(70,-7,z1),proj(-70,-7,z1)],night?'#100d18':'#9c8a70');
     trackFloor(z0,z1,dist,night?'#3b3a42':'#8f8c86',night,lv.stripes,lv.lineCols);
     box(-1.68,.07,0,.6,z0,z1,night?'#55535c':'#d4cfc4'); box(1.68,.07,0,.6,z0,z1,night?'#55535c':'#d4cfc4');
     ctx.globalAlpha=.7; for(const x of [-1,0,1]) line3(x,2.5,z0,x,2.5,z1,'#2a2622',1); ctx.globalAlpha=1;
+  } else if(s.t==='station'){
+    const X=3.6, top=CAMH+1.6, zc=z0<=zNear+.01?.2:z0, n=isNight(lv);
+    poly([proj(-X,top,zc),proj(X,top,zc),proj(X,top,z1),proj(-X,top,z1)],n?'#2a2a30':'#d8d4cc');
+    poly([proj(X,0,zc),proj(X,top,zc),proj(X,top,z1),proj(X,0,z1)],n?'#3a3a44':'#e9e3d6');
+    poly([proj(-X,0,zc),proj(-X,top,zc),proj(-X,top,z1),proj(-X,0,z1)],n?'#2c2c34':'#c9c4ba');
+    poly([proj(-X,0,z0),proj(X,0,z0),proj(X,0,z1),proj(-X,0,z1)],n?'#55535c':'#cdc7bc');
+    ctx.globalAlpha=.35; for(const x of [-1.5,-.5,.5,1.5]) line3(x,.005,z0,x,.005,z1,'#a49d90',1);
+    for(let z=2-(dist%2);z<z1;z+=2){ if(z>z0) line3(-X,.005,z,X,.005,z,'#a49d90',1); } ctx.globalAlpha=1;
+    poly([proj(-2.05,.01,z0),proj(-1.8,.01,z0),proj(-1.8,.01,z1),proj(-2.05,.01,z1)],'#f2c12e');
+    const tx=-2.7;                                   // train standing at the platform
+    poly([proj(tx,0,zc),proj(tx,2.75,zc),proj(tx,2.75,z1),proj(tx,0,z1)],n?'#8a8f96':'#c3c8ce');
+    poly([proj(tx,.55,zc),proj(tx,.7,zc),proj(tx,.7,z1),proj(tx,.55,z1)],lv.lineCols[0]);
+    for(let z=6-(dist%6);z<z1+6;z+=6){ const a=Math.max(z-6,zc), b=Math.min(z,z1); if(b<=a) continue;
+      const q=(y0,y1,za,zb,c)=>{ za=Math.max(za,a); zb=Math.min(zb,b); if(zb>za) poly([proj(tx+.01,y0,za),proj(tx+.01,y1,za),proj(tx+.01,y1,zb),proj(tx+.01,y0,zb)],c); };
+      q(1.05,1.9,z-5.4,z-4.2,'#2b3a4d'); q(1.05,1.9,z-2.2,z-1,'#2b3a4d'); q(0,2.3,z-3.9,z-2.6,'#9aa0a8'); q(0,.05,z-6,z-5.95,'#555'); }
+    for(let z=8-(dist%8);z<z1;z+=8){ if(z<z0) continue; const l=proj(-1,top-.04,z), r=proj(1,top-.04,z); ctx.strokeStyle='#fffbe8'; ctx.lineWidth=Math.max(2,l[2]*.06); ctx.beginPath(); ctx.moveTo(l[0],l[1]); ctx.lineTo(r[0],r[1]); ctx.stroke(); }
   } else if(s.t==='street'){
     poly([proj(-2.6,0,z0),proj(2.6,0,z0),proj(2.6,0,z1),proj(-2.6,0,z1)],'#5b524a');
     poly([proj(1.65,.01,z0),proj(2.6,.01,z0),proj(2.6,.01,z1),proj(1.65,.01,z1)],'#8a7c6c');
@@ -484,9 +529,11 @@ function drawBuilding(k,side,z,night){
   const x=side*(xn+w/2), y0=-7, y1=y0+h, col=HOUSE[Math.floor(hash(k,side+10)*HOUSE.length)];
   ctx.globalAlpha=vis(z,false);
   const r=box(x,w/2,y0,y1,z,z+dep,night?shade(col,-.72):col);
+  const arch=hash(k,side+46)>.55;
   if(r&&r.w>14){ const cols=Math.max(1,Math.floor(w/.9)), rows=Math.max(1,Math.floor(h/1.5)), cw=r.w/cols, rh=r.h/rows;
     for(let c=0;c<cols;c++) for(let q=0;q<rows;q++){ const lit=night&&hash(k*31+c*7+q,side+12)>.45;
-      ctx.fillStyle=lit?'#ffd27a':(night?'#0b0a12':'rgba(40,30,25,.45)'); ctx.fillRect(r.x+c*cw+cw*.28,r.y+q*rh+rh*.25,cw*.44,rh*.45); } }
+      ctx.fillStyle=lit?'#ffd27a':(night?'#0b0a12':'rgba(40,30,25,.45)'); const wx=r.x+c*cw+cw*.28, wy=r.y+q*rh+rh*.25, ww=cw*.44, wh=rh*.45;
+      if(arch){ ctx.fillRect(wx,wy+ww*.5,ww,wh-ww*.5); ctx.beginPath(); ctx.arc(wx+ww/2,wy+ww*.5,ww/2,Math.PI,0); ctx.fill(); } else ctx.fillRect(wx,wy,ww,wh); } }
   if(r&&r.w>18&&!night){ const rows=Math.max(1,Math.floor(h/1.5)), rh=r.h/rows;
     for(let q=1;q<rows;q++){ const yy=r.y+q*rh; ctx.fillStyle='rgba(255,255,255,.35)'; ctx.fillRect(r.x,yy-rh*.08,r.w,rh*.08);
       if(hash(k*13+q,side+26)>.45){ ctx.fillStyle='rgba(30,25,20,.55)'; for(let c=0;c<6;c++) ctx.fillRect(r.x+r.w*(.05+c*.18),yy-rh*.32,Math.max(1,r.w*.012),rh*.24); ctx.fillRect(r.x+r.w*.05,yy-rh*.33,r.w*.9,Math.max(1,rh*.03)); }
@@ -504,35 +551,197 @@ function drawShop(k,side,z,night){
   const h=3.2+hash(k,side+30)*1.6, col=SHOP[Math.floor(hash(k,side+32)*SHOP.length)], xin=2.6;
   box(side*(xin+1.5),1.5,0,h,z,z+3,col);
   box(side*(xin-.12),.12,1.85,1.95,z+.1,z+2.9,hash(k,side+34)>.5?'#f4a261':'#2a9d8f');
+  const xw=side*2.59, q4=(y0,y1,za,zb,c)=>{ if(zb<=zNear) return; za=Math.max(za,zNear); poly([proj(xw,y0,za),proj(xw,y1,za),proj(xw,y1,zb),proj(xw,y0,zb)],c); };
+  if(hash(k,side+44)>.4){ q4(0,1.75,z+.25,z+2.75,'#2a1d16');
+    for(let r=0;r<3;r++) for(let c=0;c<4;c++) q4(.25+r*.5,.6+r*.5,z+.4+c*.58,z+.85+c*.58,['#e9c46a','#e76f51','#f4f1de','#2a9d8f','#c44569'][(k+r*3+c)%5]); }
+  else { q4(0,1.75,z+.25,z+2.75,'#8d9096'); ctx.globalAlpha=.6; for(let y=.12;y<1.75;y+=.14) line3(xw,y,Math.max(z+.25,zNear+.01),xw,y,z+2.75,'#5f6268',1); ctx.globalAlpha=1; }
+  if(h>3.5){ for(const zo of [.45,1.75]){ q4(2.9,3.55,z+zo,z+zo+.75,night?'#ffd27a':'#3a2a22'); q4(2.86,2.9,z+zo-.05,z+zo+.8,'#f2e6cf'); }
+    box(side*(2.6-.1),.1,2.78,2.84,z+.05,z+2.95,shade(col,-.25)); }
   const sr=box(side*2.2,.42,2.2,2.8,z+.3,z+.36,hash(k,side+36)>.5?'#fff6df':'#ffd23f','#7a1f2b');
   label(SIGNS[Math.floor(hash(k,side+38)*SIGNS.length)],sr,'#7a1f2b');
   if(side>0&&hash(k,40)>.45&&z+1>zNear){ const sag=3.6+hash(k,41)*.5; ctx.strokeStyle='#1a1715'; ctx.lineWidth=1.2;
     const a=proj(-2.6,4.4,z+1),b=proj(2.6,4.2,z+1),m=proj(0,sag,z+1); ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.quadraticCurveTo(m[0],m[1],b[0],b[1]); ctx.stroke(); }
 }
 function drawMast(z,night){ for(const s of [-1,1]){ box(s*1.76,.05,0,2.8,z,z+.1,night?'#4a4852':'#7d7a74'); box(s*1.3,.45,2.55,2.62,z,z+.08,night?'#4a4852':'#7d7a74'); } }
-function drawPortal(z,lv,night){
+const ADS=[['DILLI KI CHAAT','Har station ke bahar!','#c44569'],['MIND THE GAP','Please stand behind the yellow line','#1f2a4a'],['CHAI ₹10','Garam garam','#2a9d8f'],['METRO CARD','Recharge karo, line se bacho','#e76f51']];
+function drawColumn(z,night){ for(const s of [-1,1]){ const x=s*2.3; box(x,.2,0,CAMH+1.6,z,z+.4,night?'#6b6874':'#ece7de'); box(x,.205,1.0,1.18,z-.005,z+.4,night?'#4a4752':'#8f877a'); } }
+function drawHanging(z,k,lv){ const top=CAMH+1.6; line3(-.9,top,z,-.9,top-.55,z,'#444',1.5); line3(.9,top,z,.9,top-.55,z,'#444',1.5);
+  const r=box(0,1.25,top-1.0,top-.55,z,z+.06,'#1f2a4a'); if(!r) return; ctx.fillStyle=lv.lineCols[0]; ctx.fillRect(r.x,r.y+r.h*.82,r.w,r.h*.18);
+  label(k%8===1?'PLATFORM 2 → SAMAYPUR BADLI':'WAY OUT  ·  निकास  →',{x:r.x,y:r.y,w:r.w,h:r.h*.82},'#fff',.62); }
+function drawWallPoster(z,k,night){ const a=ADS[(k/2|0)%ADS.length], x=3.59, zb=z+2.2; if(zb<=zNear) return; const za=Math.max(z,zNear);
+  poly([proj(x,.9,za),proj(x,2.1,za),proj(x,2.1,zb),proj(x,.9,zb)],night?shade(a[2],-.4):a[2]);
+  poly([proj(x-.01,1.75,za+.15),proj(x-.01,2.0,za+.15),proj(x-.01,2.0,zb-.15),proj(x-.01,1.75,zb-.15)],'rgba(255,255,255,.85)');
+  poly([proj(x-.01,1.0,za+.15),proj(x-.01,1.6,za+.15),proj(x-.01,1.6,zb-.15),proj(x-.01,1.0,zb-.15)],'rgba(255,255,255,.18)'); }
+function drawPortal(z,lv,night,seg){
   const col=night?'#3a3740':'#cbc3b4', X=3.4;
   box(-(1.65+X)/2,(X-1.65)/2,0,4.6,z,z+.6,col); box((1.65+X)/2,(X-1.65)/2,0,4.6,z,z+.6,col);
   const r=box(0,X,2.7,4.6,z,z+.6,col);
-  if(r&&r.h>10){ const s={x:r.x+r.w*.18,y:r.y+r.h*.18,w:r.w*.64,h:r.h*.5}; ctx.fillStyle='#1f2a4a'; ctx.fillRect(s.x,s.y,s.w,s.h);
+  const fromStreet=lv.segs.some(q=>q[0]==='street');
+  if(r&&r.h>10&&fromStreet){ const s={x:r.x+r.w*.18,y:r.y+r.h*.18,w:r.w*.64,h:r.h*.5}; ctx.fillStyle='#1f2a4a'; ctx.fillRect(s.x,s.y,s.w,s.h);
     ctx.fillStyle=RED; ctx.fillRect(s.x,s.y,s.h,s.h); label('M',{x:s.x,y:s.y,w:s.h,h:s.h},'#fff',.8);
     label(lv.name.toUpperCase()+'  ·  '+lv.hi,{x:s.x+s.h,y:s.y,w:s.w-s.h,h:s.h},'#fff',.6); }
 }
 
+/* ---- illustrated characters (pre-drawn once, then scaled as billboards) ---- */
+const SPR={};
+function sprite(key,w,h,fn){ let c=SPR[key]; if(!c){ c=document.createElement('canvas'); c.width=w; c.height=h; fn(c.getContext('2d'),w,h); SPR[key]=c; } return c; }
+function billboard(img,x,y,z,worldH){ if(z<=zNear) return null; const p=proj(x,y,z), hp=worldH*p[2], wp=hp*img.width/img.height; ctx.drawImage(img,p[0]-wp/2,p[1]-hp,wp,hp); return p; }
+function vgrad(g,x0,x1,c){ const gr=g.createLinearGradient(x0,0,x1,0); gr.addColorStop(0,shade(c,-.28)); gr.addColorStop(.45,shade(c,.12)); gr.addColorStop(1,shade(c,-.32)); return gr; }
+function limb(g,pts,w0,w1,col){ // tapered limb through points, drawn as round-capped strokes
+  g.lineCap='round'; g.lineJoin='round'; g.strokeStyle=col;
+  for(let i=0;i<pts.length-1;i++){ const t0=i/(pts.length-1); g.lineWidth=w0+(w1-w0)*t0; g.beginPath(); g.moveTo(pts[i][0],pts[i][1]); g.lineTo(pts[i+1][0],pts[i+1][1]); g.stroke(); } }
+function shoe(g,x,y,col,sole){ g.fillStyle=col; g.beginPath(); g.ellipse(x,y,15,8,0,0,6.283); g.fill(); if(sole){ g.fillStyle='#f2efe8'; g.beginPath(); g.ellipse(x,y+3,13,4,0,0,6.283); g.fill(); } }
+
+/* o: {view:'back'|'front', look:'boy'|'girl'|'shirt'|'kurta'|'saree'|'worker', top, bottom, skin, hair, pose:'run'|'stand'|'slide', phase, helmet} */
+function drawHuman(g,W,H,o){
+  g.save(); g.scale(W/200,H/400);
+  const cx=100, back=o.view==='back', ph=o.phase||0, run=o.pose==='run';
+  const girl=o.look==='girl'||o.look==='kurta'||o.look==='saree';
+  const bob=run?-Math.abs(Math.sin(ph*Math.PI))*7:0; g.translate(0,bob+4);
+  const skin=o.skin, top=o.top, bot=o.bottom, hair=o.hair||'#1b1210';
+  // legs
+  const liftL=run?Math.max(0,Math.sin(ph*Math.PI*2)):0, liftR=run?Math.max(0,-Math.sin(ph*Math.PI*2)):0;
+  const leg=(sx,lift)=>{ const hx=cx+sx*15, hy=196, ky=hy+92*(1-.32*lift), kx=hx+sx*3, ay=ky+86*(1-.55*lift), ax=kx-sx*2;
+    const pant=o.look==='saree'?shade(top,-.15):bot;
+    limb(g,[[hx,hy],[kx,ky]],o.look==='girl'||o.look==='kurta'?22:27,21,pant);
+    limb(g,[[kx,ky],[ax,ay]],o.look==='girl'||o.look==='kurta'?19:21,16,pant);
+    if(o.look!=='saree') limb(g,[[ax,ay-6],[ax,ay+2]],12,12,skin);
+    shoe(g,ax,ay+8,girl?'#7a3b1f':(o.look==='worker'?'#3a2a1a':'#f4f1ea'),back&&lift>.3); };
+  leg(-1,liftL); leg(1,liftR);
+  // torso / clothing
+  const len=o.look==='kurta'||o.look==='girl'?262:(o.look==='saree'?380:200);
+  g.fillStyle=vgrad(g,cx-44,cx+44,top);
+  g.beginPath(); g.moveTo(cx-17,70); g.quadraticCurveTo(cx-40,74,cx-40,92);
+  if(len>210){ g.lineTo(cx-33,180); g.quadraticCurveTo(cx-44,len-40,cx-46,len); g.lineTo(cx+46,len); g.quadraticCurveTo(cx+44,len-40,cx+33,180); }
+  else { g.lineTo(cx-31,196); g.lineTo(cx+31,196); }
+  g.lineTo(cx+40,92); g.quadraticCurveTo(cx+40,74,cx+17,70); g.closePath(); g.fill();
+  g.strokeStyle='rgba(0,0,0,.12)'; g.lineWidth=2; g.beginPath(); g.moveTo(cx,96); g.lineTo(cx,len-6); g.stroke();
+  if(o.look==='saree'){ g.fillStyle=shade(top,.25); g.beginPath(); g.moveTo(cx-38,92); g.lineTo(cx+36,120); g.lineTo(cx+46,300); g.lineTo(cx+20,300); g.lineTo(cx-20,140); g.closePath(); g.fill();
+    g.strokeStyle='#e7c14d'; g.lineWidth=5; g.beginPath(); g.moveTo(cx-46,len-6); g.lineTo(cx+46,len-6); g.stroke(); }
+  if(o.look==='kurta'||o.look==='girl'){ g.strokeStyle=o.dupatta||'#f4c430'; g.lineWidth=11; g.beginPath(); g.moveTo(cx-34,86); g.quadraticCurveTo(cx,back?150:130,cx+36,86); g.stroke(); }
+  if(o.look==='boy'||o.look==='shirt'){ g.fillStyle=shade(bot,-.2); g.fillRect(cx-31,188,62,10); }
+  if(o.look==='worker'){ g.fillStyle='#ff7b00'; g.fillRect(cx-36,96,72,96); g.fillStyle='#d9e0e6'; g.fillRect(cx-36,140,72,9); g.fillRect(cx-36,165,72,9); }
+  // arms
+  const arm=(sx)=>{ const sw=run?Math.sin(ph*Math.PI*2)*sx:0, shx=cx+sx*37, shy=96, ex=cx+sx*(46-sw*4), ey=158+sw*10, hx=cx+sx*(40-sw*6), hy=212+sw*16;
+    const sleeve=o.look==='boy'||o.look==='shirt'||o.look==='worker'?.45:(o.look==='saree'?.25:.75);
+    limb(g,[[shx,shy],[ex,ey],[hx,hy]],17,13,skin);
+    const mx=shx+(ex-shx)*Math.min(1,sleeve*2), my=shy+(ey-shy)*Math.min(1,sleeve*2);
+    limb(g,[[shx,shy],[mx,my]],20,18,o.look==='worker'?top:shade(top,-.05));
+    if(sleeve>.5) limb(g,[[ex,ey],[ex+(hx-ex)*(sleeve-.5)*2,ey+(hy-ey)*(sleeve-.5)*2]],17,15,shade(top,-.05));
+    g.fillStyle=skin; g.beginPath(); g.arc(hx,hy+4,7.5,0,6.283); g.fill(); };
+  arm(-1); arm(1);
+  if(back&&o.look==='boy'){ g.fillStyle=vgrad(g,cx-30,cx+30,o.bag||'#1f6fd1'); g.beginPath(); g.roundRect(cx-29,98,58,82,12); g.fill();
+    g.fillStyle='rgba(0,0,0,.18)'; g.beginPath(); g.roundRect(cx-20,138,40,32,7); g.fill(); g.strokeStyle='rgba(255,255,255,.5)'; g.lineWidth=2; g.beginPath(); g.moveTo(cx-20,138); g.lineTo(cx+20,138); g.stroke(); }
+  // neck + head
+  g.fillStyle=shade(skin,-.1); g.fillRect(cx-9,56,18,20);
+  const hg=g.createRadialGradient(cx-6,34,4,cx,40,30); hg.addColorStop(0,shade(skin,.12)); hg.addColorStop(1,shade(skin,-.18));
+  g.fillStyle=hg; g.beginPath(); g.ellipse(cx,38,22,27,0,0,6.283); g.fill();
+  g.fillStyle=skin; g.beginPath(); g.ellipse(cx-22,42,4.5,7,0,0,6.283); g.ellipse(cx+22,42,4.5,7,0,0,6.283); g.fill();
+  if(o.helmet){ g.fillStyle=vgrad(g,cx-28,cx+28,o.helmet); g.beginPath(); g.ellipse(cx,34,27,30,0,0,6.283); g.fill(); g.fillStyle='rgba(255,255,255,.35)'; g.fillRect(cx-4,6,8,54); }
+  else if(o.look==='worker'){ g.fillStyle='#ffd60a'; g.beginPath(); g.ellipse(cx,24,27,15,0,Math.PI,0); g.fill(); g.fillRect(cx-31,22,62,6); if(!back) face(); }
+  else if(back){ g.fillStyle=hair; g.beginPath(); g.ellipse(cx,34,23.5,27,0,0,6.283); g.fill();
+    if(girl){ for(let k=0;k<7;k++){ g.beginPath(); g.ellipse(cx+(k%2?2:-2),70+k*17,8-k*.4,10,0,0,6.283); g.fill(); } g.fillStyle='#e63946'; g.fillRect(cx-5,186,10,6); } }
+  else { face(); g.fillStyle=hair; g.beginPath(); g.ellipse(cx,26,23.5,17,0,Math.PI,0); g.lineTo(cx+23,30); g.quadraticCurveTo(cx,20,cx-23,30); g.closePath(); g.fill();
+    if(girl){ g.beginPath(); g.moveTo(cx-24,26); g.quadraticCurveTo(cx-30,70,cx-20,92); g.lineTo(cx-16,60); g.closePath(); g.fill(); g.beginPath(); g.moveTo(cx+24,26); g.quadraticCurveTo(cx+30,70,cx+20,92); g.lineTo(cx+16,60); g.closePath(); g.fill();
+      g.fillStyle='#c1121f'; g.beginPath(); g.arc(cx,30,2.2,0,6.283); g.fill(); }
+    else if(o.look==='shirt'&&o.moustache){ g.fillStyle=hair; g.fillRect(cx-8,51,16,3.5); } }
+  function face(){ g.fillStyle='#2a1a12'; g.beginPath(); g.ellipse(cx-8,40,2.6,3,0,0,6.283); g.ellipse(cx+8,40,2.6,3,0,0,6.283); g.fill();
+    g.strokeStyle='#2a1a12'; g.lineWidth=2; g.beginPath(); g.moveTo(cx-12,33); g.lineTo(cx-4,32); g.moveTo(cx+4,32); g.lineTo(cx+12,33); g.stroke();
+    g.strokeStyle=shade(skin,-.35); g.beginPath(); g.moveTo(cx-5,53); g.quadraticCurveTo(cx,56,cx+5,53); g.stroke(); }
+  g.restore();
+}
+function drawSlider(g,W,H,o){ // crouched slide, seen from behind
+  g.save(); g.scale(W/200,H/200); const cx=100, girl=o.look==='girl';
+  limb(g,[[cx-16,128],[cx-46,160],[cx-34,192]],26,18,o.bottom); limb(g,[[cx+16,128],[cx+46,160],[cx+34,192]],26,18,o.bottom);
+  shoe(g,cx-34,194,girl?'#7a3b1f':'#f4f1ea',true); shoe(g,cx+34,194,girl?'#7a3b1f':'#f4f1ea',true);
+  g.fillStyle=vgrad(g,cx-44,cx+44,o.top); g.beginPath(); g.moveTo(cx-38,62); g.lineTo(cx-34,138); g.lineTo(cx+34,138); g.lineTo(cx+38,62); g.quadraticCurveTo(cx,48,cx-38,62); g.fill();
+  limb(g,[[cx-36,70],[cx-54,110],[cx-46,140]],16,12,o.skin); limb(g,[[cx+36,70],[cx+54,110],[cx+46,140]],16,12,o.skin);
+  if(!girl){ g.fillStyle=vgrad(g,cx-28,cx+28,'#1f6fd1'); g.beginPath(); g.roundRect(cx-27,64,54,62,11); g.fill(); }
+  g.fillStyle=o.hair||'#1b1210'; g.beginPath(); g.ellipse(cx,42,22,24,0,0,6.283); g.fill();
+  if(girl){ for(let k=0;k<4;k++){ g.beginPath(); g.ellipse(cx,70+k*14,7,9,0,0,6.283); g.fill(); } }
+  g.restore();
+}
+function drawScooty(g,W,H,o){ // scooter + seated rider, seen from behind
+  g.save(); g.scale(W/240,H/420); const cx=120, girl=o.look==='girl';
+  g.fillStyle='#161616'; g.beginPath(); g.roundRect(cx-22,330,44,86,16); g.fill(); g.fillStyle='#3a3a3a'; g.fillRect(cx-18,340,36,6);
+  g.fillStyle=vgrad(g,cx-70,cx+70,o.body); g.beginPath(); g.moveTo(cx-48,230); g.quadraticCurveTo(cx-72,300,cx-56,350); g.lineTo(cx+56,350); g.quadraticCurveTo(cx+72,300,cx+48,230); g.closePath(); g.fill();
+  g.fillStyle='#222'; g.beginPath(); g.roundRect(cx-44,218,88,26,10); g.fill();
+  g.fillStyle='#ff2d2d'; g.beginPath(); g.roundRect(cx-30,262,60,16,6); g.fill(); g.fillStyle='#ffb3b3'; g.fillRect(cx-22,266,44,4);
+  g.fillStyle='#f7f4ea'; g.fillRect(cx-36,292,72,26); g.strokeStyle='#222'; g.lineWidth=2; g.strokeRect(cx-36,292,72,26);
+  g.fillStyle='#111'; g.font='700 12px Arial,sans-serif'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('DL 3S 4021',cx,306);
+  g.strokeStyle='#2a2a2a'; g.lineWidth=5; g.beginPath(); g.moveTo(cx-60,150); g.lineTo(cx-92,112); g.moveTo(cx+60,150); g.lineTo(cx+92,112); g.stroke();
+  g.fillStyle='#222'; g.beginPath(); g.ellipse(cx-96,104,12,9,0,0,6.283); g.ellipse(cx+96,104,12,9,0,0,6.283); g.fill();
+  // rider
+  g.fillStyle=vgrad(g,cx-46,cx+46,o.top); g.beginPath(); g.moveTo(cx-40,96); g.quadraticCurveTo(cx-46,170,cx-44,228); g.lineTo(cx+44,228); g.quadraticCurveTo(cx+46,170,cx+40,96); g.quadraticCurveTo(cx,82,cx-40,96); g.fill();
+  limb(g,[[cx-38,104],[cx-62,150],[cx-84,150]],17,13,o.skin); limb(g,[[cx+38,104],[cx+62,150],[cx+84,150]],17,13,o.skin);
+  limb(g,[[cx-38,104],[cx-52,128]],20,18,shade(o.top,-.05)); limb(g,[[cx+38,104],[cx+52,128]],20,18,shade(o.top,-.05));
+  if(girl){ g.strokeStyle='#f4c430'; g.lineWidth=12; g.beginPath(); g.moveTo(cx-34,104); g.quadraticCurveTo(cx+10,160,cx+70,150); g.stroke(); }
+  else { g.fillStyle=vgrad(g,cx-30,cx+30,'#1f6fd1'); g.beginPath(); g.roundRect(cx-30,112,60,78,12); g.fill(); }
+  if(girl){ g.fillStyle=o.hair||'#1b1210'; for(let k=0;k<4;k++){ g.beginPath(); g.ellipse(cx,96+k*15,7,9,0,0,6.283); g.fill(); } }
+  g.fillStyle=shade(o.skin,-.1); g.fillRect(cx-9,72,18,20);
+  g.fillStyle=vgrad(g,cx-30,cx+30,o.helmet); g.beginPath(); g.ellipse(cx,52,29,32,0,0,6.283); g.fill();
+  g.fillStyle='rgba(255,255,255,.35)'; g.fillRect(cx-4,22,8,58);
+  g.restore();
+}
+function drawCowSprite(g,W,H){ // Indian zebu, three-quarter front view
+  g.save(); g.scale(W/300,H/300);
+  const body=g.createLinearGradient(40,0,260,0); body.addColorStop(0,'#cfc6b6'); body.addColorStop(.5,'#f4efe6'); body.addColorStop(1,'#cbc2b2');
+  for(const [x,y] of [[78,196],[112,206],[192,206],[226,196]]){ limb(g,[[x,y],[x,y+70]],18,13,'#e3dccf'); g.fillStyle='#3b3330'; g.fillRect(x-8,y+68,16,12); }
+  g.fillStyle=body; g.beginPath(); g.ellipse(150,170,112,58,0,0,6.283); g.fill();
+  g.fillStyle='#ebe4d8'; g.beginPath(); g.ellipse(150,112,42,26,0,0,6.283); g.fill();
+  g.fillStyle='#e6dfd2'; g.beginPath(); g.moveTo(128,170); g.quadraticCurveTo(150,250,172,170); g.closePath(); g.fill();
+  g.strokeStyle='#c9b48a'; g.lineWidth=11; g.lineCap='round'; g.beginPath(); g.moveTo(132,96); g.quadraticCurveTo(108,74,116,50); g.moveTo(168,96); g.quadraticCurveTo(192,74,184,50); g.stroke();
+  g.fillStyle='#e9e2d6'; g.beginPath(); g.ellipse(104,112,22,10,-.4,0,6.283); g.ellipse(196,112,22,10,.4,0,6.283); g.fill();
+  const fg=g.createLinearGradient(122,0,178,0); fg.addColorStop(0,'#ddd5c7'); fg.addColorStop(.5,'#faf6ef'); fg.addColorStop(1,'#d9d1c2');
+  g.fillStyle=fg; g.beginPath(); g.moveTo(126,96); g.quadraticCurveTo(150,84,174,96); g.lineTo(166,168); g.quadraticCurveTo(150,182,134,168); g.closePath(); g.fill();
+  g.fillStyle='#b8968a'; g.beginPath(); g.ellipse(150,164,17,12,0,0,6.283); g.fill(); g.fillStyle='#5a3f38'; g.beginPath(); g.ellipse(143,165,3,4,0,0,6.283); g.ellipse(157,165,3,4,0,0,6.283); g.fill();
+  g.fillStyle='#1d1512'; g.beginPath(); g.ellipse(137,118,4.5,5.5,0,0,6.283); g.ellipse(163,118,4.5,5.5,0,0,6.283); g.fill();
+  g.fillStyle='#d62828'; g.beginPath(); g.ellipse(150,104,3.5,6,0,0,6.283); g.fill();
+  g.restore();
+}
+function drawRickshawSprite(g,W,H,o){ // cycle rickshaw coming towards you, rickshaw-wala pedalling
+  g.save(); g.scale(W/300,H/380);
+  g.fillStyle='#1c1c1c'; g.beginPath(); g.ellipse(26,290,9,62,0,0,6.283); g.ellipse(274,290,9,62,0,0,6.283); g.fill();
+  g.fillStyle='#202020'; g.beginPath(); g.moveTo(30,160); g.quadraticCurveTo(30,10,150,8); g.quadraticCurveTo(270,10,270,160); g.closePath(); g.fill();
+  g.strokeStyle='#3a3a3a'; g.lineWidth=3; for(let k=1;k<4;k++){ g.beginPath(); g.moveTo(30+k*10,160); g.quadraticCurveTo(150,8+k*18,270-k*10,160); g.stroke(); }
+  g.fillStyle=vgrad(g,36,264,o.seat); g.beginPath(); g.roundRect(36,150,228,58,10); g.fill();
+  g.fillStyle='#c9a227'; g.fillRect(36,204,228,8);
+  limb(g,[[150,236],[150,330]],10,10,'#444');
+  limb(g,[[132,222],[112,262],[130,300]],20,15,'#4a4a52'); limb(g,[[168,222],[188,252],[170,288]],20,15,'#4a4a52');
+  shoe(g,130,304,'#3a2a1a'); shoe(g,170,292,'#3a2a1a');
+  g.fillStyle=vgrad(g,112,188,'#f1e6d0'); g.beginPath(); g.moveTo(118,128); g.lineTo(114,226); g.lineTo(186,226); g.lineTo(182,128); g.quadraticCurveTo(150,116,118,128); g.fill();
+  limb(g,[[118,134],[100,176],[122,196]],14,11,o.skin); limb(g,[[182,134],[200,176],[178,196]],14,11,o.skin);
+  g.strokeStyle='#555'; g.lineWidth=6; g.beginPath(); g.moveTo(104,196); g.lineTo(196,196); g.stroke();
+  g.fillStyle=o.skin; g.beginPath(); g.ellipse(150,102,18,22,0,0,6.283); g.fill();
+  g.fillStyle='#f4f1ea'; g.beginPath(); g.ellipse(150,86,20,9,0,0,6.283); g.fill();
+  g.fillStyle='#2a1a12'; g.beginPath(); g.ellipse(143,104,2,2.5,0,0,6.283); g.ellipse(157,104,2,2.5,0,0,6.283); g.fill(); g.fillRect(142,113,16,3);
+  g.fillStyle='#161616'; g.beginPath(); g.ellipse(150,338,11,40,0,0,6.283); g.fill(); g.fillStyle='#777'; g.beginPath(); g.ellipse(150,338,4,14,0,0,6.283); g.fill();
+  g.restore();
+}
+const OUTFITS=[
+  {look:'shirt',top:'#f1f1ee',bottom:'#3a4258',moustache:true},{look:'kurta',top:'#e5487a',bottom:'#f1e6d0',dupatta:'#ffd166'},
+  {look:'shirt',top:'#5b8fd6',bottom:'#2c2c34'},{look:'saree',top:'#d62839',bottom:'#d62839'},
+  {look:'shirt',top:'#9bb069',bottom:'#4a3b2a',moustache:true},{look:'kurta',top:'#2a9d8f',bottom:'#f4efe6',dupatta:'#f4a261'},
+  {look:'saree',top:'#f4a261',bottom:'#f4a261'},{look:'shirt',top:'#e9c46a',bottom:'#264653'}];
+const SKINS=['#c68863','#a86b48','#8d5a3b','#d9a074','#b97a52'];
+function personSprite(v){ const o=OUTFITS[v%OUTFITS.length]; return sprite('p'+v,200,400,(g,w,h)=>drawHuman(g,w,h,{...o,view:'front',pose:'stand',skin:SKINS[v%SKINS.length]})); }
+function playerSprite(kind,frame){
+  const girl=save.rider==='girl', skin='#c68863';
+  const o=girl?{look:'girl',top:'#e5487a',bottom:'#3d2c5c',dupatta:'#f4c430',skin}:{look:'boy',top:'#d7263d',bottom:'#2f3d5c',skin,bag:'#1f6fd1'};
+  if(kind==='scooty') return sprite('sc'+save.rider,240,420,(g,w,h)=>drawScooty(g,w,h,{...o,body:'#e63946',helmet:girl?'#e5487a':'#1f6fd1'}));
+  if(kind==='slide') return sprite('sl'+save.rider,200,200,(g,w,h)=>drawSlider(g,w,h,o));
+  return sprite(`r${save.rider}${kind}${frame}`,200,400,(g,w,h)=>drawHuman(g,w,h,{...o,view:'back',pose:'run',phase:kind==='jump'?.25:frame/8}));
+}
+
 /* ---- obstacles ---- */
-function person(x,z,h,shirt,skin,hat){ box(x,.17,0,h,z,z+.3,shirt); circle(x,h+.16,z,.14,skin); circle(x,h+.25,z,.12,hat||'#1d1410'); }
 function drawObstacle(o,z,lv,t){
-  const night=lv.time==='night', a=vis(z,night); if(a<=0) return; ctx.globalAlpha=a;
+  const night=isNight(lv), a=vis(z,night); if(a<=0) return; ctx.globalAlpha=a;
   const x=o.x;
   switch(o.t){
-    case 'crowd': for(const [j,k] of [[-.2,0],[.2,1]]) person(x+j,z+k*.15,1.15+((o.v+k)%3)*.1,KURTA[(o.v+k*3)%KURTA.length],SKIN[(o.v+k)%4]); break;
-    case 'worker': person(x,z,1.25,'#ff7b00',SKIN[o.v%4],'#ffd60a'); box(x,.18,.75,.85,z-.01,z+.3,'#e8e8e8'); break;
-    case 'rickshaw': { circle(x-.42,.32,z+.6,.32,'#1a1715'); circle(x+.42,.32,z+.6,.32,'#1a1715');
-      box(x,.42,.4,.85,z+.3,z+1,'#2a6f97'); box(x,.45,.85,1.55,z+.55,z+1.05,'#1d1d1d'); circle(x,.3,z,.3,'#1a1715'); box(x,.05,.3,1.0,z,z+.3,'#555');
-      person(x,z+.25,1.0,'#f1e6d0',SKIN[o.v%4]); break; }
-    case 'cow': { for(const [lx,lz] of [[-.25,.25],[.25,.25],[-.25,1.2],[.25,1.2]]) box(x+lx,.06,0,.5,z+lz,z+lz+.1,'#d8d0c2');
-      box(x,.33,.45,1.05,z+.2,z+1.4,'#f2ece1'); box(x,.18,.75,1.15,z,z+.25,'#f2ece1');
-      box(x-.16,.03,1.12,1.32,z+.05,z+.1,'#c9b48a'); box(x+.16,.03,1.12,1.32,z+.05,z+.1,'#c9b48a'); circle(x,.85,z-.01,.06,'#2b2b2b'); break; }
+    case 'crowd': billboard(personSprite(o.v+3),x+.22,0,z+.15,1.42+(o.v%3)*.06); billboard(personSprite(o.v),x-.2,0,z,1.48+((o.v+1)%3)*.06); break;
+    case 'worker': billboard(sprite('wk'+(o.v%3),200,400,(g,w,h)=>drawHuman(g,w,h,{look:'worker',view:'front',pose:'stand',top:'#5b6b7a',bottom:'#3a3f4a',skin:SKINS[o.v%SKINS.length]})),x,0,z,1.55); break;
+    case 'rickshaw': billboard(sprite('rk'+(o.v%3),300,380,(g,w,h)=>drawRickshawSprite(g,w,h,{seat:['#2a6f97','#c1121f','#2a9d8f'][o.v%3],skin:SKINS[o.v%SKINS.length]})),x,0,z,1.5); break;
+    case 'cow': billboard(sprite('cow',300,300,drawCowSprite),x,0,z+.3,1.12); break;
     case 'thela': { box(x,.46,.08,.42,z,z+.7,'#8a5a2b','#c98b4f'); circle(x-.32,.08,z,.08,'#1d1410'); circle(x+.32,.08,z,.08,'#1d1410');
       for(let k=0;k<5;k++) circle(x-.32+k*.16,.48,z+.1,.07,['#ff7b00','#ffd60a','#e63946','#80b918','#ff7b00'][k]); break; }
     case 'bag': box(x-.2,.2,0,.38,z,z+.4,'#3d5a80'); box(x+.22,.18,0,.3,z+.05,z+.4,'#b5432c'); box(x+.05,.14,.38,.42,z+.1,z+.3,'#222'); break;
@@ -571,41 +780,18 @@ function drawQuizGate(q,z,lv){
 }
 function drawPlayer(g){
   if(g.crashT>0) return;
-  const sl=g.slide>0, girl=save.rider==='girl', scooty=save.ride==='scooty';
   ctx.globalAlpha=g.inv>0&&Math.floor(g.t*12)%2?.35:1;
-  const x=g.px, y=g.py, z0=PZ-.15, run=g.go>0?0:Math.sin(g.t*16);
-  const top=girl?'#e5487a':RED, pants=girl?'#3d2c5c':'#24324f', hair='#1d1410', skin='#c68863';
-  const sh=proj(x,0,PZ); ctx.fillStyle='rgba(0,0,0,.3)'; ctx.beginPath(); ctx.ellipse(sh[0],sh[1],(scooty?.36:.32)*sh[2],.09*sh[2],0,0,6.283); ctx.fill();
-  if(scooty){
-    const lift=sl?-.12:0, by=y;
-    box(x,.08,by+.05,by+.38,z0+.35,z0+.95,'#2b2b2b');                  // front fork + wheel guard
-    circle(x,by+.18,z0+.7,.18,'#151515');                               // front wheel
-    box(x,.24,by+.18,by+.56,z0-.35,z0+.35,'#e63946');                  // body
-    box(x,.2,by+.56,by+.64,z0-.3,z0+.2,'#1d1d1d');                     // seat
-    circle(x,by+.2,z0-.38,.2,'#151515'); circle(x,by+.2,z0-.39,.08,'#9a9a9a'); // rear wheel
-    box(x,.1,by+.36,by+.44,z0-.37,z0-.35,'#ff2d2d');                   // tail light
-    box(x,.3,by+1.0+lift,by+1.04+lift,z0+.55,z0+.6,'#2b2b2b');          // handlebar
-    box(x,.2,by+.62,by+1.05+lift,z0-.05,z0+.17,top);                    // rider torso
-    if(girl){ box(x,.05,by+.62,by+1.12+lift,z0-.12,z0-.08,hair); }      // braid
-    else box(x,.15,by+.66,by+.98+lift,z0-.17,z0-.05,BLUE);              // backpack
-    circle(x,by+1.18+lift,z0+.07,.14,'#e8e8e8'); circle(x,by+1.2+lift,z0+.03,.15,girl?'#e5487a':'#1f6fd1'); // helmet
-  } else if(sl){
-    box(x,.3,y,y+.32,z0-.2,z0+.5,pants); box(x,.24,y+.1,y+.45,z0-.25,z0+.1,top); circle(x,y+.5,z0-.05,.13,hair);
-  } else {
-    const ly=y>0?.1:0;
-    box(x-.1,.06,y+ly+Math.max(0,run)*.12,y+.5,z0+.05,z0+.15,pants); box(x+.1,.06,y+ly+Math.max(0,-run)*.12,y+.5,z0+.05,z0+.15,pants);
-    if(girl){ box(x,.25,y+.38,y+1.0,z0,z0+.22,top); box(x,.26,y+.74,y+.82,z0-.01,z0+.23,'#f4c430'); }  // kurti + dupatta band
-    else box(x,.22,y+.48,y+1.0,z0,z0+.22,top);
-    if(girl) box(x,.05,y+.6,y+1.12,z0-.08,z0-.04,hair); else box(x,.16,y+.55,y+.92,z0-.12,z0,BLUE);
-    circle(x,y+1.13,z0+.1,.13,skin); circle(x,y+1.17,z0+.05,.13,hair);
-    if(girl) circle(x,y+1.22,z0-.02,.08,hair);
-  }
+  const scooty=save.ride==='scooty', sl=g.slide>0, air=g.py>.05;
+  const sh=proj(g.px,0,PZ); ctx.fillStyle='rgba(0,0,0,.3)'; ctx.beginPath(); ctx.ellipse(sh[0],sh[1],(scooty?.34:.3)*sh[2],.09*sh[2],0,0,6.283); ctx.fill();
+  if(scooty) billboard(playerSprite('scooty'),g.px,g.py,PZ-.1,sl?1.25:1.55);
+  else if(sl) billboard(playerSprite('slide'),g.px,g.py,PZ,.7);
+  else billboard(playerSprite(air?'jump':'run',air?0:(g.go>0?0:Math.floor(g.t*12)%8)),g.px,g.py,PZ,1.42);
   ctx.globalAlpha=1;
 }
 
 /* ---- frame composition ---- */
 function renderWorld(L,dist,t,actors){
-  const lv=L.lv, night=lv.time==='night';
+  const lv=L.lv, night=isNight(lv);
   drawSky(lv,t); drawSkyline(lv);
   const view=L.segs.map(s=>({s,z0:Math.max(zNear,s.d0-dist+PZ),z1:Math.min(MAXZ,s.d1-dist+PZ)})).filter(v=>v.z1>v.z0);
   for(const v of view.slice().reverse()) drawSegment(v.s,v.z0,v.z1,dist,lv,t);
@@ -615,6 +801,7 @@ function renderWorld(L,dist,t,actors){
   for(let k=Math.floor((dist-PZ-6)/4.2);k*4.2<dist+MAXZ;k++){ const d=k*4.2, z=d-dist+PZ; if(z+4<zNear||segAt(d)!=='elevated'||z>tunnelZ) continue; list.push([z,'bld',k,-1],[z+.01,'bld',k,1]); }
   for(let k=Math.floor((dist-PZ-6)/9);k*9<dist+MAXZ;k++){ const d=k*9, z=d-dist+PZ; if(z<zNear||segAt(d)!=='elevated') continue; list.push([z,'mast']); }
   for(let k=Math.floor((dist-PZ-4)/3.2);k*3.2<dist+MAXZ;k++){ const d=k*3.2, z=d-dist+PZ; if(z+3<zNear||segAt(d)!=='street'||z>tunnelZ) continue; list.push([z,'shop',k,-1],[z+.01,'shop',k,1]); }
+  for(let k=Math.floor((dist-PZ-2)/6);k*6<dist+MAXZ;k++){ const d=k*6, z=d-dist+PZ; if(z+.5<zNear||segAt(d)!=='station') continue; list.push([z,'col']); if(k%4===1) list.push([z+.3,'hang',k]); if(k%2===0) list.push([z+.2,'poster',k]); }
   L.segs.forEach((s,i)=>{ if(i>0&&s.t==='tunnel'&&L.segs[i-1].t!=='tunnel'){ const z=s.d0-dist+PZ; if(z>zNear&&z<MAXZ) list.push([z+.7,'portal']); } });
   for(const o of L.obs){ const z=o.d-dist+PZ; if(z>MAXZ) break; if(z+1.4<zNear) continue; list.push([Math.max(z,zNear),'obs',o]); }
   for(const c of L.coins){ if(c.got) continue; const z=c.d-dist+PZ; if(z>MAXZ) break; if(z>zNear) list.push([z,'coin',c]); }
@@ -627,7 +814,10 @@ function renderWorld(L,dist,t,actors){
     if(k==='bld') drawBuilding(o,side,z,night);
     else if(k==='shop') drawShop(o,side,z,night);
     else if(k==='mast') drawMast(z,night);
-    else if(k==='portal') drawPortal(z-.7,lv,night);
+    else if(k==='portal') drawPortal(z-.7,lv,night,L.segs.find(s=>Math.abs(s.d0-(z-.7+dist-PZ))<1));
+    else if(k==='col') drawColumn(z,night);
+    else if(k==='hang') drawHanging(z,o,lv);
+    else if(k==='poster') drawWallPoster(z,o,night);
     else if(k==='obs') drawObstacle(o,z,lv,t);
     else if(k==='coin') drawCoin(o,z,t,night);
     else if(k==='quiz') drawQuizGate(o,z,lv);
@@ -641,7 +831,7 @@ function renderGame(){
   const g=G, lv=g.L.lv;
   ctx.save(); if(g.shake>0){ const m=g.shake*14; ctx.translate((Math.random()-.5)*m,(Math.random()-.5)*m); }
   renderWorld(g.L,g.dist,g.t,true);
-  if(lv.time==='night'){ const p=proj(g.px,.8,PZ), rg=ctx.createRadialGradient(p[0],p[1]-H*.12,Math.min(W,H)*.22,p[0],p[1]-H*.12,Math.max(W,H)*.8);
+  if(isNight(lv)){ const p=proj(g.px,.8,PZ), rg=ctx.createRadialGradient(p[0],p[1]-H*.12,Math.min(W,H)*.22,p[0],p[1]-H*.12,Math.max(W,H)*.8);
     rg.addColorStop(0,'rgba(0,0,0,0)'); rg.addColorStop(1,'rgba(4,3,12,.72)'); ctx.fillStyle=rg; ctx.fillRect(0,0,W,H); }
   ctx.restore();
   for(const p of g.parts){ ctx.globalAlpha=Math.max(0,p.life); ctx.fillStyle=p.col; ctx.fillRect(p.x-p.size/2,p.y-p.size/2,p.size,p.size); }
@@ -660,7 +850,7 @@ function renderIdle(dt){ idle.t+=dt; idle.dist+=dt*7; camX=Math.sin(idle.t*.4)*.
 let last=performance.now();
 function frame(now){ const dt=Math.max(0,Math.min(.033,(now-last)/1000)); last=now;
   if(state==='play'&&G) update(dt);
-  if(G&&state!=='menu') renderGame(); else renderIdle(dt);
+  if(G&&state!=='menu'&&state!=='rider') renderGame(); else renderIdle(dt);
   requestAnimationFrame(frame); }
 requestAnimationFrame(frame);
 
@@ -669,7 +859,7 @@ function act(a){ const g=G; if(state!=='play'||!g||g.crashT>0||g.go>0) return;
   if(a==='L'&&g.lane>-1){ g.lane--; SFX.lane(); } else if(a==='R'&&g.lane<1){ g.lane++; SFX.lane(); }
   else if(a==='U'&&g.py<=.001){ g.vy=JUMPV; g.slide=0; SFX.jump(); }
   else if(a==='D'){ if(g.py>.001){ g.vy=-18; g.slideQ=true; } else g.slide=.6; } }
-addEventListener('keydown',e=>{ const k=e.key;
+addEventListener('keydown',e=>{ const k=e.key; if(state==='rider') return;
   if(state==='intro'&&(k===' '||k==='Enter')){ beginRun(); e.preventDefault(); return; }
   if(state==='play'){ if(k==='ArrowLeft'||k==='a'||k==='A') act('L'); else if(k==='ArrowRight'||k==='d'||k==='D') act('R');
     else if(k==='ArrowUp'||k==='w'||k==='W'||k===' ') act('U'); else if(k==='ArrowDown'||k==='s'||k==='S') act('D');
@@ -683,7 +873,7 @@ cv.addEventListener('touchend',e=>{ if(state!=='play'||!ts) return; if(!ts.sw&&p
 document.addEventListener('visibilitychange',()=>{ if(document.hidden&&state==='play') pause(); });
 
 /* ================= screens ================= */
-const SCREENS=['menu','intro','pause','result'];
+const SCREENS=['menu','rider','intro','pause','result'];
 function show(id){ SCREENS.forEach(s=>$(s).hidden=s!==id); $('hud').hidden=!(state==='play'||state==='pause'); if(state!=='play') $('quiz').hidden=true; else if(G) G.hud.q=undefined; }
 function pause(){ if(state!=='play') return; state='pause'; $('pName').textContent=`Station ${G.i+1} · ${LEVELS[G.i].name}`; show('pause'); }
 function resume(){ state='play'; show(null); last=performance.now(); }
@@ -700,10 +890,25 @@ function goMenu(){
   show('menu');
 }
 function syncMute(){ $('bMute').textContent=save.muted?'Sound off':'Sound on'; }
-function syncRider(){ document.querySelectorAll('[data-g]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.g===save.rider)));
-  document.querySelectorAll('[data-r]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===save.ride))); }
+function riderLabel(){ return `${save.name||(save.rider==='girl'?'Girl':'Boy')} · ${save.ride==='scooty'?'Scooty':'On foot'}${save.mode==='night'?' · Night':''}`; }
+function previewInto(cv,look){ const g=cv.getContext('2d'); g.clearRect(0,0,cv.width,cv.height);
+  const o=look==='girl'?{look:'girl',top:'#e5487a',bottom:'#3d2c5c',dupatta:'#f4c430'}:{look:'boy',top:'#d7263d',bottom:'#2f3d5c'};
+  drawHuman(g,cv.width,cv.height,{...o,view:'front',pose:'stand',skin:'#c68863'}); }
+function syncRider(){
+  document.querySelectorAll('[data-g]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.g===save.rider)));
+  document.querySelectorAll('[data-r]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===save.ride)));
+  document.querySelectorAll('[data-m]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.m===save.mode)));
+  $('riderSum').textContent=riderLabel(); previewInto($('riderMini'),save.rider); }
+document.querySelectorAll('[data-pv]').forEach(c=>previewInto(c,c.dataset.pv));
 document.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{ save.rider=b.dataset.g; persist(); syncRider(); });
 document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{ save.ride=b.dataset.r; persist(); syncRider(); });
+document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{ save.mode=b.dataset.m; persist(); syncRider(); });
+let riderBack=null;
+function openRider(back){ clearInterval(introTimer); riderBack=back; $('riderName').value=save.name||''; state='rider'; show('rider'); }
+$('riderName').addEventListener('input',e=>{ save.name=e.target.value.replace(/[<>]/g,'').trim().slice(0,14); persist(); syncRider(); });
+$('bRider').onclick=()=>openRider('menu');
+$('bIntroRider').onclick=()=>openRider('intro');
+$('bRiderDone').onclick=()=>{ if(riderBack==='intro'&&G) showIntro(G.i); else startLevel(nextLevel()); };
 $('bPlay').onclick=()=>startLevel(nextLevel());
 $('bGo').onclick=beginRun;
 $('bMute').onclick=()=>{ save.muted=!save.muted; persist(); syncMute(); };

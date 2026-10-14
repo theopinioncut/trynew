@@ -6,6 +6,7 @@ The home of Metro Games: quick, free browser games, live at **https://www.klique
 | URL | File | What it is |
 |---|---|---|
 | `/` | `index.html` | Home page, listing every game as a stop on the metro line |
+| `/games/metro-game/play/` | `games/metro-game/play/index.html` | Metro Game: Delhi Metro runner (3 stations so far) |
 | `/games/red-view/` | `games/red-view/index.html` | Red View landing page (SEO text, FAQ, Play button) |
 | `/games/red-view/play/` | `games/red-view/play/index.html` | The game itself, full screen |
 | `/about.html` | `about.html` | About page |
@@ -41,3 +42,8 @@ After that, every merge into `main` updates the live site in about a minute.
 ## Adding a game
 1. Put the game in `games/<name>/play/index.html` and write a landing page at `games/<name>/index.html` (copy Red View's).
 2. Add a station card on the home page, update the game count, and add the new URLs to `sitemap.xml`.
+
+## Offline / slow internet
+- `sw.js` (service worker) saves the site on the phone after the first visit. Pages try the network for up to 3 seconds, then fall back to the saved copy; files load from the saved copy instantly.
+- Fonts are self-hosted in `assets/fonts/` (no Google Fonts request).
+- When you add or rename a file that should work offline, add it to `CORE` in `sw.js` and bump `VERSION`.

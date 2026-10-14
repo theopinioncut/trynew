@@ -15,9 +15,7 @@
 <link rel="icon" href="../../../assets/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="../../../assets/icon-180.png">
 <!-- ANALYTICS: paste your Google Analytics or Cloudflare Web Analytics snippet here -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../../../assets/fonts.css">
 <style>
 /* Layout: full-bleed canvas tunnel; HTML panels float over it like station signage. Single deliberate dark look. */
 :root{
@@ -950,5 +948,6 @@ $('rMap').onclick=goMap;
 syncMute();
 if(location.hash==='#go'){ history.replaceState(null,'',location.pathname); startLevel(nextLevel()); } else goMenu();
 </script>
+<script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))addEventListener('load',()=>navigator.serviceWorker.register('../../../sw.js').catch(()=>{}));</script>
 </body>
 </html>

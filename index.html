@@ -19,15 +19,14 @@
 <link rel="icon" href="assets/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="assets/icon-180.png">
 <link rel="manifest" href="site.webmanifest">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/fonts.css">
 <link rel="stylesheet" href="assets/site.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
  {"@type":"WebSite","name":"Metro Games by Kliquestart","alternateName":"Kliquestart","url":"https://www.kliquestart.com/"},
  {"@type":"ItemList","name":"Metro Games","itemListElement":[
-  {"@type":"ListItem","position":1,"url":"https://www.kliquestart.com/games/red-view/","name":"Red View"}
+  {"@type":"ListItem","position":1,"url":"https://www.kliquestart.com/games/red-view/","name":"Red View"},
+  {"@type":"ListItem","position":2,"url":"https://www.kliquestart.com/games/agla-station/play/","name":"Agla Station"}
  ]}
 ]}
 </script>
@@ -65,6 +64,21 @@
           </div>
         </div>
       </li>
+      <li class="station">
+        <div class="card">
+          <a class="play-area" href="games/agla-station/play/#go" aria-label="Play Agla Station">
+            <img src="assets/agla-station-card.jpg" alt="Agla Station: a runner in the Chandni Chowk bazaar with shop signs, fruit carts and kites in the sky" width="800" height="500">
+          </a>
+          <div class="body">
+            <span class="stop">New · Metros of India</span>
+            <h3>Agla Station</h3>
+            <p>Run through India’s metro cities, starting with Delhi. Pick your rider, on foot or on a scooty. Dodge rickshaws and cows in the Chandni Chowk bazaar, ride the metro over the rooftops and catch the last train to Hauz Khas.</p>
+            <div class="actions">
+              <a class="btn red" href="games/agla-station/play/#go">Play free</a>
+            </div>
+          </div>
+        </div>
+      </li>
       <li class="station soon">
         <div class="card ghost">
           <span class="stop">Coming soon</span>
@@ -83,5 +97,6 @@
     <nav><a href="about.html">About</a><a href="privacy.html">Privacy</a></nav>
   </div>
 </footer>
+<script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
 </body>
 </html>

@@ -6,7 +6,7 @@ The home of Metro Games: quick, free browser games, live at **https://www.klique
 | URL | File | What it is |
 |---|---|---|
 | `/` | `index.html` | Home page, listing every game as a stop on the metro line |
-| `/games/metro-game/play/` | `games/metro-game/play/index.html` | Metro Game: Delhi Metro runner (3 stations so far) |
+| `/games/agla-station/play/` | `games/agla-station/play/index.html` | Agla Station (Metros of India): Delhi first, 3 stations so far |
 | `/games/red-view/` | `games/red-view/index.html` | Red View landing page (SEO text, FAQ, Play button) |
 | `/games/red-view/play/` | `games/red-view/play/index.html` | The game itself, full screen |
 | `/about.html` | `about.html` | About page |

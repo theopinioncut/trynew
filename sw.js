@@ -9,8 +9,8 @@ const CORE = [
   '/assets/fonts/Teko-600-latin.woff2', '/assets/fonts/Teko-600-devanagari.woff2', '/assets/fonts/Mukta-400-latin.woff2', '/assets/fonts/Mukta-700-latin.woff2',
   '/assets/fonts/ChakraPetch-500.woff2', '/assets/fonts/ChakraPetch-600.woff2', '/assets/fonts/ChakraPetch-700.woff2',
   '/assets/fonts/IBMPlexMono-400.woff2', '/assets/fonts/IBMPlexMono-600.woff2',
-  '/assets/icon-192.png', '/assets/red-view-card.jpg', '/assets/metro-game-card.jpg',
-  '/games/metro-game/play/', '/games/red-view/', '/games/red-view/play/'
+  '/assets/icon-192.png', '/assets/red-view-card.jpg', '/assets/agla-station-card.jpg',
+  '/games/agla-station/play/', '/games/red-view/', '/games/red-view/play/'
 ];
 
 self.addEventListener('install', e => {

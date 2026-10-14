@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Play Metro Game – Delhi Metro Runner | Kliquestart</title>
-<meta name="description" content="Metro Game: run through Delhi station by station. Chandni Chowk bazaar, Kashmere Gate quiz run, a night ride to Hauz Khas. Free in your browser.">
-<link rel="canonical" href="https://www.kliquestart.com/games/metro-game/play/">
+<title>Agla Station – Metros of India Runner Game | Kliquestart</title>
+<meta name="description" content="Agla Station: a Metros of India runner. Run through Delhi station by station. Chandni Chowk bazaar, Kashmere Gate quiz run, a night ride to Hauz Khas. Free in your browser.">
+<link rel="canonical" href="https://www.kliquestart.com/games/agla-station/play/">
 <meta name="theme-color" content="#f4e9d2">
 <link rel="icon" href="../../../assets/icon-192.png" type="image/png">
 <link rel="manifest" href="../../../site.webmanifest">
@@ -33,7 +33,7 @@ a{color:inherit}
 .band.multi{background:linear-gradient(90deg,#e5322d 0 33.3%,var(--yellow) 33.3% 66.6%,#8a4fd3 66.6%)}
 .kicker{font-family:var(--head);font-weight:500;font-size:19px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);line-height:1;margin-top:6px}
 h1,h2{margin:0;font-family:var(--head);font-weight:600;line-height:.9;text-wrap:balance}
-.logo{font-size:clamp(64px,19vw,104px);letter-spacing:.01em}
+.logo{font-size:clamp(56px,16vw,92px);letter-spacing:.01em}
 .logo .r{color:var(--red)}.logo .b{color:var(--blue)}
 .logo small{display:block;font-size:.36em;color:var(--ink);letter-spacing:.04em;margin-top:4px}
 .tag{margin:0;font-size:17px;line-height:1.45}
@@ -44,6 +44,12 @@ h1,h2{margin:0;font-family:var(--head);font-weight:600;line-height:.9;text-wrap:
 .btn.primary:hover{filter:brightness(1.08)}
 .btn.ghost{border-color:transparent;color:var(--muted);padding-inline:8px;font-size:21px}
 .meta{font-size:13px;color:var(--muted)}
+/* rider picker */
+.rider{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
+.rider .meta{width:100%;font-family:var(--head);font-size:18px;letter-spacing:.05em;text-transform:uppercase}
+.seg{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:4px 16px 2px;font-family:var(--head);font-weight:600;font-size:21px;line-height:1.2}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 /* line map */
 .linemap{list-style:none;margin:0;padding:0 0 0 30px;position:relative;display:grid;gap:8px}
 .linemap::before{content:"";position:absolute;left:10px;top:16px;bottom:16px;width:8px;border-radius:4px;background:var(--yellow)}
@@ -93,7 +99,7 @@ h1,h2{margin:0;font-family:var(--head);font-weight:600;line-height:.9;text-wrap:
 </style>
 </head>
 <body>
-<canvas id="c" aria-label="Metro Game"></canvas>
+<canvas id="c" aria-label="Agla Station"></canvas>
 
 <div id="hud" hidden>
   <div class="hrow">
@@ -110,8 +116,12 @@ h1,h2{margin:0;font-family:var(--head);font-weight:600;line-height:.9;text-wrap:
   <div class="panel">
     <div class="band"></div>
     <div class="kicker">Kliquestart Metro Games</div>
-    <h1 class="logo"><span class="r">METRO</span> <span class="b">GAME</span><small>Delhi · दिल्ली</small></h1>
+    <h1 class="logo"><span class="r">AGLA</span> <span class="b">STATION</span><small>Metros of India · Delhi</small></h1>
     <p class="tag">Run through Delhi, station by station. Bazaars, tunnels, rooftops and the last train home.</p>
+    <div class="rider"><span class="meta">Your rider</span>
+      <div class="seg" role="group" aria-label="Rider"><button data-g="boy">Boy</button><button data-g="girl">Girl</button></div>
+      <div class="seg" role="group" aria-label="Ride"><button data-r="foot">On foot</button><button data-r="scooty">Scooty</button></div>
+    </div>
     <ol class="linemap" id="linemap"></ol>
     <div class="btns">
       <button id="bPlay" class="btn primary">Play</button>
@@ -230,7 +240,7 @@ function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.im
 
 /* ================= storage + audio ================= */
 const SKEY='metrogame_v1';
-let save={unlocked:0,stars:LEVELS.map(()=>0),best:LEVELS.map(()=>0),muted:false};
+let save={unlocked:0,stars:LEVELS.map(()=>0),best:LEVELS.map(()=>0),muted:false,rider:'boy',ride:'foot'};
 try{ const s=JSON.parse(localStorage.getItem(SKEY)); if(s&&Array.isArray(s.stars)){ save=Object.assign(save,s); while(save.stars.length<LEVELS.length){save.stars.push(0);save.best.push(0);} } }catch(e){}
 function persist(){ try{ localStorage.setItem(SKEY,JSON.stringify(save)); }catch(e){} }
 let AC=null;
@@ -300,7 +310,7 @@ function showIntro(i){
   clearInterval(introTimer);
   introTimer=setInterval(()=>{ n--; if(n<=0) beginRun(); else $('iCount').textContent=`Starting in ${n}…`; },1000);
 }
-function beginRun(){ clearInterval(introTimer); if(state!=='intro') return; state='play'; show(null); SFX.chime(); floatText('Chalo!','#fff',W/2,H*.4); }
+function beginRun(){ clearInterval(introTimer); if(state!=='intro') return; state='play'; show(null); SFX.chime(); if(save.ride==='scooty') setTimeout(()=>beep(90,.5,'sawtooth',.04,60),200); floatText(save.ride==='scooty'?'Vroom! Chalo!':'Chalo!','#fff',W/2,H*.4); }
 function text(t,col){ const p=proj(G.px,1.5,PZ); floatText(t,col,p[0],p[1]); }
 function floatText(t,col,x,y){ if(G) G.texts.push({t,col,x,y,life:1.3}); }
 function burst(x,y,col,n=14,sp=220){ for(let k=0;k<n;k++){ const a=Math.random()*6.283,v=sp*(.3+Math.random()); G.parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-60,life:.6+Math.random()*.4,col,size:2+Math.random()*3}); } }
@@ -477,7 +487,14 @@ function drawBuilding(k,side,z,night){
   if(r&&r.w>14){ const cols=Math.max(1,Math.floor(w/.9)), rows=Math.max(1,Math.floor(h/1.5)), cw=r.w/cols, rh=r.h/rows;
     for(let c=0;c<cols;c++) for(let q=0;q<rows;q++){ const lit=night&&hash(k*31+c*7+q,side+12)>.45;
       ctx.fillStyle=lit?'#ffd27a':(night?'#0b0a12':'rgba(40,30,25,.45)'); ctx.fillRect(r.x+c*cw+cw*.28,r.y+q*rh+rh*.25,cw*.44,rh*.45); } }
+  if(r&&r.w>18&&!night){ const rows=Math.max(1,Math.floor(h/1.5)), rh=r.h/rows;
+    for(let q=1;q<rows;q++){ const yy=r.y+q*rh; ctx.fillStyle='rgba(255,255,255,.35)'; ctx.fillRect(r.x,yy-rh*.08,r.w,rh*.08);
+      if(hash(k*13+q,side+26)>.45){ ctx.fillStyle='rgba(30,25,20,.55)'; for(let c=0;c<6;c++) ctx.fillRect(r.x+r.w*(.05+c*.18),yy-rh*.32,Math.max(1,r.w*.012),rh*.24); ctx.fillRect(r.x+r.w*.05,yy-rh*.33,r.w*.9,Math.max(1,rh*.03)); }
+      if(hash(k*17+q,side+28)>.6){ ctx.fillStyle='#eeeeea'; ctx.fillRect(r.x+r.w*(hash(k+q,29)>.5?.08:.72),yy-rh*.58,r.w*.18,rh*.22); }
+      if(hash(k*19+q,side+30)>.55){ ctx.fillStyle=['#2a9d8f','#e76f51','#3d5a80','#c44569'][(k+q)%4]; ctx.fillRect(r.x+r.w*.3,yy-rh*.9,r.w*.4,rh*.1); } }
+    ctx.fillStyle=shade(col,-.25); ctx.fillRect(r.x-2,r.y-Math.max(2,rh*.06),r.w+4,Math.max(2,rh*.06)); }
   if(hash(k,side+14)>.35){ const tx=x-side*w*.25; box(tx,.32,y1,y1+.65,z+.5,z+1.1,'#1c1c1c'); }
+  if(hash(k,side+32)>.7){ ctx.strokeStyle=night?'#555':'#3b3b3b'; ctx.lineWidth=1; const p0=proj(x+side*w*.2,y1,z+.4), p1=proj(x+side*w*.2,y1+1.1,z+.4); if(z+.4>zNear){ ctx.beginPath(); ctx.moveTo(p0[0],p0[1]); ctx.lineTo(p1[0],p1[1]); ctx.stroke(); } }
   if(hash(k,side+16)>.82){ const bx=x+side*w*.1, br=box(bx,Math.min(1.3,w*.45),y1+.9,y1+2.1,z+.3,z+.36,night?'#2d2140':'#fff6df','#c44569');
     label(BOARDS[Math.floor(hash(k,side+18)*BOARDS.length)],br,night?'#ffd27a':'#c44569'); }
   if(hash(k,side+20)>.55){ circle(side*(2.9+hash(k,side+22)*.5),-4.8,z+dep+.6,.9,night?'#1d2a1a':'#5c8a3e'); }
@@ -554,14 +571,35 @@ function drawQuizGate(q,z,lv){
 }
 function drawPlayer(g){
   if(g.crashT>0) return;
-  const sl=g.slide>0; ctx.globalAlpha=g.inv>0&&Math.floor(g.t*12)%2?.35:1;
+  const sl=g.slide>0, girl=save.rider==='girl', scooty=save.ride==='scooty';
+  ctx.globalAlpha=g.inv>0&&Math.floor(g.t*12)%2?.35:1;
   const x=g.px, y=g.py, z0=PZ-.15, run=g.go>0?0:Math.sin(g.t*16);
-  const sh=proj(x,0,PZ); ctx.fillStyle='rgba(0,0,0,.3)'; ctx.beginPath(); ctx.ellipse(sh[0],sh[1],.32*sh[2],.09*sh[2],0,0,6.283); ctx.fill();
-  if(sl){ box(x,.3,y,y+.32,z0-.2,z0+.5,'#24324f'); box(x,.24,y+.1,y+.45,z0-.25,z0+.1,RED); circle(x,y+.5,z0-.05,.13,'#1d1410'); }
-  else { const ly=y>0?.1:0;
-    box(x-.1,.06,y+ly+Math.max(0,run)*.12,y+.5,z0+.05,z0+.15,'#24324f'); box(x+.1,.06,y+ly+Math.max(0,-run)*.12,y+.5,z0+.05,z0+.15,'#24324f');
-    box(x,.22,y+.48,y+1.0,z0,z0+.22,RED); box(x,.16,y+.55,y+.92,z0-.12,z0,BLUE);
-    circle(x,y+1.13,z0+.1,.13,'#c68863'); circle(x,y+1.17,z0+.05,.13,'#1d1410'); }
+  const top=girl?'#e5487a':RED, pants=girl?'#3d2c5c':'#24324f', hair='#1d1410', skin='#c68863';
+  const sh=proj(x,0,PZ); ctx.fillStyle='rgba(0,0,0,.3)'; ctx.beginPath(); ctx.ellipse(sh[0],sh[1],(scooty?.36:.32)*sh[2],.09*sh[2],0,0,6.283); ctx.fill();
+  if(scooty){
+    const lift=sl?-.12:0, by=y;
+    box(x,.08,by+.05,by+.38,z0+.35,z0+.95,'#2b2b2b');                  // front fork + wheel guard
+    circle(x,by+.18,z0+.7,.18,'#151515');                               // front wheel
+    box(x,.24,by+.18,by+.56,z0-.35,z0+.35,'#e63946');                  // body
+    box(x,.2,by+.56,by+.64,z0-.3,z0+.2,'#1d1d1d');                     // seat
+    circle(x,by+.2,z0-.38,.2,'#151515'); circle(x,by+.2,z0-.39,.08,'#9a9a9a'); // rear wheel
+    box(x,.1,by+.36,by+.44,z0-.37,z0-.35,'#ff2d2d');                   // tail light
+    box(x,.3,by+1.0+lift,by+1.04+lift,z0+.55,z0+.6,'#2b2b2b');          // handlebar
+    box(x,.2,by+.62,by+1.05+lift,z0-.05,z0+.17,top);                    // rider torso
+    if(girl){ box(x,.05,by+.62,by+1.12+lift,z0-.12,z0-.08,hair); }      // braid
+    else box(x,.15,by+.66,by+.98+lift,z0-.17,z0-.05,BLUE);              // backpack
+    circle(x,by+1.18+lift,z0+.07,.14,'#e8e8e8'); circle(x,by+1.2+lift,z0+.03,.15,girl?'#e5487a':'#1f6fd1'); // helmet
+  } else if(sl){
+    box(x,.3,y,y+.32,z0-.2,z0+.5,pants); box(x,.24,y+.1,y+.45,z0-.25,z0+.1,top); circle(x,y+.5,z0-.05,.13,hair);
+  } else {
+    const ly=y>0?.1:0;
+    box(x-.1,.06,y+ly+Math.max(0,run)*.12,y+.5,z0+.05,z0+.15,pants); box(x+.1,.06,y+ly+Math.max(0,-run)*.12,y+.5,z0+.05,z0+.15,pants);
+    if(girl){ box(x,.25,y+.38,y+1.0,z0,z0+.22,top); box(x,.26,y+.74,y+.82,z0-.01,z0+.23,'#f4c430'); }  // kurti + dupatta band
+    else box(x,.22,y+.48,y+1.0,z0,z0+.22,top);
+    if(girl) box(x,.05,y+.6,y+1.12,z0-.08,z0-.04,hair); else box(x,.16,y+.55,y+.92,z0-.12,z0,BLUE);
+    circle(x,y+1.13,z0+.1,.13,skin); circle(x,y+1.17,z0+.05,.13,hair);
+    if(girl) circle(x,y+1.22,z0-.02,.08,hair);
+  }
   ctx.globalAlpha=1;
 }
 
@@ -662,13 +700,17 @@ function goMenu(){
   show('menu');
 }
 function syncMute(){ $('bMute').textContent=save.muted?'Sound off':'Sound on'; }
+function syncRider(){ document.querySelectorAll('[data-g]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.g===save.rider)));
+  document.querySelectorAll('[data-r]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===save.ride))); }
+document.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{ save.rider=b.dataset.g; persist(); syncRider(); });
+document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{ save.ride=b.dataset.r; persist(); syncRider(); });
 $('bPlay').onclick=()=>startLevel(nextLevel());
 $('bGo').onclick=beginRun;
 $('bMute').onclick=()=>{ save.muted=!save.muted; persist(); syncMute(); };
 $('bPause').onclick=pause; $('bResume').onclick=resume;
 $('bRestart').onclick=()=>startLevel(G.i); $('bQuit').onclick=goMenu;
 $('rNext').onclick=()=>startLevel(G.i+1); $('rRetry').onclick=()=>startLevel(G.i); $('rMap').onclick=goMenu;
-syncMute();
+syncMute(); syncRider();
 if(location.hash==='#go'){ history.replaceState(null,'',location.pathname); startLevel(nextLevel()); } else goMenu();
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')) navigator.serviceWorker.register('../../../sw.js').catch(()=>{});
 </script>

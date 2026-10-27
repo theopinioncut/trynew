@@ -48,6 +48,20 @@ h1,h2{margin:0;font-family:var(--head);font-weight:600;line-height:.9;text-wrap:
 .btn.primary:hover{filter:brightness(1.08)}
 .btn.ghost{border-color:transparent;color:var(--muted);padding-inline:8px;font-size:21px}
 .meta{font-size:13px;color:var(--muted)}
+/* music */
+.mopts{display:grid;gap:8px}
+.mopt{text-align:left;background:#fff8ea;border:2px solid var(--rule);border-radius:8px;padding:8px 12px 6px;display:grid}
+.mopt b{font-family:var(--head);font-weight:600;font-size:23px;line-height:1.05}
+.mopt span{font-size:14px;color:var(--muted)}
+.mopt[aria-pressed="true"]{border-color:var(--red);background:#fff}
+.filewrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.filewrap input{position:absolute;width:1px;height:1px;opacity:0}
+#spDock{position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:4;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4);background:#121212;display:flex;align-items:stretch}
+#spDock iframe{display:block;border:0;flex:1;min-width:0}
+#spDock button{border:0;background:#1db954;color:#fff;font-size:20px;width:40px}
+#spDock.min{left:auto;width:44px}
+#spDock.min iframe{display:none}
+#nowPlaying{position:fixed;left:12px;top:calc(max(10px,env(safe-area-inset-top,0px)) + 74px);z-index:6;background:var(--paper);color:var(--ink);border-radius:999px;padding:4px 14px 2px;font-family:var(--head);font-weight:600;font-size:20px;box-shadow:0 4px 14px rgba(0,0,0,.3);pointer-events:none}
 /* rider screen */
 .ridercard{display:flex;gap:12px;align-items:center;text-align:left;background:#fff8ea;border:1px solid var(--rule);border-radius:6px;padding:6px 12px}
 .ridercard canvas{width:40px;height:60px}
@@ -94,15 +108,15 @@ h1,h2{margin:0;font-family:var(--head);font-weight:600;line-height:.9;text-wrap:
 .lines i{width:12px;height:12px;border-radius:50%}
 /* hud */
 #hud{position:fixed;left:0;right:0;top:0;z-index:4;pointer-events:none;padding:max(10px,env(safe-area-inset-top,0px)) 12px 0;display:flex;flex-direction:column;gap:8px}
-.hrow{display:flex;align-items:center;gap:8px}
+.hrow{display:flex;align-items:center;gap:6px}
 .hlvl{background:var(--night);color:#fff;border-radius:6px;padding:4px 10px 2px;min-width:0;flex:1;display:flex;flex-direction:column;line-height:1}
 .hlvl b{font-family:var(--head);font-weight:600;font-size:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hlvl span{font-size:12px;color:#cfc8e0;white-space:nowrap}
-.chip{display:flex;align-items:center;gap:4px;padding:4px 12px 2px;border-radius:6px;background:var(--paper);font-family:var(--head);font-weight:600;font-size:26px;line-height:1.1;font-variant-numeric:tabular-nums;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.chip{display:flex;align-items:center;gap:3px;padding:4px 9px 2px;border-radius:6px;background:var(--paper);font-family:var(--head);font-weight:600;font-size:23px;flex:none;line-height:1.1;font-variant-numeric:tabular-nums;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .chip.coins{color:#9a6b00}
 .hearts{color:var(--red);letter-spacing:1px}
 .hearts .off{color:rgba(31,26,21,.2)}
-.icon{pointer-events:auto;width:40px;height:40px;border-radius:6px;border:0;background:var(--paper);font-family:var(--head);font-weight:600;font-size:20px;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.icon{pointer-events:auto;width:36px;height:36px;flex:none;border-radius:6px;border:0;background:var(--paper);font-family:var(--head);font-weight:600;font-size:20px;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .prog{position:relative;height:8px;background:rgba(244,233,210,.35);border-radius:4px}
 .prog .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:4px;background:var(--yellow)}
 .prog b{position:absolute;top:-4px;width:16px;height:16px;border-radius:50%;background:var(--paper);border:4px solid var(--night);transform:translateX(-50%);box-sizing:border-box}
@@ -125,6 +139,7 @@ h1,h2{margin:0;font-family:var(--head);font-weight:600;line-height:.9;text-wrap:
     <div class="hlvl"><b id="hName">Chandni Chowk</b><span id="hGenre">Station 1 · Rush Hour</span></div>
     <div class="chip coins">₹<span id="hCoins">0</span></div>
     <div class="chip hearts" id="hHearts" aria-label="Hearts"></div>
+    <button id="bMusic" class="icon" aria-label="Music">♪</button>
     <button id="bPause" class="icon" aria-label="Pause">II</button>
   </div>
   <div class="prog" id="hProg"><div class="fill" id="hFill"></div><b style="left:33.3%"></b><b style="left:66.6%"></b><b style="left:100%"></b></div>
@@ -141,11 +156,33 @@ h1,h2{margin:0;font-family:var(--head);font-weight:600;line-height:.9;text-wrap:
     <ol class="linemap" id="linemap"></ol>
     <div class="btns">
       <button id="bPlay" class="btn primary">Play</button>
-      <button id="bMute" class="btn ghost">Sound on</button>
+      <button id="bMusicMenu" class="btn">🎵 Music</button>
       <a class="btn ghost" href="../../../">All games</a>
     </div>
   </div>
 </div>
+
+<div id="music" class="screen" hidden>
+  <div class="panel">
+    <div class="band"></div>
+    <div class="kicker">Music while you ride</div>
+    <h2 style="font-size:50px">Your songs, your ride</h2>
+    <div class="mopts" role="group" aria-label="Music source">
+      <button class="mopt" data-src="mix"><b>Kliquestart Metro Mix</b><span>Our songs, made for the ride</span></button>
+      <button class="mopt" data-src="own"><b>Keep my music playing</b><span>Spotify, Prime, YouTube Music or any app</span></button>
+      <button class="mopt" data-src="spotify"><b>My Spotify playlist</b><span>Paste a playlist, album or song link</span></button>
+      <button class="mopt" data-src="files"><b>Songs from my phone</b><span>Pick audio files you already have</span></button>
+      <button class="mopt" data-src="off"><b>No music</b><span>Just game sounds</span></button>
+    </div>
+    <label class="namefield" id="spWrap" for="spUrl" hidden><span>Spotify link</span><input id="spUrl" inputmode="url" autocomplete="off" placeholder="https://open.spotify.com/playlist/…"></label>
+    <div id="fileWrap" class="filewrap" hidden><label class="btn" for="mFiles">Choose songs</label><input type="file" id="mFiles" accept="audio/*" multiple><span class="meta" id="fileInfo"></span></div>
+    <div class="opt"><span>Game sounds</span><div class="seg" role="group" aria-label="Game sounds"><button data-sfx="on">On</button><button data-sfx="soft">Soft</button><button data-sfx="off">Off</button></div></div>
+    <p class="meta" id="mNote" style="font-size:14px"></p>
+    <div class="btns"><button id="bMusicDone" class="btn primary">Done</button></div>
+  </div>
+</div>
+<div id="spDock" hidden><button id="spHide" aria-label="Show or hide player">♪</button><iframe id="spFrame" title="Spotify player" width="100%" height="80" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>
+<div id="nowPlaying" hidden><span id="npText"></span></div>
 
 <div id="rider" class="screen" hidden>
   <div class="panel">
@@ -182,6 +219,7 @@ h1,h2{margin:0;font-family:var(--head);font-weight:600;line-height:.9;text-wrap:
     <div class="btns">
       <button id="bResume" class="btn primary">Resume</button>
       <button id="bRestart" class="btn">Restart</button>
+      <button id="bMusicPause" class="btn">🎵 Music</button>
       <button id="bQuit" class="btn ghost">Line map</button>
     </div>
   </div>
@@ -273,11 +311,12 @@ function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.im
 
 /* ================= storage + audio ================= */
 const SKEY='metrogame_v1';
-let save={unlocked:0,stars:LEVELS.map(()=>0),best:LEVELS.map(()=>0),muted:false,rider:'boy',ride:'foot',name:'',mode:'normal'};
+let save={unlocked:0,stars:LEVELS.map(()=>0),best:LEVELS.map(()=>0),muted:false,rider:'boy',ride:'foot',name:'',mode:'normal',music:{src:'mix',sfx:'on',sp:''}};
 try{ const s=JSON.parse(localStorage.getItem(SKEY)); if(s&&Array.isArray(s.stars)){ save=Object.assign(save,s); while(save.stars.length<LEVELS.length){save.stars.push(0);save.best.push(0);} } }catch(e){}
+if(!save.music||typeof save.music!=='object') save.music={src:'mix',sfx:'on',sp:''};
 function persist(){ try{ localStorage.setItem(SKEY,JSON.stringify(save)); }catch(e){} }
 let AC=null;
-function beep(f,dur=.08,type='square',vol=.05,slide=0){ if(save.muted) return; try{
+function beep(f,dur=.08,type='square',vol=.05,slide=0){ const sv=SFXV[(save.music||{}).sfx]??1; if(!sv) return; vol*=sv; try{
   if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)(); const t=AC.currentTime,o=AC.createOscillator(),g=AC.createGain();
   o.type=type; o.frequency.setValueAtTime(f,t); if(slide) o.frequency.exponentialRampToValueAtTime(Math.max(40,f+slide),t+dur);
   g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.0001,t+dur); o.connect(g).connect(AC.destination); o.start(t); o.stop(t+dur); }catch(e){} }
@@ -343,7 +382,7 @@ function showIntro(i){
   clearInterval(introTimer);
   introTimer=setInterval(()=>{ n--; if(n<=0) beginRun(); else $('iCount').textContent=`Starting in ${n}…`; },1000);
 }
-function beginRun(){ clearInterval(introTimer); if(state!=='intro') return; state='play'; show(null); SFX.chime(); if(save.ride==='scooty') setTimeout(()=>beep(90,.5,'sawtooth',.04,60),200); floatText((save.ride==='scooty'?'Vroom! ':'')+'Chalo'+(save.name?', '+save.name:'')+'!','#fff',W/2,H*.4); }
+function beginRun(){ clearInterval(introTimer); if(state!=='intro') return; state='play'; show(null); if(!MUSIC.playing) musicStart(); else musicResume(); SFX.chime(); if(save.ride==='scooty') setTimeout(()=>beep(90,.5,'sawtooth',.04,60),200); floatText((save.ride==='scooty'?'Vroom! ':'')+'Chalo'+(save.name?', '+save.name:'')+'!','#fff',W/2,H*.4); }
 function text(t,col){ const p=proj(G.px,1.5,PZ); floatText(t,col,p[0],p[1]); }
 function floatText(t,col,x,y){ if(G) G.texts.push({t,col,x,y,life:1.3}); }
 function burst(x,y,col,n=14,sp=220){ for(let k=0;k<n;k++){ const a=Math.random()*6.283,v=sp*(.3+Math.random()); G.parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-60,life:.6+Math.random()*.4,col,size:2+Math.random()*3}); } }
@@ -854,16 +893,16 @@ function renderIdle(dt){ idle.t+=dt; idle.dist+=dt*7; camX=Math.sin(idle.t*.4)*.
 let last=performance.now();
 function frame(now){ const dt=Math.max(0,Math.min(.033,(now-last)/1000)); last=now;
   if(state==='play'&&G) update(dt);
-  if(G&&state!=='menu'&&state!=='rider') renderGame(); else renderIdle(dt);
+  if(G&&state!=='menu'&&state!=='rider'&&!(state==='music'&&musicBack==='menu')) renderGame(); else renderIdle(dt);
   requestAnimationFrame(frame); }
 requestAnimationFrame(frame);
 
 /* ================= input ================= */
-function act(a){ const g=G; if(state!=='play'||!g||g.crashT>0||g.go>0) return;
+function act(a){ ensureMusic(); const g=G; if(state!=='play'||!g||g.crashT>0||g.go>0) return;
   if(a==='L'&&g.lane>-1){ g.lane--; SFX.lane(); } else if(a==='R'&&g.lane<1){ g.lane++; SFX.lane(); }
   else if(a==='U'&&g.py<=.001){ g.vy=JUMPV; g.slide=0; SFX.jump(); }
   else if(a==='D'){ if(g.py>.001){ g.vy=-18; g.slideQ=true; } else g.slide=.6; } }
-addEventListener('keydown',e=>{ const k=e.key; if(state==='rider') return;
+addEventListener('keydown',e=>{ const k=e.key; if(state==='rider'||state==='music') return;
   if(state==='intro'&&(k===' '||k==='Enter')){ beginRun(); e.preventDefault(); return; }
   if(state==='play'){ if(k==='ArrowLeft'||k==='a'||k==='A') act('L'); else if(k==='ArrowRight'||k==='d'||k==='D') act('R');
     else if(k==='ArrowUp'||k==='w'||k==='W'||k===' ') act('U'); else if(k==='ArrowDown'||k==='s'||k==='S') act('D');
@@ -876,11 +915,106 @@ cv.addEventListener('touchmove',e=>{ if(state!=='play'||!ts) return; e.preventDe
 cv.addEventListener('touchend',e=>{ if(state!=='play'||!ts) return; if(!ts.sw&&performance.now()-ts.t<260) act('U'); ts=null; e.preventDefault(); },{passive:false});
 document.addEventListener('visibilitychange',()=>{ if(document.hidden&&state==='play') pause(); });
 
+/* ================= music corner =================
+   Sources: 'mix' (Kliquestart songs from assets/music/tracks.json, else the built-in Metro Beat),
+   'own' (player's own app keeps playing; we only add game sounds), 'spotify' (embed mini-player),
+   'files' (songs picked from the phone, never uploaded), 'off'. */
+const MUSIC_DIR='../../../assets/music/';
+const MUSIC={el:null,list:[],idx:0,tracks:[],files:[],playing:false};
+const SFXV={on:1,soft:.35,off:0};
+function setAudioSession(type){ try{ if(navigator.audioSession) navigator.audioSession.type=type; }catch(e){} }
+fetch(MUSIC_DIR+'tracks.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(j=>{ if(j&&Array.isArray(j.tracks)) MUSIC.tracks=j.tracks.filter(t=>t&&t.file); }).catch(()=>{});
+function nowPlaying(t){ const n=$('nowPlaying'); $('npText').textContent=t; n.hidden=false; clearTimeout(n._t); n._t=setTimeout(()=>n.hidden=true,3500); }
+function musicStart(){
+  musicStop(); const src=save.music.src; MUSIC.playing=true;
+  setAudioSession(src==='own'||src==='off'?'ambient':'playback');
+  if(src==='mix'){ if(MUSIC.tracks.length) playList(MUSIC.tracks.map(t=>({url:MUSIC_DIR+t.file,title:t.title+(t.artist?' · '+t.artist:'')}))); else synthStart(); }
+  else if(src==='files'&&MUSIC.files.length) playList(MUSIC.files);
+  else if(src==='spotify') showDock(true);
+  else MUSIC.playing=false;
+}
+function musicPause(){ if(MUSIC.el) MUSIC.el.pause(); synthStop(); }
+function musicResume(){ if(!MUSIC.playing) return musicStart();
+  if(save.music.src==='mix'&&!MUSIC.tracks.length) synthStart(); else if(MUSIC.el&&MUSIC.list.length) MUSIC.el.play().catch(()=>{}); }
+function musicStop(){ if(MUSIC.el){ MUSIC.el.pause(); } synthStop(); MUSIC.playing=false; }
+function ensureMusic(){ if(state==='play'&&!MUSIC.playing&&save.music.src!=='off'&&save.music.src!=='own') musicStart(); }
+function playList(list){ MUSIC.list=list; MUSIC.idx=MUSIC.idx%list.length;
+  if(!MUSIC.el){ MUSIC.el=new Audio(); MUSIC.el.preload='auto'; MUSIC.el.addEventListener('ended',()=>{ MUSIC.idx=(MUSIC.idx+1)%MUSIC.list.length; playCur(); }); }
+  playCur(); }
+function playCur(){ const t=MUSIC.list[MUSIC.idx]; if(!t) return; MUSIC.el.src=t.url; MUSIC.el.volume=.7;
+  MUSIC.el.play().then(()=>nowPlaying('♪ '+t.title)).catch(()=>{ MUSIC.playing=false; }); }
+
+/* ---- built-in "Metro Beat": a small original loop synthesised live (no download, no copyright) ---- */
+const SYN={on:false,timer:null,next:0,step:0,out:null,noise:null};
+const BEAT_STEP=60/104/4, ROOTS=[0,-2,-4,-2];
+const MEL=[7,null,10,null,12,null,10,7,5,null,7,null,3,null,2,null, 3,null,5,null,7,null,5,3,2,null,0,null,2,null,null,null,
+           7,null,10,null,12,null,14,12,10,null,12,null,10,null,7,null, 5,null,7,5,3,null,2,null,0,null,null,null,null,null,null,null];
+function hz(semi){ return 146.83*Math.pow(2,semi/12); }
+function synthStart(){
+  if(save.music.src!=='mix'||SYN.on) return;
+  try{ if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==='suspended') AC.resume(); }catch(e){ return; }
+  SYN.on=true; MUSIC.playing=true; SYN.out=AC.createGain(); SYN.out.gain.value=.2; SYN.out.connect(AC.destination);
+  if(!SYN.noise){ const b=AC.createBuffer(1,AC.sampleRate*.4,AC.sampleRate), d=b.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1; SYN.noise=b; }
+  SYN.next=AC.currentTime+.08; SYN.timer=setInterval(synthTick,40); nowPlaying('♪ Metro Beat · Kliquestart');
+}
+function synthStop(){ if(!SYN.on) return; SYN.on=false; clearInterval(SYN.timer); const o=SYN.out;
+  try{ o.gain.setTargetAtTime(0,AC.currentTime,.05); }catch(e){} setTimeout(()=>{ try{ o.disconnect(); }catch(e){} },400); }
+function tone(f,t,d,type,vol){ const o=AC.createOscillator(), g=AC.createGain(); o.type=type; o.frequency.value=f;
+  g.gain.setValueAtTime(.0001,t); g.gain.linearRampToValueAtTime(vol,t+.012); g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(g).connect(SYN.out); o.start(t); o.stop(t+d+.05); }
+function hit(t,d,vol,hp){ const s=AC.createBufferSource(), f=AC.createBiquadFilter(), g=AC.createGain(); s.buffer=SYN.noise; f.type='highpass'; f.frequency.value=hp;
+  g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.0001,t+d); s.connect(f).connect(g).connect(SYN.out); s.start(t); s.stop(t+d+.02); }
+function kick(t){ const o=AC.createOscillator(), g=AC.createGain(); o.frequency.setValueAtTime(150,t); o.frequency.exponentialRampToValueAtTime(45,t+.14);
+  g.gain.setValueAtTime(.9,t); g.gain.exponentialRampToValueAtTime(.0001,t+.22); o.connect(g).connect(SYN.out); o.start(t); o.stop(t+.25); }
+function synthTick(){
+  while(SYN.on&&SYN.next<AC.currentTime+.15){
+    const s=SYN.step%64, bar=s>>4, i=s&15, t=SYN.next, r=ROOTS[bar];
+    if(i%4===0) kick(t);
+    if(i%2===1) hit(t,.04,.18,8000);
+    if(i===4||i===12) hit(t,.16,.32,1800);
+    if(i===0||i===3||i===8||i===11||i===14) tone(hz(r-12),t,BEAT_STEP*1.7,'triangle',.55);
+    if(i===0){ for(const k of [0,3,7]) tone(hz(r+k),t,BEAT_STEP*15,'sine',.06); }
+    const m=MEL[s]; if(m!=null){ tone(hz(m+12),t,BEAT_STEP*1.6,'square',.05); tone(hz(m+24),t,BEAT_STEP*1.2,'sine',.04); }
+    SYN.next+=BEAT_STEP; SYN.step++;
+  }
+}
+
+/* ---- Spotify mini-player ---- */
+function spotifyEmbed(url){ const m=String(url||'').match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(playlist|album|track|artist|show|episode)\/([A-Za-z0-9]+)/);
+  return m?`https://open.spotify.com/embed/${m[1]}/${m[2]}?theme=0`:null; }
+function showDock(open){ const src=spotifyEmbed(save.music.sp); if(!src){ $('spDock').hidden=true; return; }
+  const f=$('spFrame'); if(f.dataset.src!==src){ f.src=src; f.dataset.src=src; }
+  $('spDock').hidden=false; $('spDock').classList.toggle('min',!open); }
+
+/* ---- music screen ---- */
+let musicBack=null;
+function openMusic(back){ musicBack=back; if(state==='play') pause(); state='music'; $('spUrl').value=save.music.sp||''; syncMusic(); show('music'); }
+function syncMusic(){
+  const src=save.music.src;
+  document.querySelectorAll('[data-src]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.src===src)));
+  document.querySelectorAll('[data-sfx]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sfx===save.music.sfx)));
+  $('spWrap').hidden=src!=='spotify'; $('fileWrap').hidden=src!=='files';
+  $('fileInfo').textContent=MUSIC.files.length?`${MUSIC.files.length} song${MUSIC.files.length>1?'s':''} ready`:'Your songs stay on your phone. Pick them again next visit.';
+  $('mNote').textContent={mix:MUSIC.tracks.length?`${MUSIC.tracks.length} Kliquestart songs on shuffle.`:'Plays our Metro Beat. More Kliquestart songs coming soon.',
+    own:'Start your playlist in Spotify, Prime Music, YouTube Music or any app, then come back and play. Game sounds mix in on top.',
+    spotify:spotifyEmbed(save.music.sp)?'Press play on the mini-player at the bottom. Logged-in Spotify users hear full songs; others may get previews.':'Paste a Spotify playlist, album or song link.',
+    files:'Pick songs saved on your phone. Nothing is uploaded.',off:'Only game sounds.'}[src];
+  $('bMusic').textContent=src==='off'?'♪̸':'♪';
+}
+document.querySelectorAll('[data-src]').forEach(b=>b.onclick=()=>{ save.music.src=b.dataset.src; persist(); musicStop(); if(b.dataset.src!=='spotify') $('spDock').hidden=true; syncMusic(); });
+document.querySelectorAll('[data-sfx]').forEach(b=>b.onclick=()=>{ save.music.sfx=b.dataset.sfx; persist(); syncMusic(); });
+$('spUrl').addEventListener('input',e=>{ save.music.sp=e.target.value.trim(); persist(); syncMusic(); if(spotifyEmbed(save.music.sp)) showDock(true); });
+$('mFiles').addEventListener('change',e=>{ MUSIC.files.forEach(f=>URL.revokeObjectURL(f.url));
+  MUSIC.files=[...e.target.files].map(f=>({url:URL.createObjectURL(f),title:f.name.replace(/\.[^.]+$/,'')})); MUSIC.idx=0; syncMusic(); });
+$('bMusicDone').onclick=()=>{ if(musicBack==='menu') goMenu(); else { state='pause'; show('pause'); if(musicBack==='play') resume(); }
+  if(save.music.src!=='off'&&save.music.src!=='own'&&state!=='menu') musicStart(); };
+$('spHide').onclick=()=>$('spDock').classList.toggle('min');
+
 /* ================= screens ================= */
-const SCREENS=['menu','rider','intro','pause','result'];
+const SCREENS=['menu','rider','music','intro','pause','result'];
 function show(id){ SCREENS.forEach(s=>$(s).hidden=s!==id); $('hud').hidden=!(state==='play'||state==='pause'); if(state!=='play') $('quiz').hidden=true; else if(G) G.hud.q=undefined; }
-function pause(){ if(state!=='play') return; state='pause'; $('pName').textContent=`Station ${G.i+1} · ${LEVELS[G.i].name}`; show('pause'); }
-function resume(){ state='play'; show(null); last=performance.now(); }
+function pause(){ if(state!=='play') return; musicPause(); state='pause'; $('pName').textContent=`Station ${G.i+1} · ${LEVELS[G.i].name}`; show('pause'); }
+function resume(){ state='play'; show(null); last=performance.now(); musicResume(); }
 function nextLevel(){ return Math.min(save.unlocked,LEVELS.length-1); }
 function goMenu(){
   state='menu'; G=null; clearInterval(introTimer);
@@ -893,7 +1027,7 @@ function goMenu(){
   $('bPlay').textContent=save.stars.some(s=>s)?`Play ${LEVELS[nextLevel()].name}`:'Play';
   show('menu');
 }
-function syncMute(){ $('bMute').textContent=save.muted?'Sound off':'Sound on'; }
+function syncMute(){}
 function riderLabel(){ return `${save.name||(save.rider==='girl'?'Girl':'Boy')} · ${save.ride==='scooty'?'Scooty':'On foot'}${save.mode==='night'?' · Night':''}`; }
 function previewInto(cv,look){ const g=cv.getContext('2d'); g.clearRect(0,0,cv.width,cv.height);
   const o=look==='girl'?{look:'girl',top:'#e5487a',bottom:'#3d2c5c',dupatta:'#f4c430'}:{look:'boy',top:'#d7263d',bottom:'#2f3d5c'};
@@ -915,11 +1049,11 @@ $('bIntroRider').onclick=()=>openRider('intro');
 $('bRiderDone').onclick=()=>{ if(riderBack==='intro'&&G) showIntro(G.i); else startLevel(nextLevel()); };
 $('bPlay').onclick=()=>startLevel(nextLevel());
 $('bGo').onclick=beginRun;
-$('bMute').onclick=()=>{ save.muted=!save.muted; persist(); syncMute(); };
+$('bMusicMenu').onclick=()=>openMusic('menu'); $('bMusicPause').onclick=()=>openMusic('pause'); $('bMusic').onclick=()=>openMusic('play');
 $('bPause').onclick=pause; $('bResume').onclick=resume;
 $('bRestart').onclick=()=>startLevel(G.i); $('bQuit').onclick=goMenu;
 $('rNext').onclick=()=>startLevel(G.i+1); $('rRetry').onclick=()=>startLevel(G.i); $('rMap').onclick=goMenu;
-syncMute(); syncRider();
+syncMute(); syncRider(); syncMusic();
 if(location.hash==='#go'){ history.replaceState(null,'',location.pathname); startLevel(nextLevel()); } else goMenu();
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')) navigator.serviceWorker.register('../../../sw.js').catch(()=>{});
 </script>

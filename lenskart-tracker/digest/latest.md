@@ -97,6 +97,8 @@ Attendance at 08:45: **342 of 359** rostered staff logged in across 78 stores.
 </details>
 
 ---
-Sent automatically by GitHub Actions, triggered by a local run, at 23:20 IST on 2026-11-22.
+Sent automatically by GitHub Actions, triggered by an owner update, at 23:20 IST on 2026-11-22. · [Open the tracker](https://www.kliquestart.com/lenskart-tracker/)
+
+cc @theopinioncut
 
 _Sample data generated with AI for a prototype. Names and figures are illustrative._

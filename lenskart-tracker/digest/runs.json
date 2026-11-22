@@ -1,0 +1,92 @@
+[
+ {
+  "at": "2026-11-22T17:50:43.742Z",
+  "asOf": "2026-11-22",
+  "trigger": "push",
+  "runUrl": "https://github.com/theopinioncut/trynew/actions/runs/45051693439",
+  "changes": [],
+  "top": [
+   "P-SC1",
+   "P-IN1",
+   "RE-RNW"
+  ],
+  "counts": {
+   "red": 8,
+   "amber": 18,
+   "green": 10
+  },
+  "checksOk": true
+ },
+ {
+  "at": "2026-11-22T17:50:05.645Z",
+  "asOf": "2026-11-22",
+  "trigger": "manual",
+  "runUrl": null,
+  "changes": [],
+  "top": [
+   "P-SC1",
+   "P-IN1",
+   "RE-RNW"
+  ],
+  "counts": {
+   "red": 8,
+   "amber": 18,
+   "green": 10
+  },
+  "checksOk": true
+ },
+ {
+  "at": "2026-11-22T17:45:47.900Z",
+  "asOf": "2026-11-22",
+  "trigger": "manual",
+  "runUrl": null,
+  "changes": [],
+  "top": [
+   "P-SC1",
+   "P-IN1",
+   "RE-RNW"
+  ],
+  "counts": {
+   "red": 8,
+   "amber": 18,
+   "green": 10
+  },
+  "checksOk": true
+ },
+ {
+  "at": "2026-11-22T17:45:36.406Z",
+  "asOf": "2026-11-22",
+  "trigger": "manual",
+  "runUrl": null,
+  "changes": [],
+  "top": [
+   "P-SC1",
+   "P-TE1",
+   "P-IN1"
+  ],
+  "counts": {
+   "red": 7,
+   "amber": 19,
+   "green": 10
+  },
+  "checksOk": true
+ },
+ {
+  "at": "2026-11-22T17:44:34.339Z",
+  "asOf": "2026-11-23",
+  "trigger": "manual",
+  "runUrl": null,
+  "changes": [],
+  "top": [
+   "P-TE1",
+   "P-IN1",
+   "P-SC1"
+  ],
+  "counts": {
+   "red": 10,
+   "amber": 13,
+   "green": 13
+  },
+  "checksOk": true
+ }
+]

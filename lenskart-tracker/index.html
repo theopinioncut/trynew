@@ -1,0 +1,845 @@
+<title>Lenskart Leadership Brief</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<meta name="description" content="Daily leadership brief and project tracker across eight functions. Sample data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: a morning brief. A masthead strip with the date and the last automated run, then the
+   three decisions as full-width rows, then the store desk beside function health. Other views
+   (tracker, stores, email, pipeline) share the same column. */
+:root {
+  --bg: #F2F4F8; --surface: #FFFFFF; --ink: #101A31; --mute: #586379; --faint: #8A93A6; --line: #DCE1EA; --tint: #EAEEF5;
+  --accent: #2348C8; --accent-ink: #FFFFFF; --accent-soft: #E4EAFB;
+  --red: #C0281F; --red-bg: #FBE9E7; --amber: #A35F00; --amber-bg: #FDF1DC; --green: #2B7A33; --green-bg: #E6F3E8;
+  --display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --radius: 6px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0C1220; --surface: #141C2E; --ink: #E6EBF4; --mute: #9AA4B8; --faint: #6F7A90; --line: #253049; --tint: #1A2337;
+  --accent: #8AA6FF; --accent-ink: #0C1220; --accent-soft: #1E2A4D;
+  --red: #FF7B70; --red-bg: #3A1B1D; --amber: #F2B24E; --amber-bg: #362814; --green: #6DC776; --green-bg: #163020; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0C1220; --surface: #141C2E; --ink: #E6EBF4; --mute: #9AA4B8; --faint: #6F7A90; --line: #253049; --tint: #1A2337;
+  --accent: #8AA6FF; --accent-ink: #0C1220; --accent-soft: #1E2A4D;
+  --red: #FF7B70; --red-bg: #3A1B1D; --amber: #F2B24E; --amber-bg: #362814; --green: #6DC776; --green-bg: #163020; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--body); margin: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(28px, 4.2vw, 40px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 22px; font-weight: 600; }
+h3 { font-size: 18px; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--accent); }
+button, select, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mono { font-family: var(--mono); font-size: 0.86em; }
+.num { font-variant-numeric: tabular-nums; }
+.eyebrow { font: 600 12px/1.2 var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute); }
+.muted { color: var(--mute); }
+
+/* masthead */
+.mast { background: var(--ink); color: var(--bg); padding-block: 14px; }
+.mast .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: space-between; }
+.mast .brand { font: 700 16px/1 var(--display); letter-spacing: 0.02em; }
+.mast .brand span { font-weight: 500; opacity: 0.7; }
+.mast .run { font-size: 13px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.mast .run a { color: inherit; }
+.live { width: 8px; height: 8px; border-radius: 50%; background: #5BD26B; box-shadow: 0 0 0 3px rgba(91, 210, 107, 0.25); }
+.chip-sample { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; border: 1px solid currentColor; border-radius: 3px; padding: 2px 6px; opacity: 0.75; }
+
+/* tabs */
+nav.tabs { border-bottom: 1px solid var(--line); background: var(--surface); }
+nav.tabs .wrap { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+nav.tabs a { display: block; padding: 12px 12px 10px; color: var(--mute); text-decoration: none; font-weight: 500; border-bottom: 2px solid transparent; white-space: nowrap; }
+nav.tabs a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--ink); }
+nav.tabs a:hover { color: var(--ink); }
+nav.tabs .count { font: 500 12px var(--mono); color: var(--red); margin-left: 4px; }
+
+main { padding-block: 28px 64px; }
+.view { display: grid; gap: 32px; }
+
+/* status */
+.pill { display: inline-flex; align-items: center; gap: 6px; font: 600 12px/1 var(--body); padding: 4px 8px 4px 7px; border-radius: 999px; white-space: nowrap; }
+.pill::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.pill.red { color: var(--red); background: var(--red-bg); }
+.pill.amber { color: var(--amber); background: var(--amber-bg); }
+.pill.green { color: var(--green); background: var(--green-bg); }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.dot.red { background: var(--red); } .dot.amber { background: var(--amber); } .dot.green { background: var(--green); }
+.flag { display: inline-block; font: 500 11.5px/1 var(--body); padding: 4px 6px; border-radius: 3px; background: var(--tint); color: var(--mute); white-space: nowrap; }
+.flag.hot { background: var(--red-bg); color: var(--red); }
+.flag.warn { background: var(--amber-bg); color: var(--amber); }
+.flag.good { background: var(--green-bg); color: var(--green); }
+.flag.top { background: var(--ink); color: var(--bg); }
+
+/* headline */
+.lede { display: grid; gap: 10px; }
+.lede .sum { color: var(--mute); max-width: 70ch; }
+.lede .sum b.r { color: var(--red); } .lede .sum b.a { color: var(--amber); } .lede .sum b.g { color: var(--green); }
+.checkline { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--mute); }
+.checkline.bad { color: var(--red); font-weight: 600; }
+
+/* top 3 */
+.top3 { display: grid; gap: 14px; }
+.decision { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: grid; grid-template-columns: 64px minmax(0, 1fr) minmax(0, 240px); overflow: hidden; }
+.decision .rank { font: 700 34px/1 var(--display); padding: 20px 0 0; text-align: center; border-right: 4px solid var(--sev, var(--line)); color: var(--sev); }
+.decision.red { --sev: var(--red); } .decision.amber { --sev: var(--amber); } .decision.green { --sev: var(--green); }
+.decision .body { padding: 18px 20px 20px; display: grid; gap: 10px; min-width: 0; }
+.decision .meta { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; font-size: 13.5px; color: var(--mute); }
+.decision .meta b { color: var(--ink); font-weight: 600; }
+.decision ul { margin: 0; padding-left: 18px; display: grid; gap: 2px; }
+.decision .mismatch { background: var(--red-bg); color: var(--red); font-weight: 600; font-size: 14px; padding: 8px 10px; border-radius: 4px; }
+.decision .ask { border: 1.5px solid var(--ink); border-radius: 4px; padding: 10px 12px; font-weight: 600; display: grid; gap: 2px; }
+.decision .ask .eyebrow { color: var(--ink); }
+.decision .side { padding: 18px 20px; border-left: 1px solid var(--line); background: var(--tint); display: grid; gap: 8px; align-content: start; min-width: 0; }
+.decision .big { font: 700 30px/1 var(--display); font-variant-numeric: tabular-nums; }
+.decision .linked { display: flex; flex-wrap: wrap; gap: 6px; }
+.linkbtn { background: none; border: 1px solid var(--line); border-radius: 4px; padding: 4px 8px; font-size: 13px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; color: var(--ink); text-align: left; }
+.linkbtn:hover { border-color: var(--ink); }
+.open { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; font-size: 13.5px; font-weight: 500; text-align: left; }
+.open:hover { text-decoration: underline; }
+
+/* two-column */
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px 20px; display: grid; gap: 14px; min-width: 0; }
+.panel header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.list { display: grid; gap: 0; }
+.list > div { display: grid; gap: 4px; padding: 10px 0; border-top: 1px solid var(--line); }
+.list > div:first-child { border-top: 0; padding-top: 0; }
+.desk-row { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 10px; align-items: start; }
+.desk-row .dot { margin-top: 7px; }
+.attend { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; }
+.attend .big { font: 700 34px/1 var(--display); font-variant-numeric: tabular-nums; }
+.meter { height: 8px; background: var(--tint); border-radius: 4px; overflow: hidden; }
+.meter > span { display: block; height: 100%; background: var(--ink); }
+
+.fn-row { display: grid; grid-template-columns: minmax(0, 1fr) 120px 74px; gap: 12px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line); cursor: pointer; background: none; border-left: 0; border-right: 0; border-bottom: 0; width: 100%; text-align: left; }
+.fn-row:first-of-type { border-top: 0; }
+.fn-row:hover .fn-name { text-decoration: underline; }
+.fn-name { font-weight: 600; font-size: 14.5px; display: flex; gap: 8px; align-items: center; min-width: 0; }
+.fn-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fn-head { font-size: 12.5px; color: var(--mute); }
+.stack { display: flex; height: 10px; border-radius: 2px; overflow: hidden; gap: 2px; }
+.stack i { display: block; height: 100%; }
+.stack .r { background: var(--red); } .stack .a { background: var(--amber); } .stack .g { background: var(--green); }
+.fn-counts { font: 500 12.5px var(--mono); text-align: right; white-space: nowrap; }
+.fn-counts .r { color: var(--red); } .fn-counts .a { color: var(--amber); } .fn-counts .g { color: var(--green); }
+
+.wins { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.win { border-top: 3px solid var(--green); background: var(--surface); padding: 12px 14px; border-radius: 0 0 var(--radius) var(--radius); display: grid; gap: 4px; }
+
+/* tracker */
+.filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; background: var(--surface); }
+.seg button { background: none; border: 0; padding: 7px 11px; cursor: pointer; font-size: 13.5px; color: var(--mute); border-left: 1px solid var(--line); }
+.seg button:first-child { border-left: 0; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.field { background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 7px 10px; font-size: 13.5px; min-width: 0; }
+.field:focus { border-color: var(--accent); }
+.check { display: inline-flex; gap: 6px; align-items: center; font-size: 13.5px; color: var(--mute); cursor: pointer; }
+.tablebox { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th { text-align: left; font: 600 11.5px/1.2 var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--mute); padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; background: var(--tint); }
+td { padding: 10px 12px; border-top: 1px solid var(--line); vertical-align: middle; }
+tbody tr:first-child td { border-top: 0; }
+tbody tr.click { cursor: pointer; }
+tbody tr.click:hover td { background: var(--tint); }
+td.title { min-width: 240px; }
+td.title b { font-weight: 600; display: block; }
+td .sub { font-size: 12.5px; color: var(--mute); }
+.flags { display: flex; flex-wrap: wrap; gap: 4px; min-width: 120px; }
+.prog { display: grid; gap: 4px; min-width: 110px; }
+.prog .meter { height: 6px; }
+.right { text-align: right; }
+.empty { padding: 28px; text-align: center; color: var(--mute); }
+
+/* drawer */
+dialog { border: 0; padding: 0; background: var(--surface); color: var(--ink); width: min(620px, 100vw); max-width: 100vw; height: 100%; max-height: 100%; margin: 0 0 0 auto; box-shadow: -12px 0 40px rgba(10, 18, 40, 0.25); }
+dialog::backdrop { background: rgba(10, 18, 40, 0.45); }
+.drawer { display: grid; gap: 18px; padding: calc(20px + env(safe-area-inset-top, 0px)) max(22px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) 22px; }
+.drawer .x { position: sticky; top: 0; justify-self: end; background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 6px 10px; cursor: pointer; }
+.kv { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 8px 14px; font-size: 14px; }
+.kv dt { color: var(--mute); }
+.kv dd { margin: 0; min-width: 0; }
+pre.sql { font: 12.5px/1.55 var(--mono); background: var(--tint); padding: 12px; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; word-break: break-word; margin: 0; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart text { font: 11px var(--mono); fill: var(--mute); }
+form.update { display: grid; gap: 12px; border-top: 1px solid var(--line); padding-top: 18px; }
+form.update label { display: grid; gap: 4px; font-size: 13px; color: var(--mute); }
+form.update textarea { min-height: 64px; resize: vertical; }
+.btn { background: var(--ink); color: var(--bg); border: 0; border-radius: 5px; padding: 9px 14px; font-weight: 600; cursor: pointer; }
+.btn.ghost { background: none; color: var(--ink); border: 1px solid var(--line); }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+/* banner */
+.banner { background: var(--accent-soft); border: 1px solid var(--accent); border-radius: var(--radius); padding: 12px 16px; display: grid; gap: 8px; }
+.banner pre { margin: 0; font: 12px/1.5 var(--mono); white-space: pre-wrap; word-break: break-word; background: var(--surface); padding: 10px; border-radius: 4px; max-height: 180px; overflow: auto; }
+
+/* stores */
+.staffdots { display: inline-flex; gap: 3px; vertical-align: middle; margin-left: 8px; }
+.staffdots i { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+.staffdots i.off { background: var(--red); }
+.bar { position: relative; height: 8px; background: var(--tint); border-radius: 4px; min-width: 100px; }
+.bar > span { position: absolute; inset: 0 auto 0 0; border-radius: 4px; }
+.bar .tick { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink); left: calc(100% / 1.3); }
+
+/* email */
+.emailframe { background: #EEF1F5; border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden; }
+.emailhead { background: var(--surface); border-bottom: 1px solid var(--line); padding: 12px 16px; display: grid; gap: 2px; font-size: 13.5px; }
+.emailhead b { font-weight: 600; }
+
+/* pipeline */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; counter-reset: s; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; display: grid; gap: 4px; align-content: start; counter-increment: s; }
+.step::before { content: counter(s); font: 700 13px/1 var(--mono); color: var(--accent); }
+.step b { font-weight: 600; }
+.step p { font-size: 13px; color: var(--mute); }
+.tables { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.tables div { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; font-size: 13px; display: grid; gap: 2px; }
+
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 5px; font-size: 14px; z-index: 20; }
+
+@media (max-width: 860px) {
+  .decision { grid-template-columns: 48px minmax(0, 1fr); }
+  .decision .side { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line); }
+  .decision .rank { font-size: 28px; }
+  .cols { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  .decision .body { padding: 14px; }
+  .fn-row { grid-template-columns: minmax(0, 1fr) 64px; }
+  .fn-row .stack { display: none; }
+  .kv { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .kv dd { margin-bottom: 8px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .decision { animation: rise 0.35s ease-out both; }
+  .decision:nth-child(2) { animation-delay: 0.06s; } .decision:nth-child(3) { animation-delay: 0.12s; }
+  @keyframes rise { from { transform: translateY(6px); } to { transform: none; } }
+}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="brand">Lenskart <span>Leadership Brief</span></div>
+    <div class="run" id="runline"></div>
+  </div>
+</header>
+<nav class="tabs" aria-label="Views">
+  <div class="wrap" id="tabs">
+    <a href="#brief" data-view="brief">This week</a>
+    <a href="#tracker" data-view="tracker">All items</a>
+    <a href="#stores" data-view="stores">Stores today</a>
+    <a href="#email" data-view="email">Email</a>
+    <a href="#pipeline" data-view="pipeline">How it runs</a>
+  </div>
+</nav>
+<main class="wrap">
+  <div id="banner"></div>
+  <section class="view" id="view-brief"></section>
+  <section class="view" id="view-tracker" hidden></section>
+  <section class="view" id="view-stores" hidden></section>
+  <section class="view" id="view-email" hidden></section>
+  <section class="view" id="view-pipeline" hidden></section>
+</main>
+<dialog id="drawer" aria-label="Item detail"><div class="drawer" id="drawer-body"></div></dialog>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const LIB = (() => {
+// Shared logic: risk scoring, top-3 selection and digest rendering.
+// Runs in Node (GitHub Actions) and is inlined into the browser app at build time,
+// so it stays dependency-free and uses plain `export function` declarations.
+
+const RANK = { green: 0, amber: 1, red: 2 };
+const LABEL = { green: "Green", amber: "Amber", red: "Red" };
+const DAY = 86400000;
+const t = (s) => new Date(s + "T00:00:00Z").getTime();
+
+// Turns whatever a function head typed into red / amber / green.
+function normalizeStatus(v) {
+  const s = String(v || "").trim().toLowerCase();
+  if (/^(r|red|🔴|at risk|off track|blocked|critical)$/.test(s)) return "red";
+  if (/^(a|amber|yellow|y|blue|b|🟠|🟡|🔵|watch|some risk)$/.test(s)) return "amber";
+  if (/^(g|green|🟢|on track|done|complete|ok)$/.test(s)) return "green";
+  return null;
+}
+
+function statusFor(m, v) {
+  if (v == null || Number.isNaN(v)) return "amber";
+  if (m.better === "higher") return v >= m.green ? "green" : v < m.red ? "red" : "amber";
+  return v <= m.green ? "green" : v > m.red ? "red" : "amber";
+}
+
+function fmtValue(m, v) {
+  if (v == null || Number.isNaN(v)) return "no data";
+  const x = v / (m.scale || 1);
+  const n = Math.abs(x).toLocaleString("en-IN", { minimumFractionDigits: m.decimals, maximumFractionDigits: m.decimals });
+  const sign = x < 0 ? "−" : m.signed && x > 0 ? "+" : "";
+  const pre = m.prefix === true ? "₹" : m.prefix || "";
+  return `${sign}${pre}${n}${m.unit || ""}`;
+}
+const fmtDate = (s) => new Date(t(s)).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
+
+// Score one item. Higher = needs leadership attention sooner. Green scores 0.
+function assess(p, asOf) {
+  const reasons = [];
+  let score = { red: 50, amber: 20, green: 0 }[p.status] ?? 0;
+  const worsened = RANK[p.status] > RANK[p.lastStatus];
+  const improved = RANK[p.status] < RANK[p.lastStatus];
+  if (worsened) { score += 25; reasons.push(`Went ${LABEL[p.lastStatus]} → ${LABEL[p.status]} since last week`); }
+  let extra = {};
+  if (p.kind === "metric") {
+    reasons.unshift(`${p.display} against a target of ${p.targetText}`);
+    if (p.prevDisplay) reasons.push(`was ${p.prevDisplay} ${p.window === "today" ? "same day last week" : "the week before"}`);
+    const wrongWay = p.better === "higher" ? p.value < p.prev : p.value > p.prev;
+    if (wrongWay && p.status !== "green") score += 6;
+  } else {
+    const slip = Math.round((t(p.due) - t(p.originalDue || p.due)) / DAY);
+    if (slip > 0) { score += Math.min(20, Math.ceil(slip / 2)); reasons.push(`Deadline pushed back ${slip} days`); }
+    const daysLeft = Math.round((t(p.due) - t(asOf)) / DAY);
+    if (p.progress < 100) {
+      if (daysLeft < 0) { score += 20; reasons.push(`Overdue by ${-daysLeft} days`); }
+      else if (daysLeft <= 21 && p.progress < 75) { score += 12; reasons.push(`Due in ${daysLeft} days at ${p.progress}% done`); }
+    }
+    const stale = Math.round((t(asOf) - t(p.lastUpdate)) / DAY);
+    if (stale > 7) { score += 10; reasons.push(`No update from the owner for ${stale} days`); }
+    if (p.blocker) score += 10;
+    extra = { slip, daysLeft, stale };
+  }
+  score += (p.impactTier || 1) * 8;
+  if (p.status === "green") score = 0;
+  return { ...p, ...extra, score, reasons, worsened, improved };
+}
+
+// Pick the n most urgent items. Anything caused by an item already on the list is folded
+// under it, so leadership sees the root cause once with its knock-on effects.
+function pickTop(items, n = 3) {
+  const ranked = items.filter((p) => p.status !== "green" || p.mismatch).sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
+  const top = [];
+  for (const p of ranked) {
+    if (top.length >= n) break;
+    const parent = top.find((x) => x.id === p.dependsOn);
+    if (parent) { parent.linked.push(p.id); continue; }
+    const kids = top.filter((x) => x.dependsOn === p.id);
+    const entry = { ...p, linked: kids.flatMap((k) => [k.id, ...k.linked]) };
+    if (kids.length) { const at = top.indexOf(kids[0]); for (const k of kids) top.splice(top.indexOf(k), 1); top.splice(at, 0, entry); }
+    else top.push(entry);
+  }
+  // Everything a listed root cause is causing travels with it, and is not repeated lower down.
+  for (const x of top) x.linked = [...new Set([...x.linked, ...(x.causes || [])])];
+  // Root causes rank at least as high as the worst thing they cause.
+  for (const x of top) x.score = Math.max(x.score, ...x.linked.map((id) => items.find((i) => i.id === id)?.score || 0));
+  return top.sort((a, b) => b.score - a.score);
+}
+
+function isoWeek(asOf) {
+  const d = new Date(t(asOf));
+  d.setUTCDate(d.getUTCDate() + 3 - ((d.getUTCDay() + 6) % 7));
+  const jan4 = new Date(Date.UTC(d.getUTCFullYear(), 0, 4));
+  return 1 + Math.round(((d - jan4) / DAY - 3 + ((jan4.getUTCDay() + 6) % 7)) / 7);
+}
+
+// items: metrics (already valued) + projects. extras: { checks, storeDesk }
+function buildDigest(functions, rawItems, asOf, extras = {}) {
+  const fnName = Object.fromEntries(functions.map((f) => [f.id, f.name]));
+  const all = rawItems.map((p) => ({ ...assess(p, asOf), fnName: fnName[p.fn] }));
+  for (const p of all) {
+    // Blast radius: a root cause matters more for every problem it is causing.
+    const kids = all.filter((k) => k.dependsOn === p.id && k.status !== "green");
+    p.causes = kids.map((k) => k.id);
+    if (kids.length && p.status !== "green") { p.score += 8 * kids.length; p.reasons.push(`Causing ${kids.length} other problem${kids.length > 1 ? "s" : ""} in the data`); }
+    // Optimism check: the owner's status is better than what the data under it shows.
+    const redKid = kids.find((k) => k.kind === "metric" && RANK[k.status] > RANK[p.status]);
+    if (p.kind === "project" && redKid) {
+      p.mismatch = `Owner reports ${LABEL[p.status]}, but ${redKid.title.toLowerCase()} is ${LABEL[redKid.status]} in the data (${redKid.display})`;
+      p.reasons.unshift(p.mismatch);
+      p.score = Math.max(p.score, 0) + 15 + (p.status === "green" ? 40 : 0);
+    }
+  }
+  const top = pickTop(all, 3);
+  const byScore = (a, b) => b.score - a.score;
+  const byFn = functions.map((f) => {
+    const ps = all.filter((p) => p.fn === f.id);
+    const c = { red: 0, amber: 0, green: 0 };
+    ps.forEach((p) => c[p.status]++);
+    return { ...f, counts: c, total: ps.length, worsened: ps.filter((p) => p.worsened).length, improved: ps.filter((p) => p.improved).length,
+      worst: c.red ? "red" : c.amber ? "amber" : "green" };
+  });
+  const counts = { red: 0, amber: 0, green: 0 };
+  all.forEach((p) => counts[p.status]++);
+  const checks = extras.checks || [];
+  return {
+    asOf, week: isoWeek(asOf), all, top, byFn, counts, checks, storeDesk: extras.storeDesk || null,
+    checksOk: checks.every((c) => c.ok),
+    reds: all.filter((p) => p.status === "red").sort(byScore),
+    ambers: all.filter((p) => p.status === "amber").sort(byScore),
+    wins: all.filter((p) => p.status === "green" && (p.win || p.improved)),
+    worsened: all.filter((p) => p.worsened).sort(byScore),
+    improved: all.filter((p) => p.improved),
+  };
+}
+
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const covered = (dg, p) => dg.top.some((x) => x.id === p.id || x.linked.includes(p.id));
+const facts = (p) => p.kind === "metric"
+  ? `${p.fnName} · Owner: ${p.owner} · ${p.display} (target ${p.targetText})`
+  : `${p.fnName} · Owner: ${p.owner} · Due ${fmtDate(p.due)} · ${p.progress}% done`;
+
+// Email-safe HTML: tables and inline styles only, readable in Gmail and Outlook.
+function renderEmail(dg, meta = {}) {
+  const C = { red: "#C62828", amber: "#B26A00", green: "#2E7D32", ink: "#14213D", mute: "#5B6475", line: "#E3E7EE", tint: "#F5F7FA" };
+  const F = "font-family:Arial,Helvetica,sans-serif;";
+  const dot = (s) => `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${C[s]};margin-right:6px;vertical-align:baseline"></span>`;
+  const row = (p) => `<tr><td style="padding:10px 0;border-top:1px solid ${C.line}">
+      <div style="${F}font-size:15px;font-weight:bold;line-height:1.35;color:${C.ink}">${dot(p.status)}${esc(p.title)}</div>
+      <div style="${F}font-size:13px;line-height:1.5;color:${C.mute};margin-top:2px">${esc(facts(p))}</div>
+      ${p.worsened ? `<div style="${F}font-size:13px;line-height:1.5;color:${C[p.status]};margin-top:2px">Was ${LABEL[p.lastStatus]} last week</div>` : ""}
+      ${p.blocker ? `<div style="${F}font-size:13px;line-height:1.5;color:${C.ink};margin-top:2px">Blocker: ${esc(p.blocker)}</div>` : ""}
+      ${p.note ? `<div style="${F}font-size:13px;line-height:1.5;color:${C.mute};margin-top:2px">${esc(p.note)}</div>` : ""}
+    </td></tr>`;
+  const head = (title, color, sub) => `<tr><td style="padding:26px 0 6px">
+      <div style="${F}font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:${color}">${title}</div>
+      <div style="${F}font-size:13px;line-height:1.5;color:${C.mute};margin-top:4px">${sub}</div></td></tr>`;
+  const topRows = dg.top.map((p, i) => `<tr><td style="padding:14px 16px;border-left:4px solid ${C[p.status]};background:${C.tint}">
+      <div style="${F}font-size:12px;font-weight:bold;color:${C.mute}">${i + 1} · ${esc(p.fnName).toUpperCase()}</div>
+      <div style="${F}font-size:17px;font-weight:bold;line-height:1.35;color:${C.ink};margin-top:6px">${esc(p.title)}</div>
+      <div style="${F}font-size:13px;line-height:1.5;color:${C.mute};margin-top:2px">${dot(p.status)}${LABEL[p.status]}${p.worsened ? ` (was ${LABEL[p.lastStatus]})` : ""} · Owner: <b style="color:${C.ink}">${esc(p.owner)}</b>${p.kind === "project" ? ` · Due ${fmtDate(p.due)}` : ""}</div>
+      <div style="${F}font-size:13px;line-height:1.5;color:${C.ink};margin-top:6px">${p.reasons.map(esc).join(" · ")}</div>
+      ${p.blocker ? `<div style="${F}font-size:13px;line-height:1.5;color:${C.ink};margin-top:4px">Blocker: ${esc(p.blocker)}</div>` : ""}
+      ${p.detail?.length ? `<div style="${F}font-size:13px;line-height:1.5;color:${C.ink};margin-top:4px">${esc(p.detailLabel || "Detail")}: ${p.detail.map(esc).join(", ")}</div>` : ""}
+      ${p.linked.length ? `<div style="${F}font-size:13px;line-height:1.5;color:${C.mute};margin-top:4px">Also causing: ${p.linked.map((id) => { const x = dg.all.find((a) => a.id === id); return esc(x ? `${x.title} (${x.display || LABEL[x.status]})` : id); }).join("; ")}</div>` : ""}
+      ${p.ask ? `<div style="${F}font-size:14px;font-weight:bold;line-height:1.5;color:${C.ink};margin-top:8px">Decision needed: ${esc(p.ask)}</div>` : ""}
+    </td></tr><tr><td style="height:10px;line-height:10px">&nbsp;</td></tr>`).join("");
+  const sd = dg.storeDesk;
+  const storeBlock = sd ? head("Stores this morning", C.ink, `Attendance at ${esc(sd.checkTime)} today: ${sd.loggedIn} of ${sd.rostered} rostered staff logged in across ${sd.stores} stores.`) +
+    (sd.noOptometrist.length ? `<tr><td style="${F}font-size:13px;line-height:1.6;color:${C.ink};padding:4px 0">${dot("red")}<b>No optometrist yet, so no eye tests:</b> ${sd.noOptometrist.map(esc).join(", ")}</td></tr>` : "") +
+    (sd.shortStaffed.length ? `<tr><td style="${F}font-size:13px;line-height:1.6;color:${C.ink};padding:4px 0">${dot("amber")}<b>Two or more staff not logged in:</b> ${sd.shortStaffed.map(esc).join(", ")}</td></tr>` : "") +
+    (sd.belowTarget.length ? `<tr><td style="${F}font-size:13px;line-height:1.6;color:${C.ink};padding:4px 0">${dot("amber")}<b>Under 80% of target yesterday:</b> ${sd.belowTarget.map(esc).join(", ")}</td></tr>` : "") : "";
+  const reds = dg.reds.filter((p) => !covered(dg, p)), ambers = dg.ambers.filter((p) => !covered(dg, p));
+  const fnRows = dg.byFn.map((f) => `<tr>
+      <td style="${F}font-size:13px;color:${C.ink};padding:6px 0;border-top:1px solid ${C.line}">${dot(f.worst)}${esc(f.name)}</td>
+      <td style="${F}font-size:13px;color:${C.red};padding:6px 0;border-top:1px solid ${C.line};text-align:right">${f.counts.red}</td>
+      <td style="${F}font-size:13px;color:${C.amber};padding:6px 0;border-top:1px solid ${C.line};text-align:right">${f.counts.amber}</td>
+      <td style="${F}font-size:13px;color:${C.green};padding:6px 0;border-top:1px solid ${C.line};text-align:right">${f.counts.green}</td></tr>`).join("");
+  const checksLine = dg.checks.length ? (dg.checksOk
+    ? `Data checks: all ${dg.checks.length} passed (freshness, links between tables, duplicates, finance reconciliation).`
+    : `<b style="color:${C.red}">Data checks failed: ${dg.checks.filter((c) => !c.ok).map((c) => esc(c.title)).join("; ")}. Treat the numbers below with care.</b>`) : "";
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head><body style="margin:0;padding:0;background:#EEF1F5">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EEF1F5"><tr><td align="center" style="padding:24px 12px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;background:#FFFFFF;border-radius:8px"><tr><td style="padding:28px 28px 32px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+<tr><td>
+  <div style="${F}font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:${C.mute}">Lenskart leadership brief · ${fmtDate(dg.asOf)} · Week ${dg.week}</div>
+  <div style="${F}font-size:24px;font-weight:bold;line-height:1.25;color:${C.ink};margin-top:10px">${dg.top.length} things need your attention this week</div>
+  <div style="${F}font-size:14px;line-height:1.5;color:${C.mute};margin-top:8px">${dg.all.length} tracked items across ${dg.byFn.length} functions:
+    <b style="color:${C.red}">${dg.counts.red} red</b>, <b style="color:${C.amber}">${dg.counts.amber} amber</b>, <b style="color:${C.green}">${dg.counts.green} green</b>.
+    ${dg.worsened.length} got worse since last week, ${dg.improved.length} got better.</div>
+  ${!dg.checksOk && dg.checks.length ? `<div style="${F}font-size:13px;line-height:1.5;margin-top:10px">${checksLine}</div>` : ""}
+</td></tr>
+<tr><td style="height:18px;line-height:18px">&nbsp;</td></tr>
+${topRows}
+${storeBlock}
+${reds.length ? head("Red · fix now", C.red, "Off track. The owner needs a decision or resources this week.") + reds.map(row).join("") : ""}
+${ambers.length ? head("Amber · watch", C.amber, "Some risk. Look again next week.") + ambers.map(row).join("") : ""}
+${dg.wins.length ? head("Green · wins", C.green, "Good news worth knowing.") + dg.wins.map((p) => row({ ...p, worsened: false, blocker: "", note: p.win || "Back to green this week" })).join("") : ""}
+<tr><td style="padding-top:26px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+  <tr><td style="${F}font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:${C.mute};padding-bottom:6px">By function</td>
+  <td style="${F}font-size:12px;color:${C.red};text-align:right">Red</td><td style="${F}font-size:12px;color:${C.amber};text-align:right">Amber</td><td style="${F}font-size:12px;color:${C.green};text-align:right">Green</td></tr>
+  ${fnRows}</table></td></tr>
+<tr><td style="padding-top:26px;${F}font-size:12px;line-height:1.6;color:${C.mute}">
+  ${dg.checksOk ? checksLine + "<br>" : ""}${meta.generatedBy ? esc(meta.generatedBy) + "<br>" : ""}${meta.appUrl ? `Full tracker: <a href="${esc(meta.appUrl)}" style="color:${C.ink}">${esc(meta.appUrl)}</a><br>` : ""}Sample data generated with AI for a prototype. Names and figures are illustrative.
+</td></tr>
+</table></td></tr></table></td></tr></table></body></html>`;
+}
+
+// GitHub-flavoured markdown for the issue that GitHub emails to repository watchers.
+function renderMarkdown(dg, meta = {}) {
+  const E = { red: "🔴", amber: "🟠", green: "🟢" };
+  const line = (p) => `- ${E[p.status]} **${p.title}** · ${facts(p)}${p.worsened ? ` · was ${LABEL[p.lastStatus]}` : ""}` +
+    (p.blocker ? `\n  Blocker: ${p.blocker}` : "") + (p.note ? `\n  ${p.note}` : "");
+  let md = `## ${dg.top.length} things need attention this week\n\n` +
+    `${dg.all.length} tracked items across ${dg.byFn.length} functions: ${E.red} ${dg.counts.red} red · ${E.amber} ${dg.counts.amber} amber · ${E.green} ${dg.counts.green} green. ` +
+    `${dg.worsened.length} got worse since last week, ${dg.improved.length} got better.\n\n`;
+  if (dg.checks.length && !dg.checksOk) md += `> [!WARNING]\n> Data checks failed: ${dg.checks.filter((c) => !c.ok).map((c) => c.title).join("; ")}\n\n`;
+  dg.top.forEach((p, i) => {
+    md += `### ${i + 1}. ${E[p.status]} ${p.title}\n**${p.fnName}** · Owner: **${p.owner}** · ${LABEL[p.status]}${p.worsened ? ` (was ${LABEL[p.lastStatus]})` : ""}${p.kind === "project" ? ` · Due ${fmtDate(p.due)} · ${p.progress}% done` : ""}\n\n` +
+      `- ${p.reasons.join(" · ")}\n` + (p.blocker ? `- Blocker: ${p.blocker}\n` : "") +
+      (p.detail?.length ? `- ${p.detailLabel || "Detail"}: ${p.detail.join(", ")}\n` : "") +
+      (p.linked.length ? `- Also causing: ${p.linked.map((id) => { const x = dg.all.find((a) => a.id === id); return x ? `${x.title} (${x.display || LABEL[x.status]})` : id; }).join("; ")}\n` : "") +
+      (p.ask ? `- **Decision needed:** ${p.ask}\n` : "") + "\n";
+  });
+  const sd = dg.storeDesk;
+  if (sd) {
+    md += `### 🏬 Stores this morning\nAttendance at ${sd.checkTime}: **${sd.loggedIn} of ${sd.rostered}** rostered staff logged in across ${sd.stores} stores.\n`;
+    if (sd.noOptometrist.length) md += `- ${E.red} No optometrist yet, so no eye tests: ${sd.noOptometrist.join(", ")}\n`;
+    if (sd.shortStaffed.length) md += `- ${E.amber} Two or more staff not logged in: ${sd.shortStaffed.join(", ")}\n`;
+    if (sd.belowTarget.length) md += `- ${E.amber} Under 80% of target yesterday: ${sd.belowTarget.join(", ")}\n`;
+    md += "\n";
+  }
+  const reds = dg.reds.filter((p) => !covered(dg, p)), ambers = dg.ambers.filter((p) => !covered(dg, p));
+  if (reds.length) md += `### ${E.red} Red · fix now\n${reds.map(line).join("\n")}\n\n`;
+  if (ambers.length) md += `<details><summary>${E.amber} Amber · watch (${ambers.length})</summary>\n\n${ambers.map(line).join("\n")}\n\n</details>\n\n`;
+  if (dg.wins.length) md += `### ${E.green} Green · wins\n${dg.wins.map((p) => `- ${E.green} **${p.title}** · ${p.owner}: ${p.win || "back to green this week"}`).join("\n")}\n\n`;
+  md += `| Function | 🔴 | 🟠 | 🟢 | Worse |\n|---|---:|---:|---:|---:|\n` +
+    dg.byFn.map((f) => `| ${f.name} | ${f.counts.red} | ${f.counts.amber} | ${f.counts.green} | ${f.worsened} |`).join("\n") + "\n\n";
+  if (dg.checks.length) md += `<details><summary>Data checks: ${dg.checks.filter((c) => c.ok).length}/${dg.checks.length} passed</summary>\n\n${dg.checks.map((c) => `- ${c.ok ? "✅" : "❌"} ${c.title}${c.ok ? "" : ` (${c.bad} bad rows)`}`).join("\n")}\n\n</details>\n\n`;
+  md += `---\n${meta.generatedBy || ""}${meta.appUrl ? ` · [Open the tracker](${meta.appUrl})` : ""}${meta.cc ? `\n\ncc ${meta.cc}` : ""}\n\n_Sample data generated with AI for a prototype. Names and figures are illustrative._\n`;
+  return md;
+}
+
+return { buildDigest, statusFor, fmtValue, fmtDate, LABEL, RANK, renderEmail, isoWeek };
+})();
+const D = {"functions":[{"id":"stores","name":"Stores & Eye Care","head":"Ritika Malhotra"},{"id":"supply","name":"Supply Chain & Manufacturing","head":"Arjun Menon"},{"id":"mktg","name":"Marketing & Brand","head":"Neha Kapoor"},{"id":"tech","name":"App & Product","head":"Vikram Rao"},{"id":"cs","name":"Customer Service","head":"Shreya Bose"},{"id":"retention","name":"Retention & Gold","head":"Sahil Arora"},{"id":"finance","name":"Finance","head":"Karan Shah"},{"id":"intl","name":"International","head":"Meera Iyer"}],"items":[{"kind":"metric","id":"ST-ATT","fn":"stores","title":"Opening-shift attendance at 08:45","owner":"Ritika Malhotra","impactTier":2,"better":"higher","window":"today","value":95.26462395543176,"prev":94.70752089136491,"thr":{"green":96,"red":90},"fmt":{"unit":"%","decimals":1},"display":"95.3%","prevDisplay":"94.7%","status":"amber","lastStatus":"amber","targetText":"≥ 96.0%","redText":"\u003c 90.0%","detail":["Ranchi Central (2 of 4 missing)","Kolkata Central (2 of 5 missing)","Delhi Mall Road (2 of 6 missing)"],"detailLabel":"Most staff missing","series":[{"date":"2026-11-15","v":94.70752089136491,"display":"94.7%"},{"date":"2026-11-16","v":94.42815249266862,"display":"94.4%"},{"date":"2026-11-17","v":92.99719887955182,"display":"93.0%"},{"date":"2026-11-18","v":93.85964912280701,"display":"93.9%"},{"date":"2026-11-19","v":93.65994236311239,"display":"93.7%"},{"date":"2026-11-20","v":94.57142857142857,"display":"94.6%"},{"date":"2026-11-21","v":92.94117647058823,"display":"92.9%"},{"date":"2026-11-22","v":95.26462395543176,"display":"95.3%"}],"sql":"SELECT 100.0 * COUNT(a.staff_id) / COUNT(*) AS v FROM roster r LEFT JOIN attendance a ON a.date = r.date AND a.staff_id = r.staff_id AND a.login_at \u003c= :check WHERE r.date BETWEEN :start AND :end","tables":["roster","attendance"],"asOfLabel":"today at 08:45"},{"kind":"metric","id":"ST-OPT","fn":"stores","title":"Stores with no optometrist logged in","owner":"Dr. Priya Nair","impactTier":3,"better":"lower","window":"today","value":2,"prev":4,"thr":{"green":0,"red":2},"fmt":{"unit":" stores","decimals":0},"display":"2 stores","prevDisplay":"4 stores","status":"amber","lastStatus":"red","targetText":"≤ 0 stores","redText":"> 2 stores","detail":["Delhi Mall Road","Patna Mall Road"],"detailLabel":"No eye tests possible until cover arrives","ask":"Send a cover optometrist from the nearest store before 10:00","series":[{"date":"2026-11-15","v":4,"display":"4 stores"},{"date":"2026-11-16","v":4,"display":"4 stores"},{"date":"2026-11-17","v":3,"display":"3 stores"},{"date":"2026-11-18","v":2,"display":"2 stores"},{"date":"2026-11-19","v":6,"display":"6 stores"},{"date":"2026-11-20","v":1,"display":"1 stores"},{"date":"2026-11-21","v":2,"display":"2 stores"},{"date":"2026-11-22","v":2,"display":"2 stores"}],"sql":"SELECT COUNT(*) AS v FROM (SELECT r.store_id FROM roster r JOIN staff p ON p.staff_id = r.staff_id AND p.role = 'optometrist' LEFT JOIN attendance a ON a.date = r.date AND a.staff_id = r.staff_id AND a.login_at \u003c= :check WHERE r.date BETWEEN :start AND :end GROUP BY r.date, r.store_id HAVING COUNT(a.staff_id) = 0)","tables":["roster","attendance","staff","stores"],"asOfLabel":"today at 08:45"},{"kind":"metric","id":"ST-REV","fn":"stores","title":"India store revenue vs target (7 days)","owner":"Aditya Joshi","impactTier":3,"better":"higher","window":"7d","value":108.47569836848389,"prev":108.29141464385197,"thr":{"green":100,"red":92},"fmt":{"unit":"%","decimals":1},"display":"108.5%","prevDisplay":"108.3%","status":"green","lastStatus":"green","targetText":"≥ 100.0%","redText":"\u003c 92.0%","detail":["Mumbai Mall Road 94%","Dehradun Central 95%","Varanasi Mall Road 98%"],"detailLabel":"Weakest stores","series":[{"date":"2026-11-08","v":108.27622164743335,"display":"108.3%"},{"date":"2026-11-09","v":107.93729606048548,"display":"107.9%"},{"date":"2026-11-10","v":107.94442300039793,"display":"107.9%"},{"date":"2026-11-11","v":108.00593513728612,"display":"108.0%"},{"date":"2026-11-12","v":107.88398129725428,"display":"107.9%"},{"date":"2026-11-13","v":108.00547950656586,"display":"108.0%"},{"date":"2026-11-14","v":108.29141464385197,"display":"108.3%"},{"date":"2026-11-15","v":108.56005769996021,"display":"108.6%"},{"date":"2026-11-16","v":108.59465777954635,"display":"108.6%"},{"date":"2026-11-17","v":108.63348388380422,"display":"108.6%"},{"date":"2026-11-18","v":108.62614206128134,"display":"108.6%"},{"date":"2026-11-19","v":108.89519498607243,"display":"108.9%"},{"date":"2026-11-20","v":108.75947075208914,"display":"108.8%"},{"date":"2026-11-21","v":108.47569836848389,"display":"108.5%"}],"sql":"SELECT 100.0 * SUM(d.revenue_inr) / SUM(s.daily_target_inr) AS v FROM sales_daily d JOIN stores s USING (store_id) WHERE s.country = 'India' AND d.date BETWEEN :start AND :end","tables":["sales_daily","stores"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"ST-EYE","fn":"stores","title":"Eye test to purchase conversion","owner":"Dr. Priya Nair","impactTier":2,"better":"higher","window":"7d","value":74.42157558552165,"prev":74.02422133039741,"thr":{"green":72,"red":65},"fmt":{"unit":"%","decimals":1},"display":"74.4%","prevDisplay":"74.0%","status":"green","lastStatus":"green","targetText":"≥ 72.0%","redText":"\u003c 65.0%","detail":[],"series":[{"date":"2026-11-08","v":74.03648964005374,"display":"74.0%"},{"date":"2026-11-09","v":73.89841314820062,"display":"73.9%"},{"date":"2026-11-10","v":73.84980181200453,"display":"73.8%"},{"date":"2026-11-11","v":73.92289446666902,"display":"73.9%"},{"date":"2026-11-12","v":74.03183400838485,"display":"74.0%"},{"date":"2026-11-13","v":73.89605314576006,"display":"73.9%"},{"date":"2026-11-14","v":74.02422133039741,"display":"74.0%"},{"date":"2026-11-15","v":74.11889973380657,"display":"74.1%"},{"date":"2026-11-16","v":74.2489879980115,"display":"74.2%"},{"date":"2026-11-17","v":74.27910288358846,"display":"74.3%"},{"date":"2026-11-18","v":74.28652764927763,"display":"74.3%"},{"date":"2026-11-19","v":74.21902670539066,"display":"74.2%"},{"date":"2026-11-20","v":74.35143181173802,"display":"74.4%"},{"date":"2026-11-21","v":74.42157558552165,"display":"74.4%"}],"sql":"SELECT 100.0 * SUM(orders) / SUM(eye_tests) AS v FROM sales_daily d JOIN stores s USING (store_id) WHERE s.country = 'India' AND date BETWEEN :start AND :end","tables":["sales_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"SC-BKL","fn":"supply","title":"Orders waiting to ship (all hubs)","owner":"Arjun Menon","impactTier":3,"dependsOn":"P-SC1","better":"lower","window":"7d","value":3976,"prev":2619,"thr":{"green":1500,"red":3500},"fmt":{"unit":" orders","decimals":0},"display":"3,976 orders","prevDisplay":"2,619 orders","status":"red","lastStatus":"amber","targetText":"≤ 1,500 orders","redText":"> 3,500 orders","detail":["Gurugram: 3976 orders, pick rate 68/hr","Mumbai: 0 orders, pick rate 97/hr"],"detailLabel":"Worst hubs","series":[{"date":"2026-11-08","v":1575,"display":"1,575 orders"},{"date":"2026-11-09","v":1688,"display":"1,688 orders"},{"date":"2026-11-10","v":1932,"display":"1,932 orders"},{"date":"2026-11-11","v":2012,"display":"2,012 orders"},{"date":"2026-11-12","v":2234,"display":"2,234 orders"},{"date":"2026-11-13","v":2443,"display":"2,443 orders"},{"date":"2026-11-14","v":2619,"display":"2,619 orders"},{"date":"2026-11-15","v":2915,"display":"2,915 orders"},{"date":"2026-11-16","v":2977,"display":"2,977 orders"},{"date":"2026-11-17","v":3163,"display":"3,163 orders"},{"date":"2026-11-18","v":3353,"display":"3,353 orders"},{"date":"2026-11-19","v":3528,"display":"3,528 orders"},{"date":"2026-11-20","v":3655,"display":"3,655 orders"},{"date":"2026-11-21","v":3976,"display":"3,976 orders"}],"sql":"SELECT SUM(backlog_eod) AS v FROM fulfilment_daily WHERE date = :end","tables":["fulfilment_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"SC-DLV","fn":"supply","title":"Average delivery time","owner":"Divya Pillai","impactTier":2,"dependsOn":"P-SC1","better":"lower","window":"7d","value":2.468930205755737,"prev":2.405624346576058,"thr":{"green":2.4,"red":2.6},"fmt":{"unit":" days","decimals":2},"display":"2.47 days","prevDisplay":"2.41 days","status":"amber","lastStatus":"amber","targetText":"≤ 2.40 days","redText":"> 2.60 days","detail":[],"series":[{"date":"2026-11-08","v":2.380330781406467,"display":"2.38 days"},{"date":"2026-11-09","v":2.3920504527813713,"display":"2.39 days"},{"date":"2026-11-10","v":2.3970588997602538,"display":"2.40 days"},{"date":"2026-11-11","v":2.399416850148944,"display":"2.40 days"},{"date":"2026-11-12","v":2.4020855027002557,"display":"2.40 days"},{"date":"2026-11-13","v":2.40652921971923,"display":"2.41 days"},{"date":"2026-11-14","v":2.405624346576058,"display":"2.41 days"},{"date":"2026-11-15","v":2.404466601178782,"display":"2.40 days"},{"date":"2026-11-16","v":2.410342602600635,"display":"2.41 days"},{"date":"2026-11-17","v":2.4266050158814183,"display":"2.43 days"},{"date":"2026-11-18","v":2.4384896354062517,"display":"2.44 days"},{"date":"2026-11-19","v":2.4540914120921498,"display":"2.45 days"},{"date":"2026-11-20","v":2.464193580876922,"display":"2.46 days"},{"date":"2026-11-21","v":2.468930205755737,"display":"2.47 days"}],"sql":"SELECT SUM(avg_delivery_days * orders_shipped) / SUM(orders_shipped) AS v FROM fulfilment_daily WHERE date BETWEEN :start AND :end","tables":["fulfilment_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"MF-RMK","fn":"supply","title":"Lens remake rate","owner":"Pooja Sharma","impactTier":2,"better":"lower","window":"7d","value":2.982342807924203,"prev":2.4662806298990185,"thr":{"green":2,"red":2.75},"fmt":{"unit":"%","decimals":2},"display":"2.98%","prevDisplay":"2.47%","status":"red","lastStatus":"amber","targetText":"≤ 2.00%","redText":"> 2.75%","detail":["Bhiwadi 3.4%","Bengaluru 1.9%"],"detailLabel":"By lab","ask":"Approve switching Bhiwadi back to the previous progressive-lens blank supplier","series":[{"date":"2026-11-08","v":2.1884551567548685,"display":"2.19%"},{"date":"2026-11-09","v":2.1962420248194627,"display":"2.20%"},{"date":"2026-11-10","v":2.2096347088017114,"display":"2.21%"},{"date":"2026-11-11","v":2.2761148228032337,"display":"2.28%"},{"date":"2026-11-12","v":2.3602440906221505,"display":"2.36%"},{"date":"2026-11-13","v":2.3669161253883084,"display":"2.37%"},{"date":"2026-11-14","v":2.4662806298990185,"display":"2.47%"},{"date":"2026-11-15","v":2.517795475368243,"display":"2.52%"},{"date":"2026-11-16","v":2.5757655894642197,"display":"2.58%"},{"date":"2026-11-17","v":2.618070726985311,"display":"2.62%"},{"date":"2026-11-18","v":2.668991654952759,"display":"2.67%"},{"date":"2026-11-19","v":2.73265983650448,"display":"2.73%"},{"date":"2026-11-20","v":2.852493025252164,"display":"2.85%"},{"date":"2026-11-21","v":2.982342807924203,"display":"2.98%"}],"sql":"SELECT 100.0 * SUM(remakes) / SUM(jobs) AS v FROM lab_daily WHERE date BETWEEN :start AND :end","tables":["lab_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"MK-CAC","fn":"mktg","title":"Blended cost per new customer","owner":"Neha Kapoor","impactTier":2,"better":"lower","window":"7d","value":1001.7123246723385,"prev":944.5067145356631,"thr":{"green":950,"red":1050},"fmt":{"unit":"","decimals":0,"prefix":true},"display":"₹1,002","prevDisplay":"₹945","status":"amber","lastStatus":"green","targetText":"≤ ₹950","redText":"> ₹1,050","detail":["tv ₹1435","meta ₹956","google ₹818","influencer ₹515"],"detailLabel":"By channel","series":[{"date":"2026-11-08","v":925.1742236819655,"display":"₹925"},{"date":"2026-11-09","v":933.4941396481614,"display":"₹933"},{"date":"2026-11-10","v":940.0737447013066,"display":"₹940"},{"date":"2026-11-11","v":941.7985508837413,"display":"₹942"},{"date":"2026-11-12","v":941.0744760976474,"display":"₹941"},{"date":"2026-11-13","v":949.0155806415559,"display":"₹949"},{"date":"2026-11-14","v":944.5067145356631,"display":"₹945"},{"date":"2026-11-15","v":954.7984399231535,"display":"₹955"},{"date":"2026-11-16","v":965.6674791652158,"display":"₹966"},{"date":"2026-11-17","v":963.2612631145855,"display":"₹963"},{"date":"2026-11-18","v":976.4300985313255,"display":"₹976"},{"date":"2026-11-19","v":988.3095433543635,"display":"₹988"},{"date":"2026-11-20","v":991.7086097323375,"display":"₹992"},{"date":"2026-11-21","v":1001.7123246723385,"display":"₹1,002"}],"sql":"SELECT SUM(spend_inr) / SUM(new_customers) AS v FROM marketing_daily WHERE date BETWEEN :start AND :end","tables":["marketing_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"MK-NEW","fn":"mktg","title":"New customers (7 days)","owner":"Ananya Desai","impactTier":1,"better":"higher","window":"7d","value":43490,"prev":44009,"thr":{"green":45000,"red":41000},"fmt":{"unit":"","decimals":0},"display":"43,490","prevDisplay":"44,009","status":"amber","lastStatus":"amber","targetText":"≥ 45,000","redText":"\u003c 41,000","detail":[],"series":[{"date":"2026-11-08","v":46888,"display":"46,888"},{"date":"2026-11-09","v":45987,"display":"45,987"},{"date":"2026-11-10","v":45766,"display":"45,766"},{"date":"2026-11-11","v":45545,"display":"45,545"},{"date":"2026-11-12","v":45142,"display":"45,142"},{"date":"2026-11-13","v":44735,"display":"44,735"},{"date":"2026-11-14","v":44009,"display":"44,009"},{"date":"2026-11-15","v":43203,"display":"43,203"},{"date":"2026-11-16","v":43077,"display":"43,077"},{"date":"2026-11-17","v":43749,"display":"43,749"},{"date":"2026-11-18","v":43032,"display":"43,032"},{"date":"2026-11-19","v":42637,"display":"42,637"},{"date":"2026-11-20","v":43114,"display":"43,114"},{"date":"2026-11-21","v":43490,"display":"43,490"}],"sql":"SELECT SUM(new_customers) AS v FROM marketing_daily WHERE date BETWEEN :start AND :end","tables":["marketing_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"TE-CNV","fn":"tech","title":"App checkout conversion","owner":"Kavya Reddy","impactTier":3,"better":"higher","window":"7d","value":2.9527616953209668,"prev":3.0943191509414443,"thr":{"green":3.1,"red":2.9},"fmt":{"unit":"%","decimals":2},"display":"2.95%","prevDisplay":"3.09%","status":"amber","lastStatus":"amber","targetText":"≥ 3.10%","redText":"\u003c 2.90%","detail":[],"series":[{"date":"2026-11-08","v":3.137773931050474,"display":"3.14%"},{"date":"2026-11-09","v":3.1357166588683785,"display":"3.14%"},{"date":"2026-11-10","v":3.136102925669532,"display":"3.14%"},{"date":"2026-11-11","v":3.1331929837506545,"display":"3.13%"},{"date":"2026-11-12","v":3.1354095309565038,"display":"3.14%"},{"date":"2026-11-13","v":3.1071995356475712,"display":"3.11%"},{"date":"2026-11-14","v":3.0943191509414443,"display":"3.09%"},{"date":"2026-11-15","v":3.1051370817284374,"display":"3.11%"},{"date":"2026-11-16","v":3.1043961103539726,"display":"3.10%"},{"date":"2026-11-17","v":3.0657290559930384,"display":"3.07%"},{"date":"2026-11-18","v":3.057146502349927,"display":"3.06%"},{"date":"2026-11-19","v":3.0228137535619637,"display":"3.02%"},{"date":"2026-11-20","v":2.997258709308966,"display":"3.00%"},{"date":"2026-11-21","v":2.9527616953209668,"display":"2.95%"}],"sql":"SELECT 100.0 * SUM(orders) / SUM(sessions) AS v FROM online_daily WHERE channel = 'app' AND date BETWEEN :start AND :end","tables":["online_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"TE-CRS","fn":"tech","title":"App crash-free sessions","owner":"Nikhil Jain","impactTier":2,"better":"higher","window":"7d","value":99.25880469826446,"prev":99.69565178162993,"thr":{"green":99.5,"red":99},"fmt":{"unit":"%","decimals":2},"display":"99.26%","prevDisplay":"99.70%","status":"amber","lastStatus":"green","targetText":"≥ 99.50%","redText":"\u003c 99.00%","detail":[],"ask":"Roll back the latest app release or ship the hotfix today","series":[{"date":"2026-11-08","v":99.59899138963152,"display":"99.60%"},{"date":"2026-11-09","v":99.61367483321817,"display":"99.61%"},{"date":"2026-11-10","v":99.62338710179283,"display":"99.62%"},{"date":"2026-11-11","v":99.6366525356312,"display":"99.64%"},{"date":"2026-11-12","v":99.65604089285448,"display":"99.66%"},{"date":"2026-11-13","v":99.67581387206813,"display":"99.68%"},{"date":"2026-11-14","v":99.69565178162993,"display":"99.70%"},{"date":"2026-11-15","v":99.71171205096833,"display":"99.71%"},{"date":"2026-11-16","v":99.64146624875686,"display":"99.64%"},{"date":"2026-11-17","v":99.5481144379228,"display":"99.55%"},{"date":"2026-11-18","v":99.49849316170648,"display":"99.50%"},{"date":"2026-11-19","v":99.44244892370551,"display":"99.44%"},{"date":"2026-11-20","v":99.3662916961736,"display":"99.37%"},{"date":"2026-11-21","v":99.25880469826446,"display":"99.26%"}],"sql":"SELECT SUM(crash_free_pct * sessions) / SUM(sessions) AS v FROM online_daily WHERE channel = 'app' AND date BETWEEN :start AND :end","tables":["online_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"TE-TRY","fn":"tech","title":"Sessions using 3D try-on","owner":"Vikram Rao","impactTier":1,"better":"higher","window":"7d","value":31.638019864652613,"prev":30.11163533984608,"thr":{"green":30,"red":26},"fmt":{"unit":"%","decimals":1},"display":"31.6%","prevDisplay":"30.1%","status":"green","lastStatus":"green","targetText":"≥ 30.0%","redText":"\u003c 26.0%","detail":[],"series":[{"date":"2026-11-08","v":30.59711199536864,"display":"30.6%"},{"date":"2026-11-09","v":30.574574125885686,"display":"30.6%"},{"date":"2026-11-10","v":30.564320934788643,"display":"30.6%"},{"date":"2026-11-11","v":30.29855310146104,"display":"30.3%"},{"date":"2026-11-12","v":30.078483932643252,"display":"30.1%"},{"date":"2026-11-13","v":30.345409786166137,"display":"30.3%"},{"date":"2026-11-14","v":30.11163533984608,"display":"30.1%"},{"date":"2026-11-15","v":30.805037581989986,"display":"30.8%"},{"date":"2026-11-16","v":31.127430265928325,"display":"31.1%"},{"date":"2026-11-17","v":30.858039201254883,"display":"30.9%"},{"date":"2026-11-18","v":30.8756515812934,"display":"30.9%"},{"date":"2026-11-19","v":30.83104271768208,"display":"30.8%"},{"date":"2026-11-20","v":31.07144265937431,"display":"31.1%"},{"date":"2026-11-21","v":31.638019864652613,"display":"31.6%"}],"sql":"SELECT 100.0 * SUM(tryon_sessions) / SUM(sessions) AS v FROM online_daily WHERE date BETWEEN :start AND :end","tables":["online_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"CS-FRT","fn":"cs","title":"WhatsApp median first reply","owner":"Shreya Bose","impactTier":2,"better":"lower","window":"7d","value":82.71428571428571,"prev":84.14285714285714,"thr":{"green":75,"red":95},"fmt":{"unit":" min","decimals":0},"display":"83 min","prevDisplay":"84 min","status":"amber","lastStatus":"amber","targetText":"≤ 75 min","redText":"> 95 min","detail":[],"series":[{"date":"2026-11-08","v":81.14285714285714,"display":"81 min"},{"date":"2026-11-09","v":82.71428571428571,"display":"83 min"},{"date":"2026-11-10","v":83.28571428571429,"display":"83 min"},{"date":"2026-11-11","v":84,"display":"84 min"},{"date":"2026-11-12","v":84.57142857142857,"display":"85 min"},{"date":"2026-11-13","v":85,"display":"85 min"},{"date":"2026-11-14","v":84.14285714285714,"display":"84 min"},{"date":"2026-11-15","v":83.57142857142857,"display":"84 min"},{"date":"2026-11-16","v":83.42857142857143,"display":"83 min"},{"date":"2026-11-17","v":83.28571428571429,"display":"83 min"},{"date":"2026-11-18","v":83.14285714285714,"display":"83 min"},{"date":"2026-11-19","v":83.14285714285714,"display":"83 min"},{"date":"2026-11-20","v":82.57142857142857,"display":"83 min"},{"date":"2026-11-21","v":82.71428571428571,"display":"83 min"}],"sql":"SELECT AVG(median_first_reply_min) AS v FROM support_daily WHERE channel = 'whatsapp' AND date BETWEEN :start AND :end","tables":["support_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"CS-WSM","fn":"cs","title":"Share of tickets asking \"where is my order\"","owner":"Imran Qureshi","impactTier":2,"dependsOn":"P-SC1","better":"lower","window":"7d","value":18.504872254811655,"prev":17.640817901234566,"thr":{"green":15,"red":20},"fmt":{"unit":"%","decimals":1},"display":"18.5%","prevDisplay":"17.6%","status":"amber","lastStatus":"amber","targetText":"≤ 15.0%","redText":"> 20.0%","detail":[],"series":[{"date":"2026-11-08","v":17.729516288252714,"display":"17.7%"},{"date":"2026-11-09","v":17.805057697029216,"display":"17.8%"},{"date":"2026-11-10","v":17.875914918701184,"display":"17.9%"},{"date":"2026-11-11","v":17.825895693826677,"display":"17.8%"},{"date":"2026-11-12","v":17.77172856309547,"display":"17.8%"},{"date":"2026-11-13","v":17.811618176510656,"display":"17.8%"},{"date":"2026-11-14","v":17.640817901234566,"display":"17.6%"},{"date":"2026-11-15","v":17.737552169271087,"display":"17.7%"},{"date":"2026-11-16","v":17.845166933955387,"display":"17.8%"},{"date":"2026-11-17","v":18.056231150890163,"display":"18.1%"},{"date":"2026-11-18","v":18.21990549032981,"display":"18.2%"},{"date":"2026-11-19","v":18.37985023825732,"display":"18.4%"},{"date":"2026-11-20","v":18.505389919394,"display":"18.5%"},{"date":"2026-11-21","v":18.504872254811655,"display":"18.5%"}],"sql":"SELECT 100.0 * SUM(wismo_tickets) / SUM(tickets_created) AS v FROM support_daily WHERE date BETWEEN :start AND :end","tables":["support_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"CS-RES","fn":"cs","title":"Tickets resolved same day","owner":"Lakshmi Iyer","impactTier":1,"better":"higher","window":"7d","value":93.61516459010035,"prev":94.9266975308642,"thr":{"green":95,"red":90},"fmt":{"unit":"%","decimals":1},"display":"93.6%","prevDisplay":"94.9%","status":"amber","lastStatus":"amber","targetText":"≥ 95.0%","redText":"\u003c 90.0%","detail":[],"series":[{"date":"2026-11-08","v":93.19842053307009,"display":"93.2%"},{"date":"2026-11-09","v":93.34151730910877,"display":"93.3%"},{"date":"2026-11-10","v":93.38802377560545,"display":"93.4%"},{"date":"2026-11-11","v":93.79246297472994,"display":"93.8%"},{"date":"2026-11-12","v":94.06960917752285,"display":"94.1%"},{"date":"2026-11-13","v":94.32713826992313,"display":"94.3%"},{"date":"2026-11-14","v":94.9266975308642,"display":"94.9%"},{"date":"2026-11-15","v":95.38969232262448,"display":"95.4%"},{"date":"2026-11-16","v":95.6310443699276,"display":"95.6%"},{"date":"2026-11-17","v":95.0822064403152,"display":"95.1%"},{"date":"2026-11-18","v":94.65581916500219,"display":"94.7%"},{"date":"2026-11-19","v":94.19916366819022,"display":"94.2%"},{"date":"2026-11-20","v":94.0419539671749,"display":"94.0%"},{"date":"2026-11-21","v":93.61516459010035,"display":"93.6%"}],"sql":"SELECT 100.0 * SUM(tickets_resolved) / SUM(tickets_created) AS v FROM support_daily WHERE date BETWEEN :start AND :end","tables":["support_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"RE-RNW","fn":"retention","title":"Gold membership renewal rate","owner":"Sahil Arora","impactTier":3,"better":"higher","window":"7d","value":53.847089593090445,"prev":56.58673858240019,"thr":{"green":60,"red":56},"fmt":{"unit":"%","decimals":1},"display":"53.8%","prevDisplay":"56.6%","status":"red","lastStatus":"amber","targetText":"≥ 60.0%","redText":"\u003c 56.0%","detail":[],"ask":"Pick a Gold 2.0 benefit by Friday: free lens upgrade, or a second free home eye test","series":[{"date":"2026-11-08","v":57.60986708178661,"display":"57.6%"},{"date":"2026-11-09","v":57.55848474052963,"display":"57.6%"},{"date":"2026-11-10","v":57.159904534606206,"display":"57.2%"},{"date":"2026-11-11","v":57.29461756373938,"display":"57.3%"},{"date":"2026-11-12","v":57.10908876019383,"display":"57.1%"},{"date":"2026-11-13","v":56.939942240820415,"display":"56.9%"},{"date":"2026-11-14","v":56.58673858240019,"display":"56.6%"},{"date":"2026-11-15","v":56.40142517814727,"display":"56.4%"},{"date":"2026-11-16","v":56.107147176200264,"display":"56.1%"},{"date":"2026-11-17","v":55.63405797101449,"display":"55.6%"},{"date":"2026-11-18","v":54.86890262194756,"display":"54.9%"},{"date":"2026-11-19","v":54.526560303197016,"display":"54.5%"},{"date":"2026-11-20","v":53.91507118311242,"display":"53.9%"},{"date":"2026-11-21","v":53.847089593090445,"display":"53.8%"}],"sql":"SELECT 100.0 * SUM(renewals_done) / SUM(renewals_due) AS v FROM gold_daily WHERE date BETWEEN :start AND :end","tables":["gold_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"RE-ACT","fn":"retention","title":"Net change in active Gold members (7 days)","owner":"Tara Menon","impactTier":2,"better":"higher","window":"7d","value":4964,"prev":5911,"thr":{"green":0,"red":-2000},"fmt":{"unit":"","decimals":0,"signed":true},"display":"+4,964","prevDisplay":"+5,911","status":"green","lastStatus":"green","targetText":"≥ 0","redText":"\u003c −2,000","detail":[],"series":[{"date":"2026-11-08","v":5967,"display":"+5,967"},{"date":"2026-11-09","v":5942,"display":"+5,942"},{"date":"2026-11-10","v":5694,"display":"+5,694"},{"date":"2026-11-11","v":5758,"display":"+5,758"},{"date":"2026-11-12","v":5810,"display":"+5,810"},{"date":"2026-11-13","v":5973,"display":"+5,973"},{"date":"2026-11-14","v":5911,"display":"+5,911"},{"date":"2026-11-15","v":5912,"display":"+5,912"},{"date":"2026-11-16","v":5900,"display":"+5,900"},{"date":"2026-11-17","v":5962,"display":"+5,962"},{"date":"2026-11-18","v":5769,"display":"+5,769"},{"date":"2026-11-19","v":5756,"display":"+5,756"},{"date":"2026-11-20","v":5429,"display":"+5,429"},{"date":"2026-11-21","v":4964,"display":"+4,964"}],"sql":"SELECT SUM(new_signups + renewals_done - renewals_due) AS v FROM gold_daily WHERE date BETWEEN :start AND :end","tables":["gold_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"FI-REV","fn":"finance","title":"Gross revenue (7 days)","owner":"Karan Shah","impactTier":3,"better":"higher","window":"7d","value":138862995,"prev":143146730,"thr":{"green":140000000,"red":130000000},"fmt":{"unit":" Cr","decimals":2,"prefix":"₹","scale":10000000},"display":"₹13.89 Cr","prevDisplay":"₹14.31 Cr","status":"amber","lastStatus":"green","targetText":"≥ ₹14.00 Cr","redText":"\u003c ₹13.00 Cr","detail":[],"series":[{"date":"2026-11-08","v":143858219,"display":"₹14.39 Cr"},{"date":"2026-11-09","v":143769052,"display":"₹14.38 Cr"},{"date":"2026-11-10","v":143911389,"display":"₹14.39 Cr"},{"date":"2026-11-11","v":143540456,"display":"₹14.35 Cr"},{"date":"2026-11-12","v":143534456,"display":"₹14.35 Cr"},{"date":"2026-11-13","v":143029529,"display":"₹14.30 Cr"},{"date":"2026-11-14","v":143146730,"display":"₹14.31 Cr"},{"date":"2026-11-15","v":142702239,"display":"₹14.27 Cr"},{"date":"2026-11-16","v":142440406,"display":"₹14.24 Cr"},{"date":"2026-11-17","v":141129743,"display":"₹14.11 Cr"},{"date":"2026-11-18","v":140518548,"display":"₹14.05 Cr"},{"date":"2026-11-19","v":140250487,"display":"₹14.03 Cr"},{"date":"2026-11-20","v":139477175,"display":"₹13.95 Cr"},{"date":"2026-11-21","v":138862995,"display":"₹13.89 Cr"}],"sql":"SELECT SUM(gross_revenue_inr) AS v FROM finance_daily WHERE date BETWEEN :start AND :end","tables":["finance_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"FI-INV","fn":"finance","title":"Inventory days","owner":"Sneha Agarwal","impactTier":2,"better":"lower","window":"7d","value":116.04270066321868,"prev":111.89280397680635,"thr":{"green":108,"red":116},"fmt":{"unit":" days","decimals":0},"display":"116 days","prevDisplay":"112 days","status":"red","lastStatus":"amber","targetText":"≤ 108 days","redText":"> 116 days","detail":[],"series":[{"date":"2026-11-08","v":111.56283438663849,"display":"112 days"},{"date":"2026-11-09","v":111.60434394084335,"display":"112 days"},{"date":"2026-11-10","v":111.15898932769878,"display":"111 days"},{"date":"2026-11-11","v":111.11218265917051,"display":"111 days"},{"date":"2026-11-12","v":112.35871610493503,"display":"112 days"},{"date":"2026-11-13","v":111.29386883996597,"display":"111 days"},{"date":"2026-11-14","v":111.89280397680635,"display":"112 days"},{"date":"2026-11-15","v":114.03926013491032,"display":"114 days"},{"date":"2026-11-16","v":112.69964539707122,"display":"113 days"},{"date":"2026-11-17","v":114.58924222019583,"display":"115 days"},{"date":"2026-11-18","v":113.2710371648909,"display":"113 days"},{"date":"2026-11-19","v":115.06282973828262,"display":"115 days"},{"date":"2026-11-20","v":113.80828012021676,"display":"114 days"},{"date":"2026-11-21","v":116.04270066321868,"display":"116 days"}],"sql":"SELECT inventory_value_inr / cogs_inr AS v FROM finance_daily WHERE date = :end","tables":["finance_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"FI-CSH","fn":"finance","title":"Cash collected vs revenue","owner":"Amit Saxena","impactTier":1,"better":"higher","window":"7d","value":97.04723781883,"prev":96.65029302450709,"thr":{"green":96,"red":94},"fmt":{"unit":"%","decimals":1},"display":"97.0%","prevDisplay":"96.7%","status":"green","lastStatus":"green","targetText":"≥ 96.0%","redText":"\u003c 94.0%","detail":[],"series":[{"date":"2026-11-08","v":97.24874530804527,"display":"97.2%"},{"date":"2026-11-09","v":97.5142390171704,"display":"97.5%"},{"date":"2026-11-10","v":97.5774120281752,"display":"97.6%"},{"date":"2026-11-11","v":97.74931605344767,"display":"97.7%"},{"date":"2026-11-12","v":97.3893954772783,"display":"97.4%"},{"date":"2026-11-13","v":97.14141476338078,"display":"97.1%"},{"date":"2026-11-14","v":96.65029302450709,"display":"96.7%"},{"date":"2026-11-15","v":96.74836706661624,"display":"96.7%"},{"date":"2026-11-16","v":96.77246707651199,"display":"96.8%"},{"date":"2026-11-17","v":96.9124077551817,"display":"96.9%"},{"date":"2026-11-18","v":96.46548368831708,"display":"96.5%"},{"date":"2026-11-19","v":96.763716050412,"display":"96.8%"},{"date":"2026-11-20","v":96.50693527453507,"display":"96.5%"},{"date":"2026-11-21","v":97.04723781883,"display":"97.0%"}],"sql":"SELECT 100.0 * SUM(cash_collected_inr) / SUM(gross_revenue_inr) AS v FROM finance_daily WHERE date BETWEEN :start AND :end","tables":["finance_daily"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"IN-GCC","fn":"intl","title":"UAE and Saudi store revenue vs target","owner":"Meera Iyer","impactTier":2,"dependsOn":"P-IN1","better":"higher","window":"7d","value":88.39624803767661,"prev":91.81087127158555,"thr":{"green":95,"red":85},"fmt":{"unit":"%","decimals":1},"display":"88.4%","prevDisplay":"91.8%","status":"amber","lastStatus":"amber","targetText":"≥ 95.0%","redText":"\u003c 85.0%","detail":["Saudi Arabia 74%","UAE 102%"],"detailLabel":"By country","series":[{"date":"2026-11-08","v":95.76590266875981,"display":"95.8%"},{"date":"2026-11-09","v":94.51981161695447,"display":"94.5%"},{"date":"2026-11-10","v":93.63485871271585,"display":"93.6%"},{"date":"2026-11-11","v":93.2349136577708,"display":"93.2%"},{"date":"2026-11-12","v":92.21788069073783,"display":"92.2%"},{"date":"2026-11-13","v":92.07781004709577,"display":"92.1%"},{"date":"2026-11-14","v":91.81087127158555,"display":"91.8%"},{"date":"2026-11-15","v":90.9293328100471,"display":"90.9%"},{"date":"2026-11-16","v":91.22799843014128,"display":"91.2%"},{"date":"2026-11-17","v":91.05459183673469,"display":"91.1%"},{"date":"2026-11-18","v":90.51839089481946,"display":"90.5%"},{"date":"2026-11-19","v":90.15361067503925,"display":"90.2%"},{"date":"2026-11-20","v":89.45986656200942,"display":"89.5%"},{"date":"2026-11-21","v":88.39624803767661,"display":"88.4%"}],"sql":"SELECT 100.0 * SUM(d.revenue_inr) / SUM(s.daily_target_inr) AS v FROM sales_daily d JOIN stores s USING (store_id) WHERE s.country IN ('UAE', 'Saudi Arabia') AND d.date BETWEEN :start AND :end","tables":["sales_daily","stores"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"metric","id":"IN-SGP","fn":"intl","title":"Singapore store revenue vs target","owner":"Zoya Khan","impactTier":1,"better":"higher","window":"7d","value":103.54876984126984,"prev":100.68309523809523,"thr":{"green":95,"red":85},"fmt":{"unit":"%","decimals":1},"display":"103.5%","prevDisplay":"100.7%","status":"green","lastStatus":"green","targetText":"≥ 95.0%","redText":"\u003c 85.0%","detail":[],"series":[{"date":"2026-11-08","v":100.78063492063492,"display":"100.8%"},{"date":"2026-11-09","v":101.45136904761905,"display":"101.5%"},{"date":"2026-11-10","v":102.43922619047619,"display":"102.4%"},{"date":"2026-11-11","v":102.84988095238096,"display":"102.8%"},{"date":"2026-11-12","v":102.06517857142858,"display":"102.1%"},{"date":"2026-11-13","v":101.22589285714285,"display":"101.2%"},{"date":"2026-11-14","v":100.68309523809523,"display":"100.7%"},{"date":"2026-11-15","v":101.89871031746031,"display":"101.9%"},{"date":"2026-11-16","v":100.90505952380953,"display":"100.9%"},{"date":"2026-11-17","v":101.37031746031747,"display":"101.4%"},{"date":"2026-11-18","v":101.5877380952381,"display":"101.6%"},{"date":"2026-11-19","v":101.39251984126984,"display":"101.4%"},{"date":"2026-11-20","v":102.24109126984126,"display":"102.2%"},{"date":"2026-11-21","v":103.54876984126984,"display":"103.5%"}],"sql":"SELECT 100.0 * SUM(d.revenue_inr) / SUM(s.daily_target_inr) AS v FROM sales_daily d JOIN stores s USING (store_id) WHERE s.country = 'Singapore' AND d.date BETWEEN :start AND :end","tables":["sales_daily","stores"],"asOfLabel":"7 days to 2026-11-21"},{"kind":"project","id":"P-ST1","fn":"stores","title":"Open 120 stores in Tier-2/3 cities","owner":"Aditya Joshi","status":"amber","lastStatus":"green","progress":62,"due":"2026-12-31","originalDue":"2026-12-31","lastUpdate":"2026-11-20","impactTier":3,"blocker":"14 leases stuck in landlord negotiation in UP and Bihar","ask":"Approve an 8% rent ceiling increase for high-footfall Tier-2 malls","note":"74 of 120 open, 32 in fit-out."},{"kind":"project","id":"P-ST2","fn":"stores","title":"Hire 600 optometrists for new stores","owner":"Dr. Priya Nair","status":"red","lastStatus":"red","progress":38,"due":"2027-03-31","originalDue":"2027-03-31","lastUpdate":"2026-11-20","impactTier":3,"blocker":"Hiring 35 a month against the 75 a month needed","ask":"Approve a ₹40k joining bonus and 3 more optometry college tie-ups","note":"228 of 600 hired."},{"kind":"project","id":"P-SC1","fn":"supply","title":"Move the Gurugram hub to the new WMS","owner":"Arjun Menon","status":"red","lastStatus":"red","progress":58,"due":"2026-11-25","originalDue":"2026-10-31","lastUpdate":"2026-11-18","impactTier":3,"blocker":"Pick rate at 68% of the old system; vendor patch promised for 28 Nov","ask":"Decide by Tuesday: roll back to the old WMS for wedding peak, or run both systems","note":""},{"kind":"project","id":"P-MF1","fn":"supply","title":"Commission phase 1 of the Telangana lens plant","owner":"Sanjay Bhatt","status":"amber","lastStatus":"amber","progress":48,"due":"2027-03-31","originalDue":"2027-01-31","lastUpdate":"2026-11-20","impactTier":2,"blocker":"Coating machines held at Chennai port customs for 3 weeks","note":"Civil works done."},{"kind":"project","id":"P-MK1","fn":"mktg","title":"Winter campaign across TV and digital","owner":"Neha Kapoor","status":"amber","lastStatus":"green","progress":65,"due":"2026-12-05","originalDue":"2026-12-05","lastUpdate":"2026-11-21","impactTier":2,"note":"Meta creatives are fatiguing; new set in production."},{"kind":"project","id":"P-MK2","fn":"mktg","title":"Launch campaign for kids' eyewear","owner":"Ananya Desai","status":"amber","lastStatus":"amber","progress":40,"due":"2027-01-15","originalDue":"2027-01-15","lastUpdate":"2026-11-06","impactTier":1,"note":"Agency brief not signed off."},{"kind":"project","id":"P-TE1","fn":"tech","title":"Real-time store inventory API","owner":"Nikhil Jain","status":"red","lastStatus":"red","progress":30,"due":"2026-12-10","originalDue":"2026-11-20","lastUpdate":"2026-11-21","impactTier":2,"blocker":"2 of 5 backend engineers moved to the checkout redesign","ask":"Return the two engineers until 10 Dec","note":"Blocks same-day delivery from stores."},{"kind":"project","id":"P-TE2","fn":"tech","title":"3D virtual try-on v3","owner":"Vikram Rao","status":"green","lastStatus":"green","progress":78,"due":"2026-12-31","originalDue":"2026-12-31","lastUpdate":"2026-11-20","impactTier":2,"win":"v3 lifted app conversion 6% in the A/B test","note":""},{"kind":"project","id":"P-CS1","fn":"cs","title":"AI assistant for order tracking and returns","owner":"Shreya Bose","status":"green","lastStatus":"amber","progress":80,"due":"2026-12-20","originalDue":"2026-12-20","lastUpdate":"2026-11-20","impactTier":2,"win":"AI assistant now resolves 22% of chats without an agent","note":""},{"kind":"project","id":"P-RE1","fn":"retention","title":"Relaunch Gold membership as Gold 2.0","owner":"Sahil Arora","status":"amber","lastStatus":"amber","progress":50,"due":"2026-12-20","originalDue":"2026-12-10","lastUpdate":"2026-11-19","impactTier":3,"note":"Pricing sign-off pending from Finance."},{"kind":"project","id":"P-FI1","fn":"finance","title":"Reconcile ₹38 Cr of GST input credit","owner":"Amit Saxena","status":"amber","lastStatus":"amber","progress":60,"due":"2026-12-31","originalDue":"2026-12-31","lastUpdate":"2026-11-08","impactTier":2,"note":""},{"kind":"project","id":"P-FI2","fn":"finance","title":"Quarterly results and investor day","owner":"Karan Shah","status":"green","lastStatus":"green","progress":85,"due":"2026-12-05","originalDue":"2026-12-05","lastUpdate":"2026-11-21","impactTier":3,"win":"Investor day deck signed off a week early","note":""},{"kind":"project","id":"P-IN1","fn":"intl","title":"Get licences for 9 new Saudi stores","owner":"Meera Iyer","status":"red","lastStatus":"amber","progress":20,"due":"2026-12-15","originalDue":"2026-11-30","lastUpdate":"2026-11-20","impactTier":2,"blocker":"Municipal licences delayed; existing stores on reduced hours","ask":"Approve a local licensing consultant (₹45 lakh)","note":""},{"kind":"project","id":"P-IN2","fn":"intl","title":"Relaunch the Singapore online store","owner":"Zoya Khan","status":"green","lastStatus":"green","progress":92,"due":"2026-11-30","originalDue":"2026-11-30","lastUpdate":"2026-11-21","impactTier":1,"win":"Singapore site live in soft launch at 2.8% conversion","note":""}],"asOf":"2026-11-22","checks":[{"id":"fresh","title":"Yesterday's sales landed for every store","ok":true,"bad":0},{"id":"today-roster","title":"Today's roster and logins have arrived","ok":true,"bad":0},{"id":"fk-sales","title":"Every sales row points to a known store","ok":true,"bad":0},{"id":"fk-att","title":"Every login matches a rostered staff member at the same store","ok":true,"bad":0},{"id":"dupes","title":"No duplicate store-day rows","ok":true,"bad":0},{"id":"recon","title":"Finance ledger equals store + online sales, every day (within 0.5%)","ok":true,"bad":0},{"id":"sane","title":"No negative values; remakes ≤ jobs; renewals ≤ due","ok":true,"bad":0}],"storeDesk":{"checkTime":"08:45","date":"2026-11-22","rostered":359,"loggedIn":342,"stores":78,"noOptometrist":["Delhi Mall Road","Patna Mall Road"],"shortStaffed":["Kolkata Central (2 missing)","Ranchi Central (2 missing)"],"belowTarget":["Jeddah Mall Road 79%"]},"storeRows":[{"store_id":"AE-ABU-01","name":"Abu Dhabi Central","city":"Abu Dhabi","country":"UAE","target":150000,"rostered":3,"logged":3,"opto_rostered":1,"opto_logged":1,"rev_yday":233160,"pctTarget":155,"missing":[]},{"store_id":"AE-ABU-02","name":"Abu Dhabi Mall Road","city":"Abu Dhabi","country":"UAE","target":150000,"rostered":4,"logged":3,"opto_rostered":1,"opto_logged":1,"rev_yday":199841,"pctTarget":133,"missing":["Joseph Fernandes (store manager)"]},{"store_id":"AE-DUB-01","name":"Dubai Central","city":"Dubai","country":"UAE","target":160000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":221781,"pctTarget":139,"missing":[]},{"store_id":"AE-DUB-02","name":"Dubai Mall Road","city":"Dubai","country":"UAE","target":160000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":212586,"pctTarget":133,"missing":[]},{"store_id":"AE-DUB-03","name":"Dubai Station Road","city":"Dubai","country":"UAE","target":160000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":180694,"pctTarget":113,"missing":[]},{"store_id":"AE-DUB-04","name":"Dubai High Street","city":"Dubai","country":"UAE","target":160000,"rostered":3,"logged":3,"opto_rostered":1,"opto_logged":1,"rev_yday":202809,"pctTarget":127,"missing":[]},{"store_id":"IN-AHM-01","name":"Ahmedabad Central","city":"Ahmedabad","country":"India","target":140000,"rostered":5,"logged":5,"opto_rostered":2,"opto_logged":2,"rev_yday":209982,"pctTarget":150,"missing":[]},{"store_id":"IN-AHM-02","name":"Ahmedabad Mall Road","city":"Ahmedabad","country":"India","target":140000,"rostered":6,"logged":6,"opto_rostered":2,"opto_logged":2,"rev_yday":230350,"pctTarget":165,"missing":[]},{"store_id":"IN-AHM-03","name":"Ahmedabad Station Road","city":"Ahmedabad","country":"India","target":140000,"rostered":6,"logged":5,"opto_rostered":2,"opto_logged":2,"rev_yday":168924,"pctTarget":121,"missing":["Myra Reddy (sales associate)"]},{"store_id":"IN-BEN-01","name":"Bengaluru Central","city":"Bengaluru","country":"India","target":140000,"rostered":5,"logged":5,"opto_rostered":2,"opto_logged":2,"rev_yday":189969,"pctTarget":136,"missing":[]},{"store_id":"IN-BEN-02","name":"Bengaluru Mall Road","city":"Bengaluru","country":"India","target":140000,"rostered":5,"logged":5,"opto_rostered":2,"opto_logged":2,"rev_yday":220632,"pctTarget":158,"missing":[]},{"store_id":"IN-BEN-03","name":"Bengaluru Station Road","city":"Bengaluru","country":"India","target":140000,"rostered":5,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":184942,"pctTarget":132,"missing":["Dev Sharma (sales associate)"]},{"store_id":"IN-BEN-04","name":"Bengaluru High Street","city":"Bengaluru","country":"India","target":140000,"rostered":5,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":160952,"pctTarget":115,"missing":["Imran Das (sales associate)"]},{"store_id":"IN-BEN-05","name":"Bengaluru North","city":"Bengaluru","country":"India","target":140000,"rostered":6,"logged":6,"opto_rostered":2,"opto_logged":2,"rev_yday":173308,"pctTarget":124,"missing":[]},{"store_id":"IN-CHA-01","name":"Chandigarh Central","city":"Chandigarh","country":"India","target":100000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":125057,"pctTarget":125,"missing":[]},{"store_id":"IN-CHA-02","name":"Chandigarh Mall Road","city":"Chandigarh","country":"India","target":100000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":143298,"pctTarget":143,"missing":[]},{"store_id":"IN-CHE-01","name":"Chennai Central","city":"Chennai","country":"India","target":140000,"rostered":4,"logged":3,"opto_rostered":2,"opto_logged":2,"rev_yday":210937,"pctTarget":151,"missing":["Karthik Khan (sales associate)"]},{"store_id":"IN-CHE-02","name":"Chennai Mall Road","city":"Chennai","country":"India","target":140000,"rostered":5,"logged":5,"opto_rostered":2,"opto_logged":2,"rev_yday":208743,"pctTarget":149,"missing":[]},{"store_id":"IN-CHE-03","name":"Chennai Station Road","city":"Chennai","country":"India","target":140000,"rostered":5,"logged":5,"opto_rostered":2,"opto_logged":2,"rev_yday":175989,"pctTarget":126,"missing":[]},{"store_id":"IN-CHE-04","name":"Chennai High Street","city":"Chennai","country":"India","target":140000,"rostered":6,"logged":6,"opto_rostered":2,"opto_logged":2,"rev_yday":175655,"pctTarget":125,"missing":[]},{"store_id":"IN-COI-01","name":"Coimbatore Central","city":"Coimbatore","country":"India","target":100000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":139349,"pctTarget":139,"missing":[]},{"store_id":"IN-COI-02","name":"Coimbatore Mall Road","city":"Coimbatore","country":"India","target":100000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":154313,"pctTarget":154,"missing":[]},{"store_id":"IN-DEH-01","name":"Dehradun Central","city":"Dehradun","country":"India","target":75000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":89924,"pctTarget":120,"missing":[]},{"store_id":"IN-DEL-01","name":"Delhi Central","city":"Delhi","country":"India","target":140000,"rostered":5,"logged":5,"opto_rostered":2,"opto_logged":2,"rev_yday":199626,"pctTarget":143,"missing":[]},{"store_id":"IN-DEL-02","name":"Delhi Mall Road","city":"Delhi","country":"India","target":140000,"rostered":6,"logged":4,"opto_rostered":2,"opto_logged":0,"rev_yday":178617,"pctTarget":128,"missing":["Aarav Singh (optometrist)","Saanvi Patel (optometrist)"]},{"store_id":"IN-DEL-03","name":"Delhi Station Road","city":"Delhi","country":"India","target":140000,"rostered":6,"logged":6,"opto_rostered":2,"opto_logged":2,"rev_yday":208568,"pctTarget":149,"missing":[]},{"store_id":"IN-DEL-04","name":"Delhi High Street","city":"Delhi","country":"India","target":140000,"rostered":6,"logged":6,"opto_rostered":2,"opto_logged":2,"rev_yday":185505,"pctTarget":133,"missing":[]},{"store_id":"IN-DEL-05","name":"Delhi North","city":"Delhi","country":"India","target":140000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":215813,"pctTarget":154,"missing":[]},{"store_id":"IN-GUW-01","name":"Guwahati Central","city":"Guwahati","country":"India","target":75000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":97116,"pctTarget":129,"missing":[]},{"store_id":"IN-GUW-02","name":"Guwahati Mall Road","city":"Guwahati","country":"India","target":75000,"rostered":4,"logged":4,"opto_rostered":0,"opto_logged":0,"rev_yday":119860,"pctTarget":160,"missing":[]},{"store_id":"IN-HYD-01","name":"Hyderabad Central","city":"Hyderabad","country":"India","target":140000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":209424,"pctTarget":150,"missing":[]},{"store_id":"IN-HYD-02","name":"Hyderabad Mall Road","city":"Hyderabad","country":"India","target":140000,"rostered":6,"logged":6,"opto_rostered":2,"opto_logged":2,"rev_yday":193473,"pctTarget":138,"missing":[]},{"store_id":"IN-HYD-03","name":"Hyderabad Station Road","city":"Hyderabad","country":"India","target":140000,"rostered":6,"logged":6,"opto_rostered":2,"opto_logged":2,"rev_yday":231700,"pctTarget":166,"missing":[]},{"store_id":"IN-HYD-04","name":"Hyderabad High Street","city":"Hyderabad","country":"India","target":140000,"rostered":6,"logged":6,"opto_rostered":2,"opto_logged":2,"rev_yday":198384,"pctTarget":142,"missing":[]},{"store_id":"IN-IND-01","name":"Indore Central","city":"Indore","country":"India","target":100000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":122033,"pctTarget":122,"missing":[]},{"store_id":"IN-IND-02","name":"Indore Mall Road","city":"Indore","country":"India","target":100000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":129916,"pctTarget":130,"missing":[]},{"store_id":"IN-JAI-01","name":"Jaipur Central","city":"Jaipur","country":"India","target":100000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":166256,"pctTarget":166,"missing":[]},{"store_id":"IN-JAI-02","name":"Jaipur Mall Road","city":"Jaipur","country":"India","target":100000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":121948,"pctTarget":122,"missing":[]},{"store_id":"IN-JAI-03","name":"Jaipur Station Road","city":"Jaipur","country":"India","target":100000,"rostered":4,"logged":3,"opto_rostered":1,"opto_logged":1,"rev_yday":160538,"pctTarget":161,"missing":["Dev Sharma (sales associate)"]},{"store_id":"IN-KOC-01","name":"Kochi Central","city":"Kochi","country":"India","target":100000,"rostered":5,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":118822,"pctTarget":119,"missing":["Harpreet Sharma (store manager)"]},{"store_id":"IN-KOC-02","name":"Kochi Mall Road","city":"Kochi","country":"India","target":100000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":131161,"pctTarget":131,"missing":[]},{"store_id":"IN-KOL-01","name":"Kolkata Central","city":"Kolkata","country":"India","target":140000,"rostered":5,"logged":3,"opto_rostered":1,"opto_logged":1,"rev_yday":192581,"pctTarget":138,"missing":["Ayaan Kulkarni (sales associate)","Pooja Reddy (sales associate)"]},{"store_id":"IN-KOL-02","name":"Kolkata Mall Road","city":"Kolkata","country":"India","target":140000,"rostered":6,"logged":6,"opto_rostered":2,"opto_logged":2,"rev_yday":207805,"pctTarget":148,"missing":[]},{"store_id":"IN-KOL-03","name":"Kolkata Station Road","city":"Kolkata","country":"India","target":140000,"rostered":5,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":181370,"pctTarget":130,"missing":["Joseph Fernandes (store manager)"]},{"store_id":"IN-LUC-01","name":"Lucknow Central","city":"Lucknow","country":"India","target":100000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":146704,"pctTarget":147,"missing":[]},{"store_id":"IN-LUC-02","name":"Lucknow Mall Road","city":"Lucknow","country":"India","target":100000,"rostered":4,"logged":4,"opto_rostered":0,"opto_logged":0,"rev_yday":125238,"pctTarget":125,"missing":[]},{"store_id":"IN-LUC-03","name":"Lucknow Station Road","city":"Lucknow","country":"India","target":100000,"rostered":3,"logged":3,"opto_rostered":1,"opto_logged":1,"rev_yday":139354,"pctTarget":139,"missing":[]},{"store_id":"IN-MUM-01","name":"Mumbai Central","city":"Mumbai","country":"India","target":140000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":198138,"pctTarget":142,"missing":[]},{"store_id":"IN-MUM-02","name":"Mumbai Mall Road","city":"Mumbai","country":"India","target":140000,"rostered":5,"logged":4,"opto_rostered":2,"opto_logged":2,"rev_yday":182707,"pctTarget":131,"missing":["Aarav Singh (sales associate)"]},{"store_id":"IN-MUM-03","name":"Mumbai Station Road","city":"Mumbai","country":"India","target":140000,"rostered":5,"logged":5,"opto_rostered":2,"opto_logged":2,"rev_yday":185326,"pctTarget":132,"missing":[]},{"store_id":"IN-MUM-04","name":"Mumbai High Street","city":"Mumbai","country":"India","target":140000,"rostered":5,"logged":5,"opto_rostered":2,"opto_logged":2,"rev_yday":192691,"pctTarget":138,"missing":[]},{"store_id":"IN-MUM-05","name":"Mumbai North","city":"Mumbai","country":"India","target":140000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":204410,"pctTarget":146,"missing":[]},{"store_id":"IN-MYS-01","name":"Mysuru Central","city":"Mysuru","country":"India","target":75000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":90207,"pctTarget":120,"missing":[]},{"store_id":"IN-NAG-01","name":"Nagpur Central","city":"Nagpur","country":"India","target":100000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":157130,"pctTarget":157,"missing":[]},{"store_id":"IN-NAG-02","name":"Nagpur Mall Road","city":"Nagpur","country":"India","target":100000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":127850,"pctTarget":128,"missing":[]},{"store_id":"IN-PAT-01","name":"Patna Central","city":"Patna","country":"India","target":75000,"rostered":4,"logged":3,"opto_rostered":0,"opto_logged":0,"rev_yday":109482,"pctTarget":146,"missing":["Harpreet Gupta (sales associate)"]},{"store_id":"IN-PAT-02","name":"Patna Mall Road","city":"Patna","country":"India","target":75000,"rostered":5,"logged":4,"opto_rostered":1,"opto_logged":0,"rev_yday":114979,"pctTarget":153,"missing":["Nikhil Singh (optometrist)"]},{"store_id":"IN-PUN-01","name":"Pune Central","city":"Pune","country":"India","target":140000,"rostered":5,"logged":5,"opto_rostered":2,"opto_logged":2,"rev_yday":225132,"pctTarget":161,"missing":[]},{"store_id":"IN-PUN-02","name":"Pune Mall Road","city":"Pune","country":"India","target":140000,"rostered":5,"logged":5,"opto_rostered":2,"opto_logged":2,"rev_yday":205920,"pctTarget":147,"missing":[]},{"store_id":"IN-PUN-03","name":"Pune Station Road","city":"Pune","country":"India","target":140000,"rostered":6,"logged":6,"opto_rostered":2,"opto_logged":2,"rev_yday":179503,"pctTarget":128,"missing":[]},{"store_id":"IN-RAI-01","name":"Raipur Central","city":"Raipur","country":"India","target":75000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":127998,"pctTarget":171,"missing":[]},{"store_id":"IN-RAI-02","name":"Raipur Mall Road","city":"Raipur","country":"India","target":75000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":106423,"pctTarget":142,"missing":[]},{"store_id":"IN-RAN-01","name":"Ranchi Central","city":"Ranchi","country":"India","target":75000,"rostered":4,"logged":2,"opto_rostered":1,"opto_logged":1,"rev_yday":113571,"pctTarget":151,"missing":["Imran Kulkarni (sales associate)","Joseph Patel (sales associate)"]},{"store_id":"IN-SUR-01","name":"Surat Central","city":"Surat","country":"India","target":100000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":137527,"pctTarget":138,"missing":[]},{"store_id":"IN-SUR-02","name":"Surat Mall Road","city":"Surat","country":"India","target":100000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":144952,"pctTarget":145,"missing":[]},{"store_id":"IN-UDA-01","name":"Udaipur Central","city":"Udaipur","country":"India","target":75000,"rostered":5,"logged":5,"opto_rostered":1,"opto_logged":1,"rev_yday":98035,"pctTarget":131,"missing":[]},{"store_id":"IN-VAR-01","name":"Varanasi Central","city":"Varanasi","country":"India","target":75000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":122760,"pctTarget":164,"missing":[]},{"store_id":"IN-VAR-02","name":"Varanasi Mall Road","city":"Varanasi","country":"India","target":75000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":95244,"pctTarget":127,"missing":[]},{"store_id":"SA-JED-01","name":"Jeddah Central","city":"Jeddah","country":"Saudi Arabia","target":140000,"rostered":3,"logged":3,"opto_rostered":0,"opto_logged":0,"rev_yday":127710,"pctTarget":91,"missing":[]},{"store_id":"SA-JED-02","name":"Jeddah Mall Road","city":"Jeddah","country":"Saudi Arabia","target":140000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":110059,"pctTarget":79,"missing":[]},{"store_id":"SA-RIY-01","name":"Riyadh Central","city":"Riyadh","country":"Saudi Arabia","target":150000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":128537,"pctTarget":86,"missing":[]},{"store_id":"SA-RIY-02","name":"Riyadh Mall Road","city":"Riyadh","country":"Saudi Arabia","target":150000,"rostered":3,"logged":3,"opto_rostered":0,"opto_logged":0,"rev_yday":140021,"pctTarget":93,"missing":[]},{"store_id":"SA-RIY-03","name":"Riyadh Station Road","city":"Riyadh","country":"Saudi Arabia","target":150000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":142489,"pctTarget":95,"missing":[]},{"store_id":"SA-RIY-04","name":"Riyadh High Street","city":"Riyadh","country":"Saudi Arabia","target":150000,"rostered":3,"logged":3,"opto_rostered":1,"opto_logged":1,"rev_yday":135250,"pctTarget":90,"missing":[]},{"store_id":"SG-SIN-01","name":"Singapore Central","city":"Singapore","country":"Singapore","target":180000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":217071,"pctTarget":121,"missing":[]},{"store_id":"SG-SIN-02","name":"Singapore Mall Road","city":"Singapore","country":"Singapore","target":180000,"rostered":4,"logged":4,"opto_rostered":1,"opto_logged":1,"rev_yday":277118,"pctTarget":154,"missing":[]},{"store_id":"SG-SIN-03","name":"Singapore Station Road","city":"Singapore","country":"Singapore","target":180000,"rostered":3,"logged":3,"opto_rostered":1,"opto_logged":1,"rev_yday":263020,"pctTarget":146,"missing":[]},{"store_id":"SG-SIN-04","name":"Singapore High Street","city":"Singapore","country":"Singapore","target":180000,"rostered":3,"logged":3,"opto_rostered":1,"opto_logged":1,"rev_yday":245342,"pctTarget":136,"missing":[]}],"tables":{"attendance":{"columns":["date","staff_id","store_id","login_at"],"rows":5078},"finance_daily":{"columns":["date","gross_revenue_inr","cogs_inr","cash_collected_inr","inventory_value_inr"],"rows":28},"fulfilment_daily":{"columns":["date","hub","orders_received","orders_shipped","backlog_eod","pick_rate_per_hr","avg_delivery_days","late_deliveries"],"rows":112},"gold_daily":{"columns":["date","active_members","renewals_due","renewals_done","new_signups"],"rows":28},"lab_daily":{"columns":["date","lab","jobs","remakes"],"rows":56},"marketing_daily":{"columns":["date","channel","spend_inr","new_customers"],"rows":112},"online_daily":{"columns":["date","channel","sessions","tryon_sessions","orders","revenue_inr","crash_free_pct"],"rows":56},"roster":{"columns":["date","staff_id","store_id","shift_start"],"rows":5231},"sales_daily":{"columns":["date","store_id","revenue_inr","orders","eye_tests","footfall"],"rows":2184},"staff":{"columns":["staff_id","store_id","role","name","weekly_off"],"rows":406},"stores":{"columns":["store_id","name","city","state","country","tier","daily_target_inr"],"rows":78},"support_daily":{"columns":["date","channel","tickets_created","tickets_resolved","wismo_tickets","median_first_reply_min"],"rows":84}},"runs":[{"at":"2026-11-22T17:50:43.742Z","asOf":"2026-11-22","trigger":"push","runUrl":"https://github.com/theopinioncut/trynew/actions/runs/45051693439","changes":[],"top":["P-SC1","P-IN1","RE-RNW"],"counts":{"red":8,"amber":18,"green":10},"checksOk":true},{"at":"2026-11-22T17:50:05.645Z","asOf":"2026-11-22","trigger":"manual","runUrl":null,"changes":[],"top":["P-SC1","P-IN1","RE-RNW"],"counts":{"red":8,"amber":18,"green":10},"checksOk":true},{"at":"2026-11-22T17:45:47.900Z","asOf":"2026-11-22","trigger":"manual","runUrl":null,"changes":[],"top":["P-SC1","P-IN1","RE-RNW"],"counts":{"red":8,"amber":18,"green":10},"checksOk":true},{"at":"2026-11-22T17:45:36.406Z","asOf":"2026-11-22","trigger":"manual","runUrl":null,"changes":[],"top":["P-SC1","P-TE1","P-IN1"],"counts":{"red":7,"amber":19,"green":10},"checksOk":true},{"at":"2026-11-22T17:44:34.339Z","asOf":"2026-11-23","trigger":"manual","runUrl":null,"changes":[],"top":["P-TE1","P-IN1","P-SC1"],"counts":{"red":10,"amber":13,"green":13},"checksOk":true}],"meta":{"generatedBy":"Sent automatically by GitHub Actions, triggered by an owner update, at 23:20 IST on 2026-11-22.","appUrl":"https://www.kliquestart.com/lenskart-tracker/","cc":"@theopinioncut"},"emailHtml":"\u003c!doctype html>\u003chtml>\u003chead>\u003cmeta charset=\"utf-8\">\u003cmeta name=\"viewport\" content=\"width=device-width\">\u003c/head>\u003cbody style=\"margin:0;padding:0;background:#EEF1F5\">\n\u003ctable role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#EEF1F5\">\u003ctr>\u003ctd align=\"center\" style=\"padding:24px 12px\">\n\u003ctable role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width:640px;background:#FFFFFF;border-radius:8px\">\u003ctr>\u003ctd style=\"padding:28px 28px 32px\">\n\u003ctable role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n\u003ctr>\u003ctd>\n  \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#5B6475\">Lenskart leadership brief · 22 Nov · Week 47\u003c/div>\n  \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:24px;font-weight:bold;line-height:1.25;color:#14213D;margin-top:10px\">3 things need your attention this week\u003c/div>\n  \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5B6475;margin-top:8px\">36 tracked items across 8 functions:\n    \u003cb style=\"color:#C62828\">8 red\u003c/b>, \u003cb style=\"color:#B26A00\">18 amber\u003c/b>, \u003cb style=\"color:#2E7D32\">10 green\u003c/b>.\n    10 got worse since last week, 2 got better.\u003c/div>\n  \n\u003c/td>\u003c/tr>\n\u003ctr>\u003ctd style=\"height:18px;line-height:18px\">&nbsp;\u003c/td>\u003c/tr>\n\u003ctr>\u003ctd style=\"padding:14px 16px;border-left:4px solid #C62828;background:#F5F7FA\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;color:#5B6475\">1 · SUPPLY CHAIN &AMP; MANUFACTURING\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:bold;line-height:1.35;color:#14213D;margin-top:6px\">Move the Gurugram hub to the new WMS\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>Red · Owner: \u003cb style=\"color:#14213D\">Arjun Menon\u003c/b> · Due 25 Nov\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#14213D;margin-top:6px\">Deadline pushed back 25 days · Due in 3 days at 58% done · Causing 3 other problems in the data\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#14213D;margin-top:4px\">Blocker: Pick rate at 68% of the old system; vendor patch promised for 28 Nov\u003c/div>\n      \n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:4px\">Also causing: Orders waiting to ship (all hubs) (3,976 orders); Average delivery time (2.47 days); Share of tickets asking &quot;where is my order&quot; (18.5%)\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;line-height:1.5;color:#14213D;margin-top:8px\">Decision needed: Decide by Tuesday: roll back to the old WMS for wedding peak, or run both systems\u003c/div>\n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"height:10px;line-height:10px\">&nbsp;\u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:14px 16px;border-left:4px solid #C62828;background:#F5F7FA\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;color:#5B6475\">2 · INTERNATIONAL\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:bold;line-height:1.35;color:#14213D;margin-top:6px\">Get licences for 9 new Saudi stores\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>Red (was Amber) · Owner: \u003cb style=\"color:#14213D\">Meera Iyer\u003c/b> · Due 15 Dec\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#14213D;margin-top:6px\">Went Amber → Red since last week · Deadline pushed back 15 days · Causing 1 other problem in the data\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#14213D;margin-top:4px\">Blocker: Municipal licences delayed; existing stores on reduced hours\u003c/div>\n      \n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:4px\">Also causing: UAE and Saudi store revenue vs target (88.4%)\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;line-height:1.5;color:#14213D;margin-top:8px\">Decision needed: Approve a local licensing consultant (₹45 lakh)\u003c/div>\n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"height:10px;line-height:10px\">&nbsp;\u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:14px 16px;border-left:4px solid #C62828;background:#F5F7FA\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;color:#5B6475\">3 · RETENTION &AMP; GOLD\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:bold;line-height:1.35;color:#14213D;margin-top:6px\">Gold membership renewal rate\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>Red (was Amber) · Owner: \u003cb style=\"color:#14213D\">Sahil Arora\u003c/b>\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#14213D;margin-top:6px\">53.8% against a target of ≥ 60.0% · Went Amber → Red since last week · was 56.6% the week before\u003c/div>\n      \n      \n      \n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;line-height:1.5;color:#14213D;margin-top:8px\">Decision needed: Pick a Gold 2.0 benefit by Friday: free lens upgrade, or a second free home eye test\u003c/div>\n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"height:10px;line-height:10px\">&nbsp;\u003c/td>\u003c/tr>\n\u003ctr>\u003ctd style=\"padding:26px 0 6px\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#14213D\">Stores this morning\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:4px\">Attendance at 08:45 today: 342 of 359 rostered staff logged in across 78 stores.\u003c/div>\u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#14213D;padding:4px 0\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>\u003cb>No optometrist yet, so no eye tests:\u003c/b> Delhi Mall Road, Patna Mall Road\u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#14213D;padding:4px 0\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>\u003cb>Two or more staff not logged in:\u003c/b> Kolkata Central (2 missing), Ranchi Central (2 missing)\u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#14213D;padding:4px 0\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>\u003cb>Under 80% of target yesterday:\u003c/b> Jeddah Mall Road 79%\u003c/td>\u003c/tr>\n\u003ctr>\u003ctd style=\"padding:26px 0 6px\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#C62828\">Red · fix now\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:4px\">Off track. The owner needs a decision or resources this week.\u003c/div>\u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>Real-time store inventory API\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">App &amp; Product · Owner: Nikhil Jain · Due 10 Dec · 30% done\u003c/div>\n      \n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#14213D;margin-top:2px\">Blocker: 2 of 5 backend engineers moved to the checkout redesign\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Blocks same-day delivery from stores.\u003c/div>\n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>Lens remake rate\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Supply Chain &amp; Manufacturing · Owner: Pooja Sharma · 2.98% (target ≤ 2.00%)\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#C62828;margin-top:2px\">Was Amber last week\u003c/div>\n      \n      \n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>Inventory days\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Finance · Owner: Sneha Agarwal · 116 days (target ≤ 108 days)\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#C62828;margin-top:2px\">Was Amber last week\u003c/div>\n      \n      \n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>Hire 600 optometrists for new stores\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Stores &amp; Eye Care · Owner: Dr. Priya Nair · Due 31 Mar · 38% done\u003c/div>\n      \n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#14213D;margin-top:2px\">Blocker: Hiring 35 a month against the 75 a month needed\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">228 of 600 hired.\u003c/div>\n    \u003c/td>\u003c/tr>\n\u003ctr>\u003ctd style=\"padding:26px 0 6px\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#B26A00\">Amber · watch\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:4px\">Some risk. Look again next week.\u003c/div>\u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>Open 120 stores in Tier-2/3 cities\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Stores &amp; Eye Care · Owner: Aditya Joshi · Due 31 Dec · 62% done\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#B26A00;margin-top:2px\">Was Green last week\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#14213D;margin-top:2px\">Blocker: 14 leases stuck in landlord negotiation in UP and Bihar\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">74 of 120 open, 32 in fit-out.\u003c/div>\n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>Gross revenue (7 days)\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Finance · Owner: Karan Shah · ₹13.89 Cr (target ≥ ₹14.00 Cr)\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#B26A00;margin-top:2px\">Was Green last week\u003c/div>\n      \n      \n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>Winter campaign across TV and digital\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Marketing &amp; Brand · Owner: Neha Kapoor · Due 5 Dec · 65% done\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#B26A00;margin-top:2px\">Was Green last week\u003c/div>\n      \n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Meta creatives are fatiguing; new set in production.\u003c/div>\n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>Blended cost per new customer\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Marketing &amp; Brand · Owner: Neha Kapoor · ₹1,002 (target ≤ ₹950)\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#B26A00;margin-top:2px\">Was Green last week\u003c/div>\n      \n      \n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>App crash-free sessions\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">App &amp; Product · Owner: Nikhil Jain · 99.26% (target ≥ 99.50%)\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#B26A00;margin-top:2px\">Was Green last week\u003c/div>\n      \n      \n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>Commission phase 1 of the Telangana lens plant\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Supply Chain &amp; Manufacturing · Owner: Sanjay Bhatt · Due 31 Mar · 48% done\u003c/div>\n      \n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#14213D;margin-top:2px\">Blocker: Coating machines held at Chennai port customs for 3 weeks\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Civil works done.\u003c/div>\n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>App checkout conversion\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">App &amp; Product · Owner: Kavya Reddy · 2.95% (target ≥ 3.10%)\u003c/div>\n      \n      \n      \n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>Relaunch Gold membership as Gold 2.0\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Retention &amp; Gold · Owner: Sahil Arora · Due 20 Dec · 50% done\u003c/div>\n      \n      \n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Pricing sign-off pending from Finance.\u003c/div>\n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>Reconcile ₹38 Cr of GST input credit\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Finance · Owner: Amit Saxena · Due 31 Dec · 60% done\u003c/div>\n      \n      \n      \n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>Stores with no optometrist logged in\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Stores &amp; Eye Care · Owner: Dr. Priya Nair · 2 stores (target ≤ 0 stores)\u003c/div>\n      \n      \n      \n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>Launch campaign for kids' eyewear\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Marketing &amp; Brand · Owner: Ananya Desai · Due 15 Jan · 40% done\u003c/div>\n      \n      \n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Agency brief not signed off.\u003c/div>\n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>Opening-shift attendance at 08:45\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Stores &amp; Eye Care · Owner: Ritika Malhotra · 95.3% (target ≥ 96.0%)\u003c/div>\n      \n      \n      \n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>WhatsApp median first reply\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Customer Service · Owner: Shreya Bose · 83 min (target ≤ 75 min)\u003c/div>\n      \n      \n      \n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>New customers (7 days)\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Marketing &amp; Brand · Owner: Ananya Desai · 43,490 (target ≥ 45,000)\u003c/div>\n      \n      \n      \n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>Tickets resolved same day\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Customer Service · Owner: Lakshmi Iyer · 93.6% (target ≥ 95.0%)\u003c/div>\n      \n      \n      \n    \u003c/td>\u003c/tr>\n\u003ctr>\u003ctd style=\"padding:26px 0 6px\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#2E7D32\">Green · wins\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:4px\">Good news worth knowing.\u003c/div>\u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#2E7D32;margin-right:6px;vertical-align:baseline\">\u003c/span>3D virtual try-on v3\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">App &amp; Product · Owner: Vikram Rao · Due 31 Dec · 78% done\u003c/div>\n      \n      \n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">v3 lifted app conversion 6% in the A/B test\u003c/div>\n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#2E7D32;margin-right:6px;vertical-align:baseline\">\u003c/span>AI assistant for order tracking and returns\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Customer Service · Owner: Shreya Bose · Due 20 Dec · 80% done\u003c/div>\n      \n      \n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">AI assistant now resolves 22% of chats without an agent\u003c/div>\n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#2E7D32;margin-right:6px;vertical-align:baseline\">\u003c/span>Quarterly results and investor day\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Finance · Owner: Karan Shah · Due 5 Dec · 85% done\u003c/div>\n      \n      \n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Investor day deck signed off a week early\u003c/div>\n    \u003c/td>\u003c/tr>\u003ctr>\u003ctd style=\"padding:10px 0;border-top:1px solid #E3E7EE\">\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:1.35;color:#14213D\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#2E7D32;margin-right:6px;vertical-align:baseline\">\u003c/span>Relaunch the Singapore online store\u003c/div>\n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">International · Owner: Zoya Khan · Due 30 Nov · 92% done\u003c/div>\n      \n      \n      \u003cdiv style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#5B6475;margin-top:2px\">Singapore site live in soft launch at 2.8% conversion\u003c/div>\n    \u003c/td>\u003c/tr>\n\u003ctr>\u003ctd style=\"padding-top:26px\">\u003ctable role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n  \u003ctr>\u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#5B6475;padding-bottom:6px\">By function\u003c/td>\n  \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#C62828;text-align:right\">Red\u003c/td>\u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#B26A00;text-align:right\">Amber\u003c/td>\u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#2E7D32;text-align:right\">Green\u003c/td>\u003c/tr>\n  \u003ctr>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#14213D;padding:6px 0;border-top:1px solid #E3E7EE\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>Stores &amp; Eye Care\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#C62828;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">1\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#B26A00;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">3\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#2E7D32;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">2\u003c/td>\u003c/tr>\u003ctr>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#14213D;padding:6px 0;border-top:1px solid #E3E7EE\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>Supply Chain &amp; Manufacturing\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#C62828;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">3\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#B26A00;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">2\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#2E7D32;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">0\u003c/td>\u003c/tr>\u003ctr>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#14213D;padding:6px 0;border-top:1px solid #E3E7EE\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>Marketing &amp; Brand\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#C62828;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">0\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#B26A00;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">4\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#2E7D32;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">0\u003c/td>\u003c/tr>\u003ctr>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#14213D;padding:6px 0;border-top:1px solid #E3E7EE\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>App &amp; Product\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#C62828;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">1\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#B26A00;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">2\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#2E7D32;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">2\u003c/td>\u003c/tr>\u003ctr>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#14213D;padding:6px 0;border-top:1px solid #E3E7EE\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#B26A00;margin-right:6px;vertical-align:baseline\">\u003c/span>Customer Service\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#C62828;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">0\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#B26A00;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">3\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#2E7D32;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">1\u003c/td>\u003c/tr>\u003ctr>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#14213D;padding:6px 0;border-top:1px solid #E3E7EE\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>Retention &amp; Gold\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#C62828;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">1\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#B26A00;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">1\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#2E7D32;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">1\u003c/td>\u003c/tr>\u003ctr>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#14213D;padding:6px 0;border-top:1px solid #E3E7EE\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>Finance\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#C62828;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">1\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#B26A00;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">2\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#2E7D32;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">2\u003c/td>\u003c/tr>\u003ctr>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#14213D;padding:6px 0;border-top:1px solid #E3E7EE\">\u003cspan style=\"display:inline-block;width:10px;height:10px;border-radius:50%;background:#C62828;margin-right:6px;vertical-align:baseline\">\u003c/span>International\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#C62828;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">1\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#B26A00;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">1\u003c/td>\n      \u003ctd style=\"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#2E7D32;padding:6px 0;border-top:1px solid #E3E7EE;text-align:right\">2\u003c/td>\u003c/tr>\u003c/table>\u003c/td>\u003c/tr>\n\u003ctr>\u003ctd style=\"padding-top:26px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#5B6475\">\n  Data checks: all 7 passed (freshness, links between tables, duplicates, finance reconciliation).\u003cbr>Sent automatically by GitHub Actions, triggered by an owner update, at 23:20 IST on 2026-11-22.\u003cbr>Full tracker: \u003ca href=\"https://www.kliquestart.com/lenskart-tracker/\" style=\"color:#14213D\">https://www.kliquestart.com/lenskart-tracker/\u003c/a>\u003cbr>Sample data generated with AI for a prototype. Names and figures are illustrative.\n\u003c/td>\u003c/tr>\n\u003c/table>\u003c/td>\u003c/tr>\u003c/table>\u003c/td>\u003c/tr>\u003c/table>\u003c/body>\u003c/html>"};
+
+(() => {
+  const $ = (s, el = document) => el.querySelector(s);
+  const h = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  };
+  const L = LIB.LABEL;
+  const fnById = Object.fromEntries(D.functions.map((f) => [f.id, f]));
+  let drafts = store.get("lk-drafts", {});
+  let filt = Object.assign({ fn: "all", status: "all", kind: "all", q: "", flagged: false }, store.get("lk-filter", {}));
+  let storeFilt = { q: "", issues: true };
+  let dg;
+
+  const items = () => D.items.map((i) => (drafts[i.id] ? { ...i, ...drafts[i.id], lastUpdate: D.asOf } : i));
+  const recompute = () => { dg = LIB.buildDigest(D.functions, items(), D.asOf, { checks: D.checks, storeDesk: D.storeDesk }); };
+  const byId = (id) => dg.all.find((x) => x.id === id);
+  const inTop = (id) => dg.top.findIndex((x) => x.id === id);
+  const pill = (s, extra = "") => `<span class="pill ${s}">${L[s]}${extra}</span>`;
+  const longDate = (s) => new Date(s + "T00:00:00Z").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+  const toast = (msg) => { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => (t.hidden = true), 2200); };
+  const copy = async (text) => { try { await navigator.clipboard.writeText(text); toast("Copied"); } catch { toast("Copy blocked here. Select the text and copy it."); } };
+
+  function flagsFor(p) {
+    const f = [];
+    const k = inTop(p.id);
+    if (k >= 0) f.push(`<span class="flag top">Top ${k + 1}</span>`);
+    if (p.mismatch) f.push(`<span class="flag hot">Owner vs data</span>`);
+    if (p.worsened) f.push(`<span class="flag hot">Worse</span>`);
+    if (p.improved) f.push(`<span class="flag good">Better</span>`);
+    if (p.blocker) f.push(`<span class="flag warn">Blocked</span>`);
+    if (p.kind === "project" && p.daysLeft < 0 && p.progress < 100) f.push(`<span class="flag hot">Overdue</span>`);
+    if (p.slip > 0) f.push(`<span class="flag warn">Slipped ${p.slip}d</span>`);
+    if (p.stale > 7) f.push(`<span class="flag warn">No update ${p.stale}d</span>`);
+    if (p.causes?.length) f.push(`<span class="flag">Causing ${p.causes.length}</span>`);
+    if (drafts[p.id]) f.push(`<span class="flag" style="background:var(--accent-soft);color:var(--accent)">Unsent update</span>`);
+    return f;
+  }
+
+  // ---------- charts ----------
+  function spark(p, w = 120, hgt = 30) {
+    const s = p.series || []; if (s.length < 2) return "";
+    const vs = s.map((x) => x.v);
+    const lo = Math.min(...vs), hi = Math.max(...vs), pad = (hi - lo) * 0.15 || Math.abs(hi) * 0.02 || 1;
+    const y = (v) => hgt - 3 - ((v - (lo - pad)) / (hi - lo + 2 * pad)) * (hgt - 6);
+    const x = (i) => 2 + (i * (w - 6)) / (s.length - 1);
+    const pts = s.map((d, i) => `${x(i).toFixed(1)},${y(d.v).toFixed(1)}`).join(" ");
+    const col = `var(--${p.status})`;
+    return `<svg viewBox="0 0 ${w} ${hgt}" width="${w}" height="${hgt}" role="img" aria-label="Trend, latest ${h(p.display)}">
+      <polygon points="${x(0)},${hgt} ${pts} ${x(s.length - 1)},${hgt}" fill="${col}" opacity="0.12"></polygon>
+      <polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.6" stroke-linejoin="round"></polyline>
+      <circle cx="${x(s.length - 1)}" cy="${y(vs[vs.length - 1])}" r="2.8" fill="${col}"></circle></svg>`;
+  }
+  function bigChart(p) {
+    const s = p.series || []; if (s.length < 2) return "";
+    const W = 560, H = 200, L0 = 64, R0 = 16, T0 = 14, B0 = 28;
+    const vs = s.map((x) => x.v);
+    const all = [...vs, p.thr.green, p.thr.red];
+    let lo = Math.min(...all), hi = Math.max(...all); const pad = (hi - lo) * 0.12 || 1; lo -= pad; hi += pad;
+    const y = (v) => T0 + (1 - (v - lo) / (hi - lo)) * (H - T0 - B0);
+    const x = (i) => L0 + (i * (W - L0 - R0)) / (s.length - 1);
+    const f = (v) => LIB.fmtValue(p.fmt, v);
+    const pts = s.map((d, i) => `${x(i).toFixed(1)},${y(d.v).toFixed(1)}`).join(" ");
+    const thr = (v, cls, label) => `<line x1="${L0}" x2="${W - R0}" y1="${y(v)}" y2="${y(v)}" stroke="var(--${cls})" stroke-dasharray="4 4" stroke-width="1"></line>
+      <text x="${L0 - 6}" y="${y(v) + 4}" text-anchor="end" style="fill:var(--${cls})">${h(f(v))}</text>
+      <text x="${W - R0}" y="${y(v) - 5}" text-anchor="end" style="fill:var(--${cls})">${label}</text>`;
+    const last = s.length - 1;
+    return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${h(p.title)} over the last ${s.length} ${p.window === "today" ? "days at 08:45" : "days, rolling 7-day"}">
+      ${thr(p.thr.green, "green", "green line")}${thr(p.thr.red, "red", "red line")}
+      <polygon points="${x(0)},${H - B0} ${pts} ${x(last)},${H - B0}" fill="var(--${p.status})" opacity="0.1"></polygon>
+      <polyline points="${pts}" fill="none" stroke="var(--${p.status})" stroke-width="2" stroke-linejoin="round"></polyline>
+      ${s.map((d, i) => `<circle cx="${x(i)}" cy="${y(d.v)}" r="${i === last ? 4 : 2}" fill="var(--${LIB.statusFor({ ...p.thr, better: p.better }, d.v)})"><title>${h(d.date)}: ${h(d.display)}</title></circle>`).join("")}
+      <text x="${x(0)}" y="${H - 8}" text-anchor="start">${h(LIB.fmtDate(s[0].date))}</text>
+      <text x="${x(last)}" y="${H - 8}" text-anchor="end">${h(LIB.fmtDate(s[last].date))}</text>
+      <text x="${x(last) - 8}" y="${y(vs[last]) - 8}" text-anchor="end" style="fill:var(--ink);font-weight:500">${h(s[last].display)}</text>
+    </svg></div>`;
+  }
+
+  // ---------- masthead + banner ----------
+  function renderMast() {
+    const r = D.runs[0];
+    const when = r ? new Date(r.at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "";
+    const trig = r ? { schedule: "08:45 schedule", push: "owner update", workflow_dispatch: "manual run", manual: "local run" }[r.trigger] || r.trigger : "";
+    $("#runline").innerHTML = `<span class="live" aria-hidden="true"></span>
+      <span>Last run ${h(when)} IST · ${h(trig)}${r?.runUrl ? ` · <a href="${h(r.runUrl)}" target="_blank" rel="noopener">see run</a>` : ""}</span>
+      <span class="chip-sample">Sample data</span>`;
+    const n = Object.keys(drafts).length;
+    $("#banner").innerHTML = n ? `<div class="banner" style="margin-bottom:24px">
+      <div><b>Previewing ${n} unsent owner update${n > 1 ? "s" : ""}.</b> The brief, tracker and email on this page include ${n > 1 ? "them" : "it"}. To send for real, commit the JSON below to <span class="mono">lenskart-tracker/data/inbox/</span>; the pipeline runs on that push and emails everyone.</div>
+      <pre id="draft-json">${h(draftJson())}</pre>
+      <div class="btn-row"><button class="btn" id="copy-drafts" type="button">Copy update JSON</button><button class="btn ghost" id="clear-drafts" type="button">Discard</button></div></div>` : "";
+    if (n) {
+      $("#copy-drafts").onclick = () => copy(draftJson());
+      $("#clear-drafts").onclick = () => { drafts = {}; store.set("lk-drafts", drafts); renderAll(); toast("Discarded"); };
+    }
+    const reds = dg.counts.red;
+    $('#tabs a[data-view="tracker"]').innerHTML = `All items<span class="count">${reds} red</span>`;
+  }
+  const draftJson = () => JSON.stringify({ updates: Object.entries(drafts).map(([id, d]) => ({ id, ...d, date: D.asOf })) }, null, 2);
+
+  // ---------- brief ----------
+  function decision(p, i) {
+    const linked = p.linked.map(byId).filter(Boolean);
+    const side = p.kind === "metric"
+      ? `<div class="eyebrow">${h(p.asOfLabel)}</div><div class="big">${h(p.display)}</div><div class="muted" style="font-size:13px">Target ${h(p.targetText)} · red ${h(p.redText)}</div>${spark(p, 200, 44)}`
+      : `<div class="eyebrow">Progress</div><div class="big">${p.progress}%</div><div class="meter"><span style="width:${p.progress}%"></span></div>
+         <div class="muted" style="font-size:13px">Due ${h(LIB.fmtDate(p.due))}${p.slip > 0 ? `, was ${h(LIB.fmtDate(p.originalDue))}` : ""}<br>Last update ${h(LIB.fmtDate(p.lastUpdate))}</div>`;
+    return `<article class="decision ${p.status}">
+      <div class="rank">${i + 1}</div>
+      <div class="body">
+        <div class="eyebrow">${h(p.fnName)}</div>
+        <h3>${h(p.title)}</h3>
+        <div class="meta">${pill(p.status, p.worsened ? ` · was ${L[p.lastStatus]}` : "")}<span>Owner <b>${h(p.owner)}</b></span><span class="mono">${h(p.id)}</span></div>
+        ${p.mismatch ? `<div class="mismatch">${h(p.mismatch)}</div>` : ""}
+        <ul>${p.reasons.filter((r) => r !== p.mismatch).map((r) => `<li>${h(r)}</li>`).join("")}${p.blocker ? `<li><b>Blocker:</b> ${h(p.blocker)}</li>` : ""}${p.detail?.length ? `<li><b>${h(p.detailLabel || "Detail")}:</b> ${p.detail.map(h).join(", ")}</li>` : ""}</ul>
+        ${linked.length ? `<div class="linked"><span class="muted" style="font-size:13px;align-self:center">Also causing</span>${linked.map((x) => `<button class="linkbtn" type="button" data-open="${h(x.id)}"><span class="dot ${x.status}"></span>${h(x.title)} · ${h(x.display || L[x.status])}</button>`).join("")}</div>` : ""}
+        ${p.ask ? `<div class="ask"><span class="eyebrow">Decision needed</span>${h(p.ask)}</div>` : ""}
+        <div><button class="open" type="button" data-open="${h(p.id)}">Open details${p.kind === "metric" ? " and SQL" : " and post an update"}</button></div>
+      </div>
+      <div class="side">${side}</div>
+    </article>`;
+  }
+
+  function renderBrief() {
+    const sd = D.storeDesk;
+    const fnRows = dg.byFn.map((f) => {
+      const tot = f.total || 1;
+      return `<button class="fn-row" type="button" data-fn="${h(f.id)}">
+        <div><div class="fn-name"><span class="dot ${f.worst}"></span><span>${h(f.name)}</span></div><div class="fn-head">${h(f.head)}${f.worsened ? ` · <span style="color:var(--red)">${f.worsened} worse</span>` : ""}${f.improved ? ` · <span style="color:var(--green)">${f.improved} better</span>` : ""}</div></div>
+        <div class="stack" aria-hidden="true">${f.counts.red ? `<i class="r" style="flex:${f.counts.red / tot}"></i>` : ""}${f.counts.amber ? `<i class="a" style="flex:${f.counts.amber / tot}"></i>` : ""}${f.counts.green ? `<i class="g" style="flex:${f.counts.green / tot}"></i>` : ""}</div>
+        <div class="fn-counts" aria-label="${f.counts.red} red, ${f.counts.amber} amber, ${f.counts.green} green"><span class="r">${f.counts.red}</span> · <span class="a">${f.counts.amber}</span> · <span class="g">${f.counts.green}</span></div>
+      </button>`;
+    }).join("");
+    const pct = Math.round((1000 * sd.loggedIn) / sd.rostered) / 10;
+    $("#view-brief").innerHTML = `
+      <div class="lede">
+        <div class="eyebrow">${h(longDate(D.asOf))} · Week ${dg.week}</div>
+        <h1>${dg.top.length} things need your attention this week</h1>
+        <p class="sum">${dg.all.length} tracked items across ${dg.byFn.length} functions: <b class="r">${dg.counts.red} red</b>, <b class="a">${dg.counts.amber} amber</b>, <b class="g">${dg.counts.green} green</b>. ${dg.worsened.length} got worse since last week and ${dg.improved.length} got better. Statuses for metrics come straight from the data; projects come from their owners.</p>
+        <div class="checkline ${dg.checksOk ? "" : "bad"}"><span class="dot ${dg.checksOk ? "green" : "red"}"></span>${dg.checksOk ? `All ${dg.checks.length} data checks passed this morning` : `Data checks failed: ${dg.checks.filter((c) => !c.ok).map((c) => h(c.title)).join("; ")}`} · <a href="#pipeline">see checks</a></div>
+      </div>
+      <div class="top3">${dg.top.map(decision).join("")}</div>
+      <div class="cols">
+        <section class="panel" aria-labelledby="desk-h">
+          <header><h2 id="desk-h">Stores this morning</h2><a href="#stores" class="open">All ${sd.stores} stores</a></header>
+          <div class="attend"><div class="big">${pct}%</div><div style="display:grid;gap:6px"><div class="meter"><span style="width:${pct}%"></span></div><div class="muted" style="font-size:13px">${sd.loggedIn} of ${sd.rostered} rostered staff logged in by ${h(sd.checkTime)}</div></div></div>
+          <div class="list">
+            ${sd.noOptometrist.length ? `<div class="desk-row"><span class="dot red"></span><div><b>No optometrist yet, so no eye tests</b><div class="muted">${sd.noOptometrist.map(h).join(", ")}</div></div></div>` : `<div class="desk-row"><span class="dot green"></span><div><b>Every store has an optometrist in</b></div></div>`}
+            ${sd.shortStaffed.length ? `<div class="desk-row"><span class="dot amber"></span><div><b>Two or more staff not logged in</b><div class="muted">${sd.shortStaffed.map(h).join(", ")}</div></div></div>` : ""}
+            ${sd.belowTarget.length ? `<div class="desk-row"><span class="dot amber"></span><div><b>Under 80% of sales target yesterday</b><div class="muted">${sd.belowTarget.map(h).join(", ")}</div></div></div>` : ""}
+          </div>
+        </section>
+        <section class="panel" aria-labelledby="fn-h">
+          <header><h2 id="fn-h">By function</h2><span class="muted" style="font-size:13px">red · amber · green</span></header>
+          <div>${fnRows}</div>
+        </section>
+      </div>
+      ${dg.wins.length ? `<section style="display:grid;gap:12px"><h2>Wins this week</h2><div class="wins">${dg.wins.map((p) => `<div class="win"><div class="eyebrow">${h(p.fnName)}</div><b>${h(p.title)}</b><div class="muted" style="font-size:14px">${h(p.win || `Back to green: ${p.display || ""}`)}</div><div style="font-size:13px">${h(p.owner)}</div></div>`).join("")}</div></section>` : ""}`;
+  }
+
+  // ---------- tracker ----------
+  function renderTracker() {
+    const q = filt.q.trim().toLowerCase();
+    const list = dg.all.filter((p) => (filt.fn === "all" || p.fn === filt.fn) && (filt.status === "all" || p.status === filt.status) && (filt.kind === "all" || p.kind === filt.kind)
+      && (!q || `${p.title} ${p.owner} ${p.id} ${p.fnName}`.toLowerCase().includes(q)) && (!filt.flagged || flagsFor(p).length))
+      .sort((a, b) => b.score - a.score || LIB.RANK[b.status] - LIB.RANK[a.status] || a.id.localeCompare(b.id));
+    const seg = (key, opts) => `<div class="seg" role="group">${opts.map(([v, l]) => `<button type="button" data-${key}="${v}" aria-pressed="${filt[key] === v}">${l}</button>`).join("")}</div>`;
+    $("#view-tracker").innerHTML = `
+      <div class="lede"><h1>All tracked items</h1><p class="sum">Metrics are worked out from the warehouse every morning; projects carry their owner's latest update. Sorted by how urgently leadership should look, highest first. Click any row for the detail.</p></div>
+      <div class="filters">
+        <select class="field" id="f-fn" aria-label="Function"><option value="all">All functions</option>${D.functions.map((f) => `<option value="${f.id}" ${filt.fn === f.id ? "selected" : ""}>${h(f.name)}</option>`).join("")}</select>
+        ${seg("status", [["all", "All"], ["red", "Red"], ["amber", "Amber"], ["green", "Green"]])}
+        ${seg("kind", [["all", "Both"], ["metric", "Metrics"], ["project", "Projects"]])}
+        <input class="field" id="f-q" type="search" placeholder="Search item or owner" value="${h(filt.q)}" aria-label="Search">
+        <label class="check"><input type="checkbox" id="f-flag" ${filt.flagged ? "checked" : ""}> Flagged only</label>
+      </div>
+      <div class="tablebox"><table>
+        <thead><tr><th>Status</th><th>Item</th><th>Owner</th><th>Now</th><th>Trend</th><th>Flags</th><th class="right">Score</th></tr></thead>
+        <tbody>${list.length ? list.map((p) => `<tr class="click" data-open="${h(p.id)}" tabindex="0">
+          <td>${pill(p.status)}</td>
+          <td class="title"><b>${h(p.title)}</b><span class="sub">${h(p.fnName)} · <span class="mono">${h(p.id)}</span> · ${p.kind === "metric" ? "from data" : "owner update"}</span></td>
+          <td style="white-space:nowrap">${h(p.owner)}</td>
+          <td class="num" style="white-space:nowrap">${p.kind === "metric" ? `<b>${h(p.display)}</b><div class="sub">target ${h(p.targetText)}</div>` : `<b>${p.progress}%</b><div class="sub">due ${h(LIB.fmtDate(p.due))}</div>`}</td>
+          <td>${p.kind === "metric" ? spark(p) : `<div class="prog"><div class="meter"><span style="width:${p.progress}%"></span></div></div>`}</td>
+          <td><div class="flags">${flagsFor(p).join("")}</div></td>
+          <td class="right num mono">${Math.round(p.score)}</td></tr>`).join("") : `<tr><td colspan="7" class="empty">Nothing matches these filters.</td></tr>`}</tbody>
+      </table></div>
+      <p class="muted" style="font-size:13px">Score: Red 50, Amber 20, plus 25 if it got worse this week, plus points for slipped or near deadlines, blockers, missing updates, business impact, and each other problem it is causing. An owner status that is better than the data underneath adds 15.</p>`;
+    $("#f-fn").onchange = (e) => setFilt({ fn: e.target.value });
+    $("#f-q").oninput = (e) => { filt.q = e.target.value; store.set("lk-filter", filt); const pos = e.target.selectionStart; renderTracker(); const el = $("#f-q"); el.focus(); el.setSelectionRange(pos, pos); };
+    $("#f-flag").onchange = (e) => setFilt({ flagged: e.target.checked });
+    $("#view-tracker").querySelectorAll("[data-status]").forEach((b) => (b.onclick = () => setFilt({ status: b.dataset.status })));
+    $("#view-tracker").querySelectorAll("[data-kind]").forEach((b) => (b.onclick = () => setFilt({ kind: b.dataset.kind })));
+  }
+  function setFilt(patch) { Object.assign(filt, patch); store.set("lk-filter", filt); renderTracker(); }
+
+  // ---------- stores ----------
+  function renderStores() {
+    const sd = D.storeDesk;
+    const rank = (r) => (r.opto_rostered > 0 && r.opto_logged === 0 ? 3 : 0) + (r.rostered - r.logged >= 2 ? 2 : r.rostered - r.logged) + (r.pctTarget < 80 ? 1 : 0);
+    const q = storeFilt.q.trim().toLowerCase();
+    const rows = D.storeRows.filter((r) => (!storeFilt.issues || rank(r) > 0) && (!q || `${r.name} ${r.city} ${r.country} ${r.store_id}`.toLowerCase().includes(q)))
+      .sort((a, b) => rank(b) - rank(a) || a.pctTarget - b.pctTarget);
+    const money = (v) => "₹" + Math.round(v).toLocaleString("en-IN");
+    $("#view-stores").innerHTML = `
+      <div class="lede"><div class="eyebrow">${h(longDate(D.asOf))} · snapshot at ${h(sd.checkTime)}</div><h1>Stores today</h1>
+        <p class="sum">${sd.loggedIn} of ${sd.rostered} rostered staff logged in across ${sd.stores} stores. Store managers get this list before opening. Sales are yesterday's, against each store's daily target.</p></div>
+      <div class="filters">
+        <input class="field" id="s-q" type="search" placeholder="Search store or city" value="${h(storeFilt.q)}" aria-label="Search stores">
+        <label class="check"><input type="checkbox" id="s-issues" ${storeFilt.issues ? "checked" : ""}> Only stores that need action</label>
+        <span class="muted" style="font-size:13px">${rows.length} shown</span>
+      </div>
+      <div class="tablebox"><table>
+        <thead><tr><th>Store</th><th>Staff in by ${h(sd.checkTime)}</th><th>Optometrist</th><th>Yesterday vs target</th><th>Not logged in</th></tr></thead>
+        <tbody>${rows.length ? rows.map((r) => {
+          const optoOk = r.opto_rostered === 0 || r.opto_logged > 0;
+          const col = r.pctTarget >= 100 ? "green" : r.pctTarget >= 80 ? "amber" : "red";
+          return `<tr>
+          <td class="title"><b>${h(r.name)}</b><span class="sub">${h(r.city)}${r.country !== "India" ? `, ${h(r.country)}` : ""} · <span class="mono">${h(r.store_id)}</span></span></td>
+          <td class="num" style="white-space:nowrap">${r.logged} / ${r.rostered}<span class="staffdots" aria-hidden="true">${Array.from({ length: r.rostered }, (_, i) => `<i class="${i < r.logged ? "" : "off"}"></i>`).join("")}</span></td>
+          <td>${r.opto_rostered === 0 ? `<span class="muted">Off today</span>` : optoOk ? `<span class="pill green">In</span>` : `<span class="pill red">Not in</span>`}</td>
+          <td style="min-width:170px"><div style="display:flex;gap:10px;align-items:center"><div class="bar" style="flex:1" title="Target marker at 100%"><span style="width:${Math.min(100, r.pctTarget / 1.3)}%;background:var(--${col})"></span><i class="tick"></i></div><span class="num mono" style="width:44px;text-align:right">${r.pctTarget}%</span></div><div class="sub">${money(r.rev_yday)} of ${money(r.target)}</div></td>
+          <td style="font-size:13px">${r.missing.length ? r.missing.map(h).join("<br>") : `<span class="muted">Everyone in</span>`}</td></tr>`;
+        }).join("") : `<tr><td colspan="5" class="empty">No stores match.</td></tr>`}</tbody>
+      </table></div>`;
+    $("#s-q").oninput = (e) => { storeFilt.q = e.target.value; const pos = e.target.selectionStart; renderStores(); const el = $("#s-q"); el.focus(); el.setSelectionRange(pos, pos); };
+    $("#s-issues").onchange = (e) => { storeFilt.issues = e.target.checked; renderStores(); };
+  }
+
+  // ---------- email ----------
+  function renderEmailView() {
+    const n = Object.keys(drafts).length;
+    const html = n ? LIB.renderEmail(dg, { ...D.meta, generatedBy: "Preview with unsent owner updates. Not sent yet." }) : D.emailHtml;
+    const subject = `Leadership brief ${D.asOf}: ${dg.counts.red} red · top 3: ${dg.top.map((p) => p.title).join(" / ")}`;
+    $("#view-email").innerHTML = `
+      <div class="lede"><h1>The email leadership gets</h1><p class="sum">${n ? "This preview includes your unsent updates." : "This is exactly what this morning's run sent."} It goes out as a GitHub issue that GitHub emails to everyone watching the repository, and as a real email when mail settings are added.</p></div>
+      <div class="emailframe"><div class="emailhead"><div><b>Subject:</b> ${h(subject)}</div><div class="muted">From: Leadership brief bot · To: leadership@ (sample)</div></div><div id="email-host"></div></div>`;
+    const host = $("#email-host");
+    const root = host.attachShadow({ mode: "open" });
+    root.innerHTML = `<style>:host{display:block;background:#EEF1F5;color:#14213D}</style>` + html.replace(/^[\s\S]*?<body[^>]*>/i, "").replace(/<\/body>[\s\S]*$/i, "");
+  }
+
+  // ---------- pipeline ----------
+  function renderPipeline() {
+    const runs = D.runs.map((r) => `<tr>
+      <td class="num" style="white-space:nowrap">${h(new Date(r.at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }))} IST</td>
+      <td>${h({ schedule: "08:45 schedule", push: "Owner update pushed", workflow_dispatch: "Manual run", manual: "Local run" }[r.trigger] || r.trigger)}</td>
+      <td style="font-size:13px">${r.changes?.length ? r.changes.map((c) => `${h(c.id)}: ${h(L[c.before.status])} → ${h(L[c.after.status])}`).join("<br>") : `<span class="muted">none</span>`}</td>
+      <td class="mono" style="font-size:12.5px">${(r.top || []).map(h).join(", ")}</td>
+      <td class="num"><span style="color:var(--red)">${r.counts?.red ?? ""}</span> / <span style="color:var(--amber)">${r.counts?.amber ?? ""}</span> / <span style="color:var(--green)">${r.counts?.green ?? ""}</span></td>
+      <td>${r.checksOk === false ? `<span class="pill red">Failed</span>` : `<span class="pill green">Passed</span>`}</td>
+      <td>${r.runUrl ? `<a href="${h(r.runUrl)}" target="_blank" rel="noopener">Log</a>` : `<span class="muted">local</span>`}</td></tr>`).join("");
+    $("#view-pipeline").innerHTML = `
+      <div class="lede"><h1>How it runs</h1><p class="sum">Nobody presses a button. A GitHub Actions workflow runs every morning at 08:45 IST, and again whenever a function head pushes an update into the inbox folder.</p></div>
+      <div class="steps">
+        <div class="step"><b>Trigger</b><p>08:45 IST schedule, or an owner update landing in data/inbox</p></div>
+        <div class="step"><b>Refresh the tables</b><p>Nightly sales, attendance, hubs, lab, support, Gold, marketing, finance</p></div>
+        <div class="step"><b>Check the data</b><p>${D.checks.length} checks, including finance reconciled to store + online sales</p></div>
+        <div class="step"><b>Work out every status</b><p>${D.items.filter((i) => i.kind === "metric").length} SQL metrics against targets, plus ${D.items.filter((i) => i.kind === "project").length} owner-updated projects</p></div>
+        <div class="step"><b>Rank and pick 3</b><p>Root causes absorb what they cause; owner-vs-data gaps get flagged</p></div>
+        <div class="step"><b>Send and publish</b><p>Email via GitHub issue (and SMTP if set up); this page is rebuilt</p></div>
+      </div>
+      <section style="display:grid;gap:12px"><h2>Recent runs</h2>
+        <div class="tablebox"><table><thead><tr><th>When</th><th>Trigger</th><th>Owner updates</th><th>Top 3</th><th>R / A / G</th><th>Checks</th><th>Run</th></tr></thead><tbody>${runs}</tbody></table></div></section>
+      <section style="display:grid;gap:12px"><h2>Data checks this morning</h2>
+        <div class="panel"><div class="list">${D.checks.map((c) => `<div class="desk-row"><span class="dot ${c.ok ? "green" : "red"}"></span><div>${h(c.title)}${c.ok ? "" : ` <b style="color:var(--red)">(${c.bad} bad rows)</b>`}</div></div>`).join("")}</div></div></section>
+      <section style="display:grid;gap:12px"><h2>Warehouse tables</h2><p class="muted" style="max-width:70ch">Sample tables generated with AI-written rules so the numbers hang together: a hub backlog drives late deliveries, which drive "where is my order" tickets. To go live, point the loader at the real warehouse; the metric SQL stays the same.</p>
+        <div class="tables">${Object.entries(D.tables).map(([k, v]) => `<div><b class="mono">${h(k)}</b><span class="muted num">${v.rows.toLocaleString("en-IN")} rows</span><span class="muted" style="font-size:12px">${v.columns.map(h).join(", ")}</span></div>`).join("")}</div></section>`;
+  }
+
+  // ---------- drawer ----------
+  function openItem(id) {
+    const p = byId(id); if (!p) return;
+    const k = inTop(id);
+    const dependents = dg.all.filter((x) => x.dependsOn === id);
+    const parent = p.dependsOn ? byId(p.dependsOn) : null;
+    const rel = (x) => `<button class="linkbtn" type="button" data-open="${h(x.id)}"><span class="dot ${x.status}"></span>${h(x.title)}</button>`;
+    let body = `<button class="x" type="button" id="drawer-close">Close</button>
+      <div style="display:grid;gap:8px"><div class="eyebrow">${h(p.fnName)} · ${p.kind === "metric" ? "Metric from data" : "Project, owner update"}${k >= 0 ? ` · Top ${k + 1} this week` : ""}</div>
+      <h2>${h(p.title)}</h2><div class="meta" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${pill(p.status, p.worsened ? ` · was ${L[p.lastStatus]}` : p.improved ? ` · was ${L[p.lastStatus]}` : "")}<span class="flags">${flagsFor(p).join("")}</span></div></div>
+      ${p.mismatch ? `<div class="mismatch" style="background:var(--red-bg);color:var(--red);font-weight:600;padding:8px 10px;border-radius:4px">${h(p.mismatch)}</div>` : ""}
+      <dl class="kv">
+        <dt>Owner</dt><dd>${h(p.owner)}</dd>
+        ${p.kind === "metric" ? `<dt>Now</dt><dd class="num"><b>${h(p.display)}</b> · ${h(p.asOfLabel)}</dd><dt>Before</dt><dd class="num">${h(p.prevDisplay)}</dd><dt>Green / red</dt><dd class="num">${h(p.targetText)} / ${h(p.redText)}</dd>${p.detail?.length ? `<dt>${h(p.detailLabel || "Detail")}</dt><dd>${p.detail.map(h).join("<br>")}</dd>` : ""}`
+          : `<dt>Progress</dt><dd class="num">${p.progress}%</dd><dt>Due</dt><dd>${h(LIB.fmtDate(p.due))}${p.slip > 0 ? ` (originally ${h(LIB.fmtDate(p.originalDue))})` : ""}</dd><dt>Last update</dt><dd>${h(LIB.fmtDate(p.lastUpdate))}</dd>${p.blocker ? `<dt>Blocker</dt><dd>${h(p.blocker)}</dd>` : ""}${p.note ? `<dt>Note</dt><dd>${h(p.note)}</dd>` : ""}${p.win ? `<dt>Win</dt><dd>${h(p.win)}</dd>` : ""}`}
+        ${p.ask ? `<dt>Decision needed</dt><dd><b>${h(p.ask)}</b></dd>` : ""}
+        <dt>Why it ranks</dt><dd>${p.reasons.length ? p.reasons.map(h).join("<br>") : "Green"} <span class="muted mono">(score ${Math.round(p.score)})</span></dd>
+        ${parent ? `<dt>Caused by</dt><dd>${rel(parent)}</dd>` : ""}
+        ${dependents.length ? `<dt>Is causing</dt><dd style="display:flex;flex-wrap:wrap;gap:6px">${dependents.map(rel).join("")}</dd>` : ""}
+      </dl>`;
+    if (p.kind === "metric") {
+      body += `${bigChart(p)}<div style="display:grid;gap:6px"><div class="eyebrow">How it's calculated · tables: ${p.tables.map(h).join(", ")}</div><pre class="sql">${h(p.sql)}</pre></div>`;
+    } else {
+      const d = drafts[id] || {};
+      const cur = { status: d.status || p.status, progress: d.progress ?? p.progress, blocker: d.blocker ?? p.blocker ?? "", note: d.note ?? p.note ?? "" };
+      body += `<form class="update" id="upd">
+        <div style="display:grid;gap:2px"><h3>Post an owner update</h3><p class="muted" style="font-size:13px">Preview how leadership will see it. Nothing is sent until the update is committed to the inbox.</p></div>
+        <div class="seg" role="radiogroup" aria-label="Status">${["red", "amber", "green"].map((s) => `<button type="button" data-set="${s}" aria-pressed="${cur.status === s}">${L[s]}</button>`).join("")}</div>
+        <label>Progress (%)<input class="field" id="u-progress" type="number" min="0" max="100" value="${cur.progress}"></label>
+        <label>Blocker (leave empty if none)<input class="field" id="u-blocker" type="text" value="${h(cur.blocker)}"></label>
+        <label>Note for leadership<textarea class="field" id="u-note">${h(cur.note)}</textarea></label>
+        <div class="btn-row"><button class="btn" type="submit">Preview in the brief</button>${drafts[id] ? `<button class="btn ghost" type="button" id="u-discard">Discard this update</button>` : ""}</div>
+      </form>`;
+    }
+    $("#drawer-body").innerHTML = body;
+    const dlg = $("#drawer");
+    if (!dlg.open) { try { dlg.showModal(); } catch { dlg.setAttribute("open", ""); } }
+    $("#drawer-close").onclick = () => dlg.close();
+    const form = $("#upd");
+    if (form) {
+      let st = (drafts[id] || {}).status || p.status;
+      form.querySelectorAll("[data-set]").forEach((b) => (b.onclick = () => { st = b.dataset.set; form.querySelectorAll("[data-set]").forEach((x) => x.setAttribute("aria-pressed", x === b)); }));
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        drafts[id] = { status: st, progress: Math.max(0, Math.min(100, parseInt($("#u-progress").value, 10) || 0)), blocker: $("#u-blocker").value.trim(), note: $("#u-note").value.trim() };
+        store.set("lk-drafts", drafts); renderAll(); openItem(id); toast("Preview updated. Copy the JSON at the top to send it.");
+      };
+      const disc = $("#u-discard");
+      if (disc) disc.onclick = () => { delete drafts[id]; store.set("lk-drafts", drafts); renderAll(); openItem(id); toast("Update discarded"); };
+    }
+  }
+
+  // ---------- routing ----------
+  const VIEWS = ["brief", "tracker", "stores", "email", "pipeline"];
+  let rendered = {};
+  function show() {
+    const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "brief";
+    VIEWS.forEach((x) => { $("#view-" + x).hidden = x !== v; });
+    document.querySelectorAll("#tabs a").forEach((a) => a.setAttribute("aria-current", a.dataset.view === v ? "page" : "false"));
+    if (!rendered[v]) { ({ brief: renderBrief, tracker: renderTracker, stores: renderStores, email: renderEmailView, pipeline: renderPipeline })[v](); rendered[v] = true; }
+  }
+  function renderAll() { recompute(); renderMast(); rendered = {}; show(); }
+
+  document.addEventListener("click", (e) => {
+    const o = e.target.closest("[data-open]");
+    if (o) { e.preventDefault(); openItem(o.dataset.open); return; }
+    const f = e.target.closest("[data-fn]");
+    if (f) { filt = { ...filt, fn: f.dataset.fn, status: "all", kind: "all", q: "", flagged: false }; store.set("lk-filter", filt); rendered.tracker = false; location.hash = "tracker"; }
+  });
+  document.addEventListener("keydown", (e) => { const r = e.target.closest?.("tr[data-open]"); if (r && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openItem(r.dataset.open); } });
+  $("#drawer").addEventListener("click", (e) => { if (e.target === $("#drawer")) $("#drawer").close(); });
+  window.addEventListener("hashchange", show);
+  renderAll();
+})();
+</script>

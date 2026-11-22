@@ -2,7 +2,7 @@
    - Pages: try the network for up to 3 seconds, then fall back to the saved copy (slow metro signal).
    - Files (CSS, fonts, images): serve the saved copy instantly and refresh it in the background.
    Bump VERSION whenever the CORE list changes. */
-const VERSION = 'ks-v2';
+const VERSION = 'ks-v4';
 const CORE = [
   '/', '/about.html', '/privacy.html', '/site.webmanifest',
   '/assets/site.css', '/assets/fonts.css', '/assets/fonts-metro.css',
@@ -10,7 +10,7 @@ const CORE = [
   '/assets/fonts/ChakraPetch-500.woff2', '/assets/fonts/ChakraPetch-600.woff2', '/assets/fonts/ChakraPetch-700.woff2',
   '/assets/fonts/IBMPlexMono-400.woff2', '/assets/fonts/IBMPlexMono-600.woff2',
   '/assets/icon-192.png', '/assets/red-view-card.jpg', '/assets/agla-station-card.jpg',
-  '/games/agla-station/play/', '/games/red-view/', '/games/red-view/play/'
+  '/games/agla-station/', '/games/agla-station/play/', '/games/red-view/', '/games/red-view/play/'
 ];
 
 self.addEventListener('install', e => {
@@ -28,6 +28,7 @@ self.addEventListener('fetch', e => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;
+  if (url.pathname.startsWith('/assets/music/')) return; // songs stream straight from the network (range requests)
   e.respondWith(req.mode === 'navigate' ? pageFirstFromNetwork(req) : fileFromCache(req));
 });
 

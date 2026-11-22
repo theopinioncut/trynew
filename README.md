@@ -47,3 +47,15 @@ After that, every merge into `main` updates the live site in about a minute.
 - `sw.js` (service worker) saves the site on the phone after the first visit. Pages try the network for up to 3 seconds, then fall back to the saved copy; files load from the saved copy instantly.
 - Fonts are self-hosted in `assets/fonts/` (no Google Fonts request).
 - When you add or rename a file that should work offline, add it to `CORE` in `sw.js` and bump `VERSION`.
+
+## Adding your songs (Kliquestart Metro Mix)
+1. Export each song as `.mp3` (aim for under 4 MB each so it loads on metro internet).
+2. Put the files in `assets/music/` (e.g. `assets/music/dilli-nights.mp3`).
+3. List them in `assets/music/tracks.json`:
+   ```json
+   { "tracks": [
+     { "title": "Dilli Nights", "artist": "Kliquestart", "file": "dilli-nights.mp3" }
+   ] }
+   ```
+While the list is empty, the game plays its built-in **Metro Beat** (generated in the browser, no download).
+Only add songs you own or have a licence for commercial use.

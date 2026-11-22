@@ -10,9 +10,9 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Metro Games by Kliquestart">
 <meta property="og:title" content="Metro Games by Kliquestart – Quick games for the ride home">
-<meta property="og:description" content="Quick, free browser games for your phone or laptop. Play Red View now.">
+<meta property="og:description" content="Quick, free browser games for your phone or laptop. Play Agla Station and Red View now.">
 <meta property="og:url" content="https://www.kliquestart.com/">
-<meta property="og:image" content="https://www.kliquestart.com/assets/og-red-view.png">
+<meta property="og:image" content="https://www.kliquestart.com/assets/og-agla-station.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -25,8 +25,8 @@
 {"@context":"https://schema.org","@graph":[
  {"@type":"WebSite","name":"Metro Games by Kliquestart","alternateName":"Kliquestart","url":"https://www.kliquestart.com/"},
  {"@type":"ItemList","name":"Metro Games","itemListElement":[
-  {"@type":"ListItem","position":1,"url":"https://www.kliquestart.com/games/red-view/","name":"Red View"},
-  {"@type":"ListItem","position":2,"url":"https://www.kliquestart.com/games/agla-station/play/","name":"Agla Station"}
+  {"@type":"ListItem","position":1,"url":"https://www.kliquestart.com/games/agla-station/","name":"Agla Station"},
+  {"@type":"ListItem","position":2,"url":"https://www.kliquestart.com/games/red-view/","name":"Red View"}
  ]}
 ]}
 </script>
@@ -43,49 +43,22 @@
 <main class="wrap">
   <section class="hero">
     <h1>Quick games for the ride home.</h1>
-    <p class="lede">Free games that play right in your browser, on your phone or your laptop.</p>
+    <p class="lede">Free games that play right in your browser, on your phone or laptop. Tap a game to start.</p>
   </section>
 
-  <section class="line" aria-labelledby="line-title">
-    <h2 id="line-title" class="sr-only">Games</h2>
-    <ol class="stations">
-      <li class="station">
-        <div class="card">
-          <a class="play-area" href="games/red-view/play/#go" aria-label="Play Red View">
-            <img src="assets/red-view-card.jpg" alt="Red View gameplay: a glowing red data cube runs down a metro tunnel past punch-card obstacles" width="800" height="500">
-          </a>
-          <div class="body">
-            <h3>Red View</h3>
-            <p>Your data is red until you save it. Run it from punch cards to quantum chips and reach the blue gates before you crash.</p>
-            <div class="actions">
-              <a class="btn red" href="games/red-view/play/#go">Play free</a>
-              <a class="more" href="games/red-view/">How to play</a>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li class="station">
-        <div class="card">
-          <a class="play-area" href="games/agla-station/play/#go" aria-label="Play Agla Station">
-            <img src="assets/agla-station-card.jpg" alt="Agla Station: a runner in the Chandni Chowk bazaar with shop signs, fruit carts and kites in the sky" width="800" height="500">
-          </a>
-          <div class="body">
-            <span class="stop">New · Metros of India</span>
-            <h3>Agla Station</h3>
-            <p>Run through India’s metro cities, starting with Delhi. Pick your rider, on foot or on a scooty, beat the Chandni Chowk rush hour, ride over the rooftops and catch the last train to Hauz Khas.</p>
-            <div class="actions">
-              <a class="btn red" href="games/agla-station/play/#go">Play free</a>
-            </div>
-          </div>
-        </div>
-      </li>
-      <li class="station soon">
-        <div class="card ghost">
-          <span class="stop">Coming soon</span>
-          <h3>More games are on the way</h3>
-        </div>
-      </li>
-    </ol>
+  <section aria-labelledby="games-title">
+    <h2 id="games-title" class="sr-only">Games</h2>
+    <div class="tiles">
+      <a class="tile" href="games/agla-station/play/#go">
+        <span class="thumb"><img src="assets/agla-station-card.jpg" alt="Agla Station: a girl on a red scooty riding the elevated Delhi Metro line over the rooftops, with a cow on the track" width="800" height="500"><span class="playbtn" aria-hidden="true">▶</span><span class="badge">New</span></span>
+        <span class="info"><b>Agla Station</b><span>Delhi Metro runner. Pick your rider, hop on a scooty and catch the last train.</span><span class="go">Play free →</span></span>
+      </a>
+      <a class="tile" href="games/red-view/play/#go">
+        <span class="thumb"><img src="assets/red-view-card.jpg" alt="Red View: a glowing red data cube runs down a neon tunnel collecting red bits" width="800" height="500"><span class="playbtn" aria-hidden="true">▶</span></span>
+        <span class="info"><b>Red View</b><span>Carry your data through 200 years of tech. Save it at the blue gates before you crash.</span><span class="go">Play free →</span></span>
+      </a>
+    </div>
+    <p class="howlinks"><a href="games/agla-station/">How to play Agla Station</a> · <a href="games/red-view/">How to play Red View</a></p>
   </section>
 
   <div class="ad-slot" id="ad-home" hidden></div>

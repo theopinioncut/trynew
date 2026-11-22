@@ -1,0 +1,605 @@
+<title>Lenskart Leadership Brief</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<meta name="description" content="Daily leadership brief and project tracker across eight functions. Sample data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: a morning brief. A masthead strip with the date and the last automated run, then the
+   three decisions as full-width rows, then the store desk beside function health. Other views
+   (tracker, stores, email, pipeline) share the same column. */
+:root {
+  --bg: #F2F4F8; --surface: #FFFFFF; --ink: #101A31; --mute: #586379; --faint: #8A93A6; --line: #DCE1EA; --tint: #EAEEF5;
+  --accent: #2348C8; --accent-ink: #FFFFFF; --accent-soft: #E4EAFB;
+  --red: #C0281F; --red-bg: #FBE9E7; --amber: #A35F00; --amber-bg: #FDF1DC; --green: #2B7A33; --green-bg: #E6F3E8;
+  --display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --radius: 6px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0C1220; --surface: #141C2E; --ink: #E6EBF4; --mute: #9AA4B8; --faint: #6F7A90; --line: #253049; --tint: #1A2337;
+  --accent: #8AA6FF; --accent-ink: #0C1220; --accent-soft: #1E2A4D;
+  --red: #FF7B70; --red-bg: #3A1B1D; --amber: #F2B24E; --amber-bg: #362814; --green: #6DC776; --green-bg: #163020; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0C1220; --surface: #141C2E; --ink: #E6EBF4; --mute: #9AA4B8; --faint: #6F7A90; --line: #253049; --tint: #1A2337;
+  --accent: #8AA6FF; --accent-ink: #0C1220; --accent-soft: #1E2A4D;
+  --red: #FF7B70; --red-bg: #3A1B1D; --amber: #F2B24E; --amber-bg: #362814; --green: #6DC776; --green-bg: #163020; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--body); margin: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(28px, 4.2vw, 40px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 22px; font-weight: 600; }
+h3 { font-size: 18px; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--accent); }
+button, select, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mono { font-family: var(--mono); font-size: 0.86em; }
+.num { font-variant-numeric: tabular-nums; }
+.eyebrow { font: 600 12px/1.2 var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute); }
+.muted { color: var(--mute); }
+
+/* masthead */
+.mast { background: var(--ink); color: var(--bg); padding-block: 14px; }
+.mast .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: space-between; }
+.mast .brand { font: 700 16px/1 var(--display); letter-spacing: 0.02em; }
+.mast .brand span { font-weight: 500; opacity: 0.7; }
+.mast .run { font-size: 13px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.mast .run a { color: inherit; }
+.live { width: 8px; height: 8px; border-radius: 50%; background: #5BD26B; box-shadow: 0 0 0 3px rgba(91, 210, 107, 0.25); }
+.chip-sample { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; border: 1px solid currentColor; border-radius: 3px; padding: 2px 6px; opacity: 0.75; }
+
+/* tabs */
+nav.tabs { border-bottom: 1px solid var(--line); background: var(--surface); }
+nav.tabs .wrap { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+nav.tabs a { display: block; padding: 12px 12px 10px; color: var(--mute); text-decoration: none; font-weight: 500; border-bottom: 2px solid transparent; white-space: nowrap; }
+nav.tabs a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--ink); }
+nav.tabs a:hover { color: var(--ink); }
+nav.tabs .count { font: 500 12px var(--mono); color: var(--red); margin-left: 4px; }
+
+main { padding-block: 28px 64px; }
+.view { display: grid; gap: 32px; }
+
+/* status */
+.pill { display: inline-flex; align-items: center; gap: 6px; font: 600 12px/1 var(--body); padding: 4px 8px 4px 7px; border-radius: 999px; white-space: nowrap; }
+.pill::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.pill.red { color: var(--red); background: var(--red-bg); }
+.pill.amber { color: var(--amber); background: var(--amber-bg); }
+.pill.green { color: var(--green); background: var(--green-bg); }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.dot.red { background: var(--red); } .dot.amber { background: var(--amber); } .dot.green { background: var(--green); }
+.flag { display: inline-block; font: 500 11.5px/1 var(--body); padding: 4px 6px; border-radius: 3px; background: var(--tint); color: var(--mute); white-space: nowrap; }
+.flag.hot { background: var(--red-bg); color: var(--red); }
+.flag.warn { background: var(--amber-bg); color: var(--amber); }
+.flag.good { background: var(--green-bg); color: var(--green); }
+.flag.top { background: var(--ink); color: var(--bg); }
+
+/* headline */
+.lede { display: grid; gap: 10px; }
+.lede .sum { color: var(--mute); max-width: 70ch; }
+.lede .sum b.r { color: var(--red); } .lede .sum b.a { color: var(--amber); } .lede .sum b.g { color: var(--green); }
+.checkline { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--mute); }
+.checkline.bad { color: var(--red); font-weight: 600; }
+
+/* top 3 */
+.top3 { display: grid; gap: 14px; }
+.decision { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: grid; grid-template-columns: 64px minmax(0, 1fr) minmax(0, 240px); overflow: hidden; }
+.decision .rank { font: 700 34px/1 var(--display); padding: 20px 0 0; text-align: center; border-right: 4px solid var(--sev, var(--line)); color: var(--sev); }
+.decision.red { --sev: var(--red); } .decision.amber { --sev: var(--amber); } .decision.green { --sev: var(--green); }
+.decision .body { padding: 18px 20px 20px; display: grid; gap: 10px; min-width: 0; }
+.decision .meta { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; font-size: 13.5px; color: var(--mute); }
+.decision .meta b { color: var(--ink); font-weight: 600; }
+.decision ul { margin: 0; padding-left: 18px; display: grid; gap: 2px; }
+.decision .mismatch { background: var(--red-bg); color: var(--red); font-weight: 600; font-size: 14px; padding: 8px 10px; border-radius: 4px; }
+.decision .ask { border: 1.5px solid var(--ink); border-radius: 4px; padding: 10px 12px; font-weight: 600; display: grid; gap: 2px; }
+.decision .ask .eyebrow { color: var(--ink); }
+.decision .side { padding: 18px 20px; border-left: 1px solid var(--line); background: var(--tint); display: grid; gap: 8px; align-content: start; min-width: 0; }
+.decision .big { font: 700 30px/1 var(--display); font-variant-numeric: tabular-nums; }
+.decision .linked { display: flex; flex-wrap: wrap; gap: 6px; }
+.linkbtn { background: none; border: 1px solid var(--line); border-radius: 4px; padding: 4px 8px; font-size: 13px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; color: var(--ink); text-align: left; }
+.linkbtn:hover { border-color: var(--ink); }
+.open { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; font-size: 13.5px; font-weight: 500; text-align: left; }
+.open:hover { text-decoration: underline; }
+
+/* two-column */
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px 20px; display: grid; gap: 14px; min-width: 0; }
+.panel header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.list { display: grid; gap: 0; }
+.list > div { display: grid; gap: 4px; padding: 10px 0; border-top: 1px solid var(--line); }
+.list > div:first-child { border-top: 0; padding-top: 0; }
+.desk-row { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 10px; align-items: start; }
+.desk-row .dot { margin-top: 7px; }
+.attend { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; }
+.attend .big { font: 700 34px/1 var(--display); font-variant-numeric: tabular-nums; }
+.meter { height: 8px; background: var(--tint); border-radius: 4px; overflow: hidden; }
+.meter > span { display: block; height: 100%; background: var(--ink); }
+
+.fn-row { display: grid; grid-template-columns: minmax(0, 1fr) 120px 74px; gap: 12px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line); cursor: pointer; background: none; border-left: 0; border-right: 0; border-bottom: 0; width: 100%; text-align: left; }
+.fn-row:first-of-type { border-top: 0; }
+.fn-row:hover .fn-name { text-decoration: underline; }
+.fn-name { font-weight: 600; font-size: 14.5px; display: flex; gap: 8px; align-items: center; min-width: 0; }
+.fn-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fn-head { font-size: 12.5px; color: var(--mute); }
+.stack { display: flex; height: 10px; border-radius: 2px; overflow: hidden; gap: 2px; }
+.stack i { display: block; height: 100%; }
+.stack .r { background: var(--red); } .stack .a { background: var(--amber); } .stack .g { background: var(--green); }
+.fn-counts { font: 500 12.5px var(--mono); text-align: right; white-space: nowrap; }
+.fn-counts .r { color: var(--red); } .fn-counts .a { color: var(--amber); } .fn-counts .g { color: var(--green); }
+
+.wins { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.win { border-top: 3px solid var(--green); background: var(--surface); padding: 12px 14px; border-radius: 0 0 var(--radius) var(--radius); display: grid; gap: 4px; }
+
+/* tracker */
+.filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; background: var(--surface); }
+.seg button { background: none; border: 0; padding: 7px 11px; cursor: pointer; font-size: 13.5px; color: var(--mute); border-left: 1px solid var(--line); }
+.seg button:first-child { border-left: 0; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.field { background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 7px 10px; font-size: 13.5px; min-width: 0; }
+.field:focus { border-color: var(--accent); }
+.check { display: inline-flex; gap: 6px; align-items: center; font-size: 13.5px; color: var(--mute); cursor: pointer; }
+.tablebox { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th { text-align: left; font: 600 11.5px/1.2 var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--mute); padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; background: var(--tint); }
+td { padding: 10px 12px; border-top: 1px solid var(--line); vertical-align: middle; }
+tbody tr:first-child td { border-top: 0; }
+tbody tr.click { cursor: pointer; }
+tbody tr.click:hover td { background: var(--tint); }
+td.title { min-width: 240px; }
+td.title b { font-weight: 600; display: block; }
+td .sub { font-size: 12.5px; color: var(--mute); }
+.flags { display: flex; flex-wrap: wrap; gap: 4px; min-width: 120px; }
+.prog { display: grid; gap: 4px; min-width: 110px; }
+.prog .meter { height: 6px; }
+.right { text-align: right; }
+.empty { padding: 28px; text-align: center; color: var(--mute); }
+
+/* drawer */
+dialog { border: 0; padding: 0; background: var(--surface); color: var(--ink); width: min(620px, 100vw); max-width: 100vw; height: 100%; max-height: 100%; margin: 0 0 0 auto; box-shadow: -12px 0 40px rgba(10, 18, 40, 0.25); }
+dialog::backdrop { background: rgba(10, 18, 40, 0.45); }
+.drawer { display: grid; gap: 18px; padding: calc(20px + env(safe-area-inset-top, 0px)) max(22px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) 22px; }
+.drawer .x { position: sticky; top: 0; justify-self: end; background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 6px 10px; cursor: pointer; }
+.kv { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 8px 14px; font-size: 14px; }
+.kv dt { color: var(--mute); }
+.kv dd { margin: 0; min-width: 0; }
+pre.sql { font: 12.5px/1.55 var(--mono); background: var(--tint); padding: 12px; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; word-break: break-word; margin: 0; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart text { font: 11px var(--mono); fill: var(--mute); }
+form.update { display: grid; gap: 12px; border-top: 1px solid var(--line); padding-top: 18px; }
+form.update label { display: grid; gap: 4px; font-size: 13px; color: var(--mute); }
+form.update textarea { min-height: 64px; resize: vertical; }
+.btn { background: var(--ink); color: var(--bg); border: 0; border-radius: 5px; padding: 9px 14px; font-weight: 600; cursor: pointer; }
+.btn.ghost { background: none; color: var(--ink); border: 1px solid var(--line); }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+/* banner */
+.banner { background: var(--accent-soft); border: 1px solid var(--accent); border-radius: var(--radius); padding: 12px 16px; display: grid; gap: 8px; }
+.banner pre { margin: 0; font: 12px/1.5 var(--mono); white-space: pre-wrap; word-break: break-word; background: var(--surface); padding: 10px; border-radius: 4px; max-height: 180px; overflow: auto; }
+
+/* stores */
+.staffdots { display: inline-flex; gap: 3px; vertical-align: middle; margin-left: 8px; }
+.staffdots i { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+.staffdots i.off { background: var(--red); }
+.bar { position: relative; height: 8px; background: var(--tint); border-radius: 4px; min-width: 100px; }
+.bar > span { position: absolute; inset: 0 auto 0 0; border-radius: 4px; }
+.bar .tick { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink); left: calc(100% / 1.3); }
+
+/* email */
+.emailframe { background: #EEF1F5; border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden; }
+.emailhead { background: var(--surface); border-bottom: 1px solid var(--line); padding: 12px 16px; display: grid; gap: 2px; font-size: 13.5px; }
+.emailhead b { font-weight: 600; }
+
+/* pipeline */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; counter-reset: s; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; display: grid; gap: 4px; align-content: start; counter-increment: s; }
+.step::before { content: counter(s); font: 700 13px/1 var(--mono); color: var(--accent); }
+.step b { font-weight: 600; }
+.step p { font-size: 13px; color: var(--mute); }
+.tables { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.tables div { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; font-size: 13px; display: grid; gap: 2px; }
+
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 5px; font-size: 14px; z-index: 20; }
+
+@media (max-width: 860px) {
+  .decision { grid-template-columns: 48px minmax(0, 1fr); }
+  .decision .side { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line); }
+  .decision .rank { font-size: 28px; }
+  .cols { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  .decision .body { padding: 14px; }
+  .fn-row { grid-template-columns: minmax(0, 1fr) 64px; }
+  .fn-row .stack { display: none; }
+  .kv { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .kv dd { margin-bottom: 8px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .decision { animation: rise 0.35s ease-out both; }
+  .decision:nth-child(2) { animation-delay: 0.06s; } .decision:nth-child(3) { animation-delay: 0.12s; }
+  @keyframes rise { from { transform: translateY(6px); } to { transform: none; } }
+}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="brand">Lenskart <span>Leadership Brief</span></div>
+    <div class="run" id="runline"></div>
+  </div>
+</header>
+<nav class="tabs" aria-label="Views">
+  <div class="wrap" id="tabs">
+    <a href="#brief" data-view="brief">This week</a>
+    <a href="#tracker" data-view="tracker">All items</a>
+    <a href="#stores" data-view="stores">Stores today</a>
+    <a href="#email" data-view="email">Email</a>
+    <a href="#pipeline" data-view="pipeline">How it runs</a>
+  </div>
+</nav>
+<main class="wrap">
+  <div id="banner"></div>
+  <section class="view" id="view-brief"></section>
+  <section class="view" id="view-tracker" hidden></section>
+  <section class="view" id="view-stores" hidden></section>
+  <section class="view" id="view-email" hidden></section>
+  <section class="view" id="view-pipeline" hidden></section>
+</main>
+<dialog id="drawer" aria-label="Item detail"><div class="drawer" id="drawer-body"></div></dialog>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const LIB = (() => {
+/*__LIB__*/
+return { buildDigest, statusFor, fmtValue, fmtDate, LABEL, RANK, renderEmail, isoWeek };
+})();
+const D = /*__DATA__*/null;
+
+(() => {
+  const $ = (s, el = document) => el.querySelector(s);
+  const h = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  };
+  const L = LIB.LABEL;
+  const fnById = Object.fromEntries(D.functions.map((f) => [f.id, f]));
+  let drafts = store.get("lk-drafts", {});
+  let filt = Object.assign({ fn: "all", status: "all", kind: "all", q: "", flagged: false }, store.get("lk-filter", {}));
+  let storeFilt = { q: "", issues: true };
+  let dg;
+
+  const items = () => D.items.map((i) => (drafts[i.id] ? { ...i, ...drafts[i.id], lastUpdate: D.asOf } : i));
+  const recompute = () => { dg = LIB.buildDigest(D.functions, items(), D.asOf, { checks: D.checks, storeDesk: D.storeDesk }); };
+  const byId = (id) => dg.all.find((x) => x.id === id);
+  const inTop = (id) => dg.top.findIndex((x) => x.id === id);
+  const pill = (s, extra = "") => `<span class="pill ${s}">${L[s]}${extra}</span>`;
+  const longDate = (s) => new Date(s + "T00:00:00Z").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+  const toast = (msg) => { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => (t.hidden = true), 2200); };
+  const copy = async (text) => { try { await navigator.clipboard.writeText(text); toast("Copied"); } catch { toast("Copy blocked here. Select the text and copy it."); } };
+
+  function flagsFor(p) {
+    const f = [];
+    const k = inTop(p.id);
+    if (k >= 0) f.push(`<span class="flag top">Top ${k + 1}</span>`);
+    if (p.mismatch) f.push(`<span class="flag hot">Owner vs data</span>`);
+    if (p.worsened) f.push(`<span class="flag hot">Worse</span>`);
+    if (p.improved) f.push(`<span class="flag good">Better</span>`);
+    if (p.blocker) f.push(`<span class="flag warn">Blocked</span>`);
+    if (p.kind === "project" && p.daysLeft < 0 && p.progress < 100) f.push(`<span class="flag hot">Overdue</span>`);
+    if (p.slip > 0) f.push(`<span class="flag warn">Slipped ${p.slip}d</span>`);
+    if (p.stale > 7) f.push(`<span class="flag warn">No update ${p.stale}d</span>`);
+    if (p.causes?.length) f.push(`<span class="flag">Causing ${p.causes.length}</span>`);
+    if (drafts[p.id]) f.push(`<span class="flag" style="background:var(--accent-soft);color:var(--accent)">Unsent update</span>`);
+    return f;
+  }
+
+  // ---------- charts ----------
+  function spark(p, w = 120, hgt = 30) {
+    const s = p.series || []; if (s.length < 2) return "";
+    const vs = s.map((x) => x.v);
+    const lo = Math.min(...vs), hi = Math.max(...vs), pad = (hi - lo) * 0.15 || Math.abs(hi) * 0.02 || 1;
+    const y = (v) => hgt - 3 - ((v - (lo - pad)) / (hi - lo + 2 * pad)) * (hgt - 6);
+    const x = (i) => 2 + (i * (w - 6)) / (s.length - 1);
+    const pts = s.map((d, i) => `${x(i).toFixed(1)},${y(d.v).toFixed(1)}`).join(" ");
+    const col = `var(--${p.status})`;
+    return `<svg viewBox="0 0 ${w} ${hgt}" width="${w}" height="${hgt}" role="img" aria-label="Trend, latest ${h(p.display)}">
+      <polygon points="${x(0)},${hgt} ${pts} ${x(s.length - 1)},${hgt}" fill="${col}" opacity="0.12"></polygon>
+      <polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.6" stroke-linejoin="round"></polyline>
+      <circle cx="${x(s.length - 1)}" cy="${y(vs[vs.length - 1])}" r="2.8" fill="${col}"></circle></svg>`;
+  }
+  function bigChart(p) {
+    const s = p.series || []; if (s.length < 2) return "";
+    const W = 560, H = 200, L0 = 64, R0 = 16, T0 = 14, B0 = 28;
+    const vs = s.map((x) => x.v);
+    const all = [...vs, p.thr.green, p.thr.red];
+    let lo = Math.min(...all), hi = Math.max(...all); const pad = (hi - lo) * 0.12 || 1; lo -= pad; hi += pad;
+    const y = (v) => T0 + (1 - (v - lo) / (hi - lo)) * (H - T0 - B0);
+    const x = (i) => L0 + (i * (W - L0 - R0)) / (s.length - 1);
+    const f = (v) => LIB.fmtValue(p.fmt, v);
+    const pts = s.map((d, i) => `${x(i).toFixed(1)},${y(d.v).toFixed(1)}`).join(" ");
+    const thr = (v, cls, label) => `<line x1="${L0}" x2="${W - R0}" y1="${y(v)}" y2="${y(v)}" stroke="var(--${cls})" stroke-dasharray="4 4" stroke-width="1"></line>
+      <text x="${L0 - 6}" y="${y(v) + 4}" text-anchor="end" style="fill:var(--${cls})">${h(f(v))}</text>
+      <text x="${W - R0}" y="${y(v) - 5}" text-anchor="end" style="fill:var(--${cls})">${label}</text>`;
+    const last = s.length - 1;
+    return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${h(p.title)} over the last ${s.length} ${p.window === "today" ? "days at 08:45" : "days, rolling 7-day"}">
+      ${thr(p.thr.green, "green", "green line")}${thr(p.thr.red, "red", "red line")}
+      <polygon points="${x(0)},${H - B0} ${pts} ${x(last)},${H - B0}" fill="var(--${p.status})" opacity="0.1"></polygon>
+      <polyline points="${pts}" fill="none" stroke="var(--${p.status})" stroke-width="2" stroke-linejoin="round"></polyline>
+      ${s.map((d, i) => `<circle cx="${x(i)}" cy="${y(d.v)}" r="${i === last ? 4 : 2}" fill="var(--${LIB.statusFor({ ...p.thr, better: p.better }, d.v)})"><title>${h(d.date)}: ${h(d.display)}</title></circle>`).join("")}
+      <text x="${x(0)}" y="${H - 8}" text-anchor="start">${h(LIB.fmtDate(s[0].date))}</text>
+      <text x="${x(last)}" y="${H - 8}" text-anchor="end">${h(LIB.fmtDate(s[last].date))}</text>
+      <text x="${x(last) - 8}" y="${y(vs[last]) - 8}" text-anchor="end" style="fill:var(--ink);font-weight:500">${h(s[last].display)}</text>
+    </svg></div>`;
+  }
+
+  // ---------- masthead + banner ----------
+  function renderMast() {
+    const r = D.runs[0];
+    const when = r ? new Date(r.at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "";
+    const trig = r ? { schedule: "08:45 schedule", push: "owner update", workflow_dispatch: "manual run", manual: "local run" }[r.trigger] || r.trigger : "";
+    $("#runline").innerHTML = `<span class="live" aria-hidden="true"></span>
+      <span>Last run ${h(when)} IST · ${h(trig)}${r?.runUrl ? ` · <a href="${h(r.runUrl)}" target="_blank" rel="noopener">see run</a>` : ""}</span>
+      <span class="chip-sample">Sample data</span>`;
+    const n = Object.keys(drafts).length;
+    $("#banner").innerHTML = n ? `<div class="banner" style="margin-bottom:24px">
+      <div><b>Previewing ${n} unsent owner update${n > 1 ? "s" : ""}.</b> The brief, tracker and email on this page include ${n > 1 ? "them" : "it"}. To send for real, commit the JSON below to <span class="mono">lenskart-tracker/data/inbox/</span>; the pipeline runs on that push and emails everyone.</div>
+      <pre id="draft-json">${h(draftJson())}</pre>
+      <div class="btn-row"><button class="btn" id="copy-drafts" type="button">Copy update JSON</button><button class="btn ghost" id="clear-drafts" type="button">Discard</button></div></div>` : "";
+    if (n) {
+      $("#copy-drafts").onclick = () => copy(draftJson());
+      $("#clear-drafts").onclick = () => { drafts = {}; store.set("lk-drafts", drafts); renderAll(); toast("Discarded"); };
+    }
+    const reds = dg.counts.red;
+    $('#tabs a[data-view="tracker"]').innerHTML = `All items<span class="count">${reds} red</span>`;
+  }
+  const draftJson = () => JSON.stringify({ updates: Object.entries(drafts).map(([id, d]) => ({ id, ...d, date: D.asOf })) }, null, 2);
+
+  // ---------- brief ----------
+  function decision(p, i) {
+    const linked = p.linked.map(byId).filter(Boolean);
+    const side = p.kind === "metric"
+      ? `<div class="eyebrow">${h(p.asOfLabel)}</div><div class="big">${h(p.display)}</div><div class="muted" style="font-size:13px">Target ${h(p.targetText)} · red ${h(p.redText)}</div>${spark(p, 200, 44)}`
+      : `<div class="eyebrow">Progress</div><div class="big">${p.progress}%</div><div class="meter"><span style="width:${p.progress}%"></span></div>
+         <div class="muted" style="font-size:13px">Due ${h(LIB.fmtDate(p.due))}${p.slip > 0 ? `, was ${h(LIB.fmtDate(p.originalDue))}` : ""}<br>Last update ${h(LIB.fmtDate(p.lastUpdate))}</div>`;
+    return `<article class="decision ${p.status}">
+      <div class="rank">${i + 1}</div>
+      <div class="body">
+        <div class="eyebrow">${h(p.fnName)}</div>
+        <h3>${h(p.title)}</h3>
+        <div class="meta">${pill(p.status, p.worsened ? ` · was ${L[p.lastStatus]}` : "")}<span>Owner <b>${h(p.owner)}</b></span><span class="mono">${h(p.id)}</span></div>
+        ${p.mismatch ? `<div class="mismatch">${h(p.mismatch)}</div>` : ""}
+        <ul>${p.reasons.filter((r) => r !== p.mismatch).map((r) => `<li>${h(r)}</li>`).join("")}${p.blocker ? `<li><b>Blocker:</b> ${h(p.blocker)}</li>` : ""}${p.detail?.length ? `<li><b>${h(p.detailLabel || "Detail")}:</b> ${p.detail.map(h).join(", ")}</li>` : ""}</ul>
+        ${linked.length ? `<div class="linked"><span class="muted" style="font-size:13px;align-self:center">Also causing</span>${linked.map((x) => `<button class="linkbtn" type="button" data-open="${h(x.id)}"><span class="dot ${x.status}"></span>${h(x.title)} · ${h(x.display || L[x.status])}</button>`).join("")}</div>` : ""}
+        ${p.ask ? `<div class="ask"><span class="eyebrow">Decision needed</span>${h(p.ask)}</div>` : ""}
+        <div><button class="open" type="button" data-open="${h(p.id)}">Open details${p.kind === "metric" ? " and SQL" : " and post an update"}</button></div>
+      </div>
+      <div class="side">${side}</div>
+    </article>`;
+  }
+
+  function renderBrief() {
+    const sd = D.storeDesk;
+    const fnRows = dg.byFn.map((f) => {
+      const tot = f.total || 1;
+      return `<button class="fn-row" type="button" data-fn="${h(f.id)}">
+        <div><div class="fn-name"><span class="dot ${f.worst}"></span><span>${h(f.name)}</span></div><div class="fn-head">${h(f.head)}${f.worsened ? ` · <span style="color:var(--red)">${f.worsened} worse</span>` : ""}${f.improved ? ` · <span style="color:var(--green)">${f.improved} better</span>` : ""}</div></div>
+        <div class="stack" aria-hidden="true">${f.counts.red ? `<i class="r" style="flex:${f.counts.red / tot}"></i>` : ""}${f.counts.amber ? `<i class="a" style="flex:${f.counts.amber / tot}"></i>` : ""}${f.counts.green ? `<i class="g" style="flex:${f.counts.green / tot}"></i>` : ""}</div>
+        <div class="fn-counts" aria-label="${f.counts.red} red, ${f.counts.amber} amber, ${f.counts.green} green"><span class="r">${f.counts.red}</span> · <span class="a">${f.counts.amber}</span> · <span class="g">${f.counts.green}</span></div>
+      </button>`;
+    }).join("");
+    const pct = Math.round((1000 * sd.loggedIn) / sd.rostered) / 10;
+    $("#view-brief").innerHTML = `
+      <div class="lede">
+        <div class="eyebrow">${h(longDate(D.asOf))} · Week ${dg.week}</div>
+        <h1>${dg.top.length} things need your attention this week</h1>
+        <p class="sum">${dg.all.length} tracked items across ${dg.byFn.length} functions: <b class="r">${dg.counts.red} red</b>, <b class="a">${dg.counts.amber} amber</b>, <b class="g">${dg.counts.green} green</b>. ${dg.worsened.length} got worse since last week and ${dg.improved.length} got better. Statuses for metrics come straight from the data; projects come from their owners.</p>
+        <div class="checkline ${dg.checksOk ? "" : "bad"}"><span class="dot ${dg.checksOk ? "green" : "red"}"></span>${dg.checksOk ? `All ${dg.checks.length} data checks passed this morning` : `Data checks failed: ${dg.checks.filter((c) => !c.ok).map((c) => h(c.title)).join("; ")}`} · <a href="#pipeline">see checks</a></div>
+      </div>
+      <div class="top3">${dg.top.map(decision).join("")}</div>
+      <div class="cols">
+        <section class="panel" aria-labelledby="desk-h">
+          <header><h2 id="desk-h">Stores this morning</h2><a href="#stores" class="open">All ${sd.stores} stores</a></header>
+          <div class="attend"><div class="big">${pct}%</div><div style="display:grid;gap:6px"><div class="meter"><span style="width:${pct}%"></span></div><div class="muted" style="font-size:13px">${sd.loggedIn} of ${sd.rostered} rostered staff logged in by ${h(sd.checkTime)}</div></div></div>
+          <div class="list">
+            ${sd.noOptometrist.length ? `<div class="desk-row"><span class="dot red"></span><div><b>No optometrist yet, so no eye tests</b><div class="muted">${sd.noOptometrist.map(h).join(", ")}</div></div></div>` : `<div class="desk-row"><span class="dot green"></span><div><b>Every store has an optometrist in</b></div></div>`}
+            ${sd.shortStaffed.length ? `<div class="desk-row"><span class="dot amber"></span><div><b>Two or more staff not logged in</b><div class="muted">${sd.shortStaffed.map(h).join(", ")}</div></div></div>` : ""}
+            ${sd.belowTarget.length ? `<div class="desk-row"><span class="dot amber"></span><div><b>Under 80% of sales target yesterday</b><div class="muted">${sd.belowTarget.map(h).join(", ")}</div></div></div>` : ""}
+          </div>
+        </section>
+        <section class="panel" aria-labelledby="fn-h">
+          <header><h2 id="fn-h">By function</h2><span class="muted" style="font-size:13px">red · amber · green</span></header>
+          <div>${fnRows}</div>
+        </section>
+      </div>
+      ${dg.wins.length ? `<section style="display:grid;gap:12px"><h2>Wins this week</h2><div class="wins">${dg.wins.map((p) => `<div class="win"><div class="eyebrow">${h(p.fnName)}</div><b>${h(p.title)}</b><div class="muted" style="font-size:14px">${h(p.win || `Back to green: ${p.display || ""}`)}</div><div style="font-size:13px">${h(p.owner)}</div></div>`).join("")}</div></section>` : ""}`;
+  }
+
+  // ---------- tracker ----------
+  function renderTracker() {
+    const q = filt.q.trim().toLowerCase();
+    const list = dg.all.filter((p) => (filt.fn === "all" || p.fn === filt.fn) && (filt.status === "all" || p.status === filt.status) && (filt.kind === "all" || p.kind === filt.kind)
+      && (!q || `${p.title} ${p.owner} ${p.id} ${p.fnName}`.toLowerCase().includes(q)) && (!filt.flagged || flagsFor(p).length))
+      .sort((a, b) => b.score - a.score || LIB.RANK[b.status] - LIB.RANK[a.status] || a.id.localeCompare(b.id));
+    const seg = (key, opts) => `<div class="seg" role="group">${opts.map(([v, l]) => `<button type="button" data-${key}="${v}" aria-pressed="${filt[key] === v}">${l}</button>`).join("")}</div>`;
+    $("#view-tracker").innerHTML = `
+      <div class="lede"><h1>All tracked items</h1><p class="sum">Metrics are worked out from the warehouse every morning; projects carry their owner's latest update. Sorted by how urgently leadership should look, highest first. Click any row for the detail.</p></div>
+      <div class="filters">
+        <select class="field" id="f-fn" aria-label="Function"><option value="all">All functions</option>${D.functions.map((f) => `<option value="${f.id}" ${filt.fn === f.id ? "selected" : ""}>${h(f.name)}</option>`).join("")}</select>
+        ${seg("status", [["all", "All"], ["red", "Red"], ["amber", "Amber"], ["green", "Green"]])}
+        ${seg("kind", [["all", "Both"], ["metric", "Metrics"], ["project", "Projects"]])}
+        <input class="field" id="f-q" type="search" placeholder="Search item or owner" value="${h(filt.q)}" aria-label="Search">
+        <label class="check"><input type="checkbox" id="f-flag" ${filt.flagged ? "checked" : ""}> Flagged only</label>
+      </div>
+      <div class="tablebox"><table>
+        <thead><tr><th>Status</th><th>Item</th><th>Owner</th><th>Now</th><th>Trend</th><th>Flags</th><th class="right">Score</th></tr></thead>
+        <tbody>${list.length ? list.map((p) => `<tr class="click" data-open="${h(p.id)}" tabindex="0">
+          <td>${pill(p.status)}</td>
+          <td class="title"><b>${h(p.title)}</b><span class="sub">${h(p.fnName)} · <span class="mono">${h(p.id)}</span> · ${p.kind === "metric" ? "from data" : "owner update"}</span></td>
+          <td style="white-space:nowrap">${h(p.owner)}</td>
+          <td class="num" style="white-space:nowrap">${p.kind === "metric" ? `<b>${h(p.display)}</b><div class="sub">target ${h(p.targetText)}</div>` : `<b>${p.progress}%</b><div class="sub">due ${h(LIB.fmtDate(p.due))}</div>`}</td>
+          <td>${p.kind === "metric" ? spark(p) : `<div class="prog"><div class="meter"><span style="width:${p.progress}%"></span></div></div>`}</td>
+          <td><div class="flags">${flagsFor(p).join("")}</div></td>
+          <td class="right num mono">${Math.round(p.score)}</td></tr>`).join("") : `<tr><td colspan="7" class="empty">Nothing matches these filters.</td></tr>`}</tbody>
+      </table></div>
+      <p class="muted" style="font-size:13px">Score: Red 50, Amber 20, plus 25 if it got worse this week, plus points for slipped or near deadlines, blockers, missing updates, business impact, and each other problem it is causing. An owner status that is better than the data underneath adds 15.</p>`;
+    $("#f-fn").onchange = (e) => setFilt({ fn: e.target.value });
+    $("#f-q").oninput = (e) => { filt.q = e.target.value; store.set("lk-filter", filt); const pos = e.target.selectionStart; renderTracker(); const el = $("#f-q"); el.focus(); el.setSelectionRange(pos, pos); };
+    $("#f-flag").onchange = (e) => setFilt({ flagged: e.target.checked });
+    $("#view-tracker").querySelectorAll("[data-status]").forEach((b) => (b.onclick = () => setFilt({ status: b.dataset.status })));
+    $("#view-tracker").querySelectorAll("[data-kind]").forEach((b) => (b.onclick = () => setFilt({ kind: b.dataset.kind })));
+  }
+  function setFilt(patch) { Object.assign(filt, patch); store.set("lk-filter", filt); renderTracker(); }
+
+  // ---------- stores ----------
+  function renderStores() {
+    const sd = D.storeDesk;
+    const rank = (r) => (r.opto_rostered > 0 && r.opto_logged === 0 ? 3 : 0) + (r.rostered - r.logged >= 2 ? 2 : r.rostered - r.logged) + (r.pctTarget < 80 ? 1 : 0);
+    const q = storeFilt.q.trim().toLowerCase();
+    const rows = D.storeRows.filter((r) => (!storeFilt.issues || rank(r) > 0) && (!q || `${r.name} ${r.city} ${r.country} ${r.store_id}`.toLowerCase().includes(q)))
+      .sort((a, b) => rank(b) - rank(a) || a.pctTarget - b.pctTarget);
+    const money = (v) => "₹" + Math.round(v).toLocaleString("en-IN");
+    $("#view-stores").innerHTML = `
+      <div class="lede"><div class="eyebrow">${h(longDate(D.asOf))} · snapshot at ${h(sd.checkTime)}</div><h1>Stores today</h1>
+        <p class="sum">${sd.loggedIn} of ${sd.rostered} rostered staff logged in across ${sd.stores} stores. Store managers get this list before opening. Sales are yesterday's, against each store's daily target.</p></div>
+      <div class="filters">
+        <input class="field" id="s-q" type="search" placeholder="Search store or city" value="${h(storeFilt.q)}" aria-label="Search stores">
+        <label class="check"><input type="checkbox" id="s-issues" ${storeFilt.issues ? "checked" : ""}> Only stores that need action</label>
+        <span class="muted" style="font-size:13px">${rows.length} shown</span>
+      </div>
+      <div class="tablebox"><table>
+        <thead><tr><th>Store</th><th>Staff in by ${h(sd.checkTime)}</th><th>Optometrist</th><th>Yesterday vs target</th><th>Not logged in</th></tr></thead>
+        <tbody>${rows.length ? rows.map((r) => {
+          const optoOk = r.opto_rostered === 0 || r.opto_logged > 0;
+          const col = r.pctTarget >= 100 ? "green" : r.pctTarget >= 80 ? "amber" : "red";
+          return `<tr>
+          <td class="title"><b>${h(r.name)}</b><span class="sub">${h(r.city)}${r.country !== "India" ? `, ${h(r.country)}` : ""} · <span class="mono">${h(r.store_id)}</span></span></td>
+          <td class="num" style="white-space:nowrap">${r.logged} / ${r.rostered}<span class="staffdots" aria-hidden="true">${Array.from({ length: r.rostered }, (_, i) => `<i class="${i < r.logged ? "" : "off"}"></i>`).join("")}</span></td>
+          <td>${r.opto_rostered === 0 ? `<span class="muted">Off today</span>` : optoOk ? `<span class="pill green">In</span>` : `<span class="pill red">Not in</span>`}</td>
+          <td style="min-width:170px"><div style="display:flex;gap:10px;align-items:center"><div class="bar" style="flex:1" title="Target marker at 100%"><span style="width:${Math.min(100, r.pctTarget / 1.3)}%;background:var(--${col})"></span><i class="tick"></i></div><span class="num mono" style="width:44px;text-align:right">${r.pctTarget}%</span></div><div class="sub">${money(r.rev_yday)} of ${money(r.target)}</div></td>
+          <td style="font-size:13px">${r.missing.length ? r.missing.map(h).join("<br>") : `<span class="muted">Everyone in</span>`}</td></tr>`;
+        }).join("") : `<tr><td colspan="5" class="empty">No stores match.</td></tr>`}</tbody>
+      </table></div>`;
+    $("#s-q").oninput = (e) => { storeFilt.q = e.target.value; const pos = e.target.selectionStart; renderStores(); const el = $("#s-q"); el.focus(); el.setSelectionRange(pos, pos); };
+    $("#s-issues").onchange = (e) => { storeFilt.issues = e.target.checked; renderStores(); };
+  }
+
+  // ---------- email ----------
+  function renderEmailView() {
+    const n = Object.keys(drafts).length;
+    const html = n ? LIB.renderEmail(dg, { ...D.meta, generatedBy: "Preview with unsent owner updates. Not sent yet." }) : D.emailHtml;
+    const subject = `Leadership brief ${D.asOf}: ${dg.counts.red} red · top 3: ${dg.top.map((p) => p.title).join(" / ")}`;
+    $("#view-email").innerHTML = `
+      <div class="lede"><h1>The email leadership gets</h1><p class="sum">${n ? "This preview includes your unsent updates." : "This is exactly what this morning's run sent."} It goes out as a GitHub issue that GitHub emails to everyone watching the repository, and as a real email when mail settings are added.</p></div>
+      <div class="emailframe"><div class="emailhead"><div><b>Subject:</b> ${h(subject)}</div><div class="muted">From: Leadership brief bot · To: leadership@ (sample)</div></div><div id="email-host"></div></div>`;
+    const host = $("#email-host");
+    const root = host.attachShadow({ mode: "open" });
+    root.innerHTML = `<style>:host{display:block;background:#EEF1F5;color:#14213D}</style>` + html.replace(/^[\s\S]*?<body[^>]*>/i, "").replace(/<\/body>[\s\S]*$/i, "");
+  }
+
+  // ---------- pipeline ----------
+  function renderPipeline() {
+    const runs = D.runs.map((r) => `<tr>
+      <td class="num" style="white-space:nowrap">${h(new Date(r.at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }))} IST</td>
+      <td>${h({ schedule: "08:45 schedule", push: "Owner update pushed", workflow_dispatch: "Manual run", manual: "Local run" }[r.trigger] || r.trigger)}</td>
+      <td style="font-size:13px">${r.changes?.length ? r.changes.map((c) => `${h(c.id)}: ${h(L[c.before.status])} → ${h(L[c.after.status])}`).join("<br>") : `<span class="muted">none</span>`}</td>
+      <td class="mono" style="font-size:12.5px">${(r.top || []).map(h).join(", ")}</td>
+      <td class="num"><span style="color:var(--red)">${r.counts?.red ?? ""}</span> / <span style="color:var(--amber)">${r.counts?.amber ?? ""}</span> / <span style="color:var(--green)">${r.counts?.green ?? ""}</span></td>
+      <td>${r.checksOk === false ? `<span class="pill red">Failed</span>` : `<span class="pill green">Passed</span>`}</td>
+      <td>${r.runUrl ? `<a href="${h(r.runUrl)}" target="_blank" rel="noopener">Log</a>` : `<span class="muted">local</span>`}</td></tr>`).join("");
+    $("#view-pipeline").innerHTML = `
+      <div class="lede"><h1>How it runs</h1><p class="sum">Nobody presses a button. A GitHub Actions workflow runs every morning at 08:45 IST, and again whenever a function head pushes an update into the inbox folder.</p></div>
+      <div class="steps">
+        <div class="step"><b>Trigger</b><p>08:45 IST schedule, or an owner update landing in data/inbox</p></div>
+        <div class="step"><b>Refresh the tables</b><p>Nightly sales, attendance, hubs, lab, support, Gold, marketing, finance</p></div>
+        <div class="step"><b>Check the data</b><p>${D.checks.length} checks, including finance reconciled to store + online sales</p></div>
+        <div class="step"><b>Work out every status</b><p>${D.items.filter((i) => i.kind === "metric").length} SQL metrics against targets, plus ${D.items.filter((i) => i.kind === "project").length} owner-updated projects</p></div>
+        <div class="step"><b>Rank and pick 3</b><p>Root causes absorb what they cause; owner-vs-data gaps get flagged</p></div>
+        <div class="step"><b>Send and publish</b><p>Email via GitHub issue (and SMTP if set up); this page is rebuilt</p></div>
+      </div>
+      <section style="display:grid;gap:12px"><h2>Recent runs</h2>
+        <div class="tablebox"><table><thead><tr><th>When</th><th>Trigger</th><th>Owner updates</th><th>Top 3</th><th>R / A / G</th><th>Checks</th><th>Run</th></tr></thead><tbody>${runs}</tbody></table></div></section>
+      <section style="display:grid;gap:12px"><h2>Data checks this morning</h2>
+        <div class="panel"><div class="list">${D.checks.map((c) => `<div class="desk-row"><span class="dot ${c.ok ? "green" : "red"}"></span><div>${h(c.title)}${c.ok ? "" : ` <b style="color:var(--red)">(${c.bad} bad rows)</b>`}</div></div>`).join("")}</div></div></section>
+      <section style="display:grid;gap:12px"><h2>Warehouse tables</h2><p class="muted" style="max-width:70ch">Sample tables generated with AI-written rules so the numbers hang together: a hub backlog drives late deliveries, which drive "where is my order" tickets. To go live, point the loader at the real warehouse; the metric SQL stays the same.</p>
+        <div class="tables">${Object.entries(D.tables).map(([k, v]) => `<div><b class="mono">${h(k)}</b><span class="muted num">${v.rows.toLocaleString("en-IN")} rows</span><span class="muted" style="font-size:12px">${v.columns.map(h).join(", ")}</span></div>`).join("")}</div></section>`;
+  }
+
+  // ---------- drawer ----------
+  function openItem(id) {
+    const p = byId(id); if (!p) return;
+    const k = inTop(id);
+    const dependents = dg.all.filter((x) => x.dependsOn === id);
+    const parent = p.dependsOn ? byId(p.dependsOn) : null;
+    const rel = (x) => `<button class="linkbtn" type="button" data-open="${h(x.id)}"><span class="dot ${x.status}"></span>${h(x.title)}</button>`;
+    let body = `<button class="x" type="button" id="drawer-close">Close</button>
+      <div style="display:grid;gap:8px"><div class="eyebrow">${h(p.fnName)} · ${p.kind === "metric" ? "Metric from data" : "Project, owner update"}${k >= 0 ? ` · Top ${k + 1} this week` : ""}</div>
+      <h2>${h(p.title)}</h2><div class="meta" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${pill(p.status, p.worsened ? ` · was ${L[p.lastStatus]}` : p.improved ? ` · was ${L[p.lastStatus]}` : "")}<span class="flags">${flagsFor(p).join("")}</span></div></div>
+      ${p.mismatch ? `<div class="mismatch" style="background:var(--red-bg);color:var(--red);font-weight:600;padding:8px 10px;border-radius:4px">${h(p.mismatch)}</div>` : ""}
+      <dl class="kv">
+        <dt>Owner</dt><dd>${h(p.owner)}</dd>
+        ${p.kind === "metric" ? `<dt>Now</dt><dd class="num"><b>${h(p.display)}</b> · ${h(p.asOfLabel)}</dd><dt>Before</dt><dd class="num">${h(p.prevDisplay)}</dd><dt>Green / red</dt><dd class="num">${h(p.targetText)} / ${h(p.redText)}</dd>${p.detail?.length ? `<dt>${h(p.detailLabel || "Detail")}</dt><dd>${p.detail.map(h).join("<br>")}</dd>` : ""}`
+          : `<dt>Progress</dt><dd class="num">${p.progress}%</dd><dt>Due</dt><dd>${h(LIB.fmtDate(p.due))}${p.slip > 0 ? ` (originally ${h(LIB.fmtDate(p.originalDue))})` : ""}</dd><dt>Last update</dt><dd>${h(LIB.fmtDate(p.lastUpdate))}</dd>${p.blocker ? `<dt>Blocker</dt><dd>${h(p.blocker)}</dd>` : ""}${p.note ? `<dt>Note</dt><dd>${h(p.note)}</dd>` : ""}${p.win ? `<dt>Win</dt><dd>${h(p.win)}</dd>` : ""}`}
+        ${p.ask ? `<dt>Decision needed</dt><dd><b>${h(p.ask)}</b></dd>` : ""}
+        <dt>Why it ranks</dt><dd>${p.reasons.length ? p.reasons.map(h).join("<br>") : "Green"} <span class="muted mono">(score ${Math.round(p.score)})</span></dd>
+        ${parent ? `<dt>Caused by</dt><dd>${rel(parent)}</dd>` : ""}
+        ${dependents.length ? `<dt>Is causing</dt><dd style="display:flex;flex-wrap:wrap;gap:6px">${dependents.map(rel).join("")}</dd>` : ""}
+      </dl>`;
+    if (p.kind === "metric") {
+      body += `${bigChart(p)}<div style="display:grid;gap:6px"><div class="eyebrow">How it's calculated · tables: ${p.tables.map(h).join(", ")}</div><pre class="sql">${h(p.sql)}</pre></div>`;
+    } else {
+      const d = drafts[id] || {};
+      const cur = { status: d.status || p.status, progress: d.progress ?? p.progress, blocker: d.blocker ?? p.blocker ?? "", note: d.note ?? p.note ?? "" };
+      body += `<form class="update" id="upd">
+        <div style="display:grid;gap:2px"><h3>Post an owner update</h3><p class="muted" style="font-size:13px">Preview how leadership will see it. Nothing is sent until the update is committed to the inbox.</p></div>
+        <div class="seg" role="radiogroup" aria-label="Status">${["red", "amber", "green"].map((s) => `<button type="button" data-set="${s}" aria-pressed="${cur.status === s}">${L[s]}</button>`).join("")}</div>
+        <label>Progress (%)<input class="field" id="u-progress" type="number" min="0" max="100" value="${cur.progress}"></label>
+        <label>Blocker (leave empty if none)<input class="field" id="u-blocker" type="text" value="${h(cur.blocker)}"></label>
+        <label>Note for leadership<textarea class="field" id="u-note">${h(cur.note)}</textarea></label>
+        <div class="btn-row"><button class="btn" type="submit">Preview in the brief</button>${drafts[id] ? `<button class="btn ghost" type="button" id="u-discard">Discard this update</button>` : ""}</div>
+      </form>`;
+    }
+    $("#drawer-body").innerHTML = body;
+    const dlg = $("#drawer");
+    if (!dlg.open) { try { dlg.showModal(); } catch { dlg.setAttribute("open", ""); } }
+    $("#drawer-close").onclick = () => dlg.close();
+    const form = $("#upd");
+    if (form) {
+      let st = (drafts[id] || {}).status || p.status;
+      form.querySelectorAll("[data-set]").forEach((b) => (b.onclick = () => { st = b.dataset.set; form.querySelectorAll("[data-set]").forEach((x) => x.setAttribute("aria-pressed", x === b)); }));
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        drafts[id] = { status: st, progress: Math.max(0, Math.min(100, parseInt($("#u-progress").value, 10) || 0)), blocker: $("#u-blocker").value.trim(), note: $("#u-note").value.trim() };
+        store.set("lk-drafts", drafts); renderAll(); openItem(id); toast("Preview updated. Copy the JSON at the top to send it.");
+      };
+      const disc = $("#u-discard");
+      if (disc) disc.onclick = () => { delete drafts[id]; store.set("lk-drafts", drafts); renderAll(); openItem(id); toast("Update discarded"); };
+    }
+  }
+
+  // ---------- routing ----------
+  const VIEWS = ["brief", "tracker", "stores", "email", "pipeline"];
+  let rendered = {};
+  function show() {
+    const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "brief";
+    VIEWS.forEach((x) => { $("#view-" + x).hidden = x !== v; });
+    document.querySelectorAll("#tabs a").forEach((a) => a.setAttribute("aria-current", a.dataset.view === v ? "page" : "false"));
+    if (!rendered[v]) { ({ brief: renderBrief, tracker: renderTracker, stores: renderStores, email: renderEmailView, pipeline: renderPipeline })[v](); rendered[v] = true; }
+  }
+  function renderAll() { recompute(); renderMast(); rendered = {}; show(); }
+
+  document.addEventListener("click", (e) => {
+    const o = e.target.closest("[data-open]");
+    if (o) { e.preventDefault(); openItem(o.dataset.open); return; }
+    const f = e.target.closest("[data-fn]");
+    if (f) { filt = { ...filt, fn: f.dataset.fn, status: "all", kind: "all", q: "", flagged: false }; store.set("lk-filter", filt); rendered.tracker = false; location.hash = "tracker"; }
+  });
+  document.addEventListener("keydown", (e) => { const r = e.target.closest?.("tr[data-open]"); if (r && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openItem(r.dataset.open); } });
+  $("#drawer").addEventListener("click", (e) => { if (e.target === $("#drawer")) $("#drawer").close(); });
+  window.addEventListener("hashchange", show);
+  renderAll();
+})();
+</script>

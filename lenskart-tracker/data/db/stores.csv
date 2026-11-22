@@ -1,0 +1,79 @@
+store_id,name,city,state,country,tier,daily_target_inr
+IN-DEL-01,Delhi Central,Delhi,Delhi,India,1,140000
+IN-DEL-02,Delhi Mall Road,Delhi,Delhi,India,1,140000
+IN-DEL-03,Delhi Station Road,Delhi,Delhi,India,1,140000
+IN-DEL-04,Delhi High Street,Delhi,Delhi,India,1,140000
+IN-DEL-05,Delhi North,Delhi,Delhi,India,1,140000
+IN-MUM-01,Mumbai Central,Mumbai,Maharashtra,India,1,140000
+IN-MUM-02,Mumbai Mall Road,Mumbai,Maharashtra,India,1,140000
+IN-MUM-03,Mumbai Station Road,Mumbai,Maharashtra,India,1,140000
+IN-MUM-04,Mumbai High Street,Mumbai,Maharashtra,India,1,140000
+IN-MUM-05,Mumbai North,Mumbai,Maharashtra,India,1,140000
+IN-BEN-01,Bengaluru Central,Bengaluru,Karnataka,India,1,140000
+IN-BEN-02,Bengaluru Mall Road,Bengaluru,Karnataka,India,1,140000
+IN-BEN-03,Bengaluru Station Road,Bengaluru,Karnataka,India,1,140000
+IN-BEN-04,Bengaluru High Street,Bengaluru,Karnataka,India,1,140000
+IN-BEN-05,Bengaluru North,Bengaluru,Karnataka,India,1,140000
+IN-HYD-01,Hyderabad Central,Hyderabad,Telangana,India,1,140000
+IN-HYD-02,Hyderabad Mall Road,Hyderabad,Telangana,India,1,140000
+IN-HYD-03,Hyderabad Station Road,Hyderabad,Telangana,India,1,140000
+IN-HYD-04,Hyderabad High Street,Hyderabad,Telangana,India,1,140000
+IN-CHE-01,Chennai Central,Chennai,Tamil Nadu,India,1,140000
+IN-CHE-02,Chennai Mall Road,Chennai,Tamil Nadu,India,1,140000
+IN-CHE-03,Chennai Station Road,Chennai,Tamil Nadu,India,1,140000
+IN-CHE-04,Chennai High Street,Chennai,Tamil Nadu,India,1,140000
+IN-KOL-01,Kolkata Central,Kolkata,West Bengal,India,1,140000
+IN-KOL-02,Kolkata Mall Road,Kolkata,West Bengal,India,1,140000
+IN-KOL-03,Kolkata Station Road,Kolkata,West Bengal,India,1,140000
+IN-PUN-01,Pune Central,Pune,Maharashtra,India,1,140000
+IN-PUN-02,Pune Mall Road,Pune,Maharashtra,India,1,140000
+IN-PUN-03,Pune Station Road,Pune,Maharashtra,India,1,140000
+IN-AHM-01,Ahmedabad Central,Ahmedabad,Gujarat,India,1,140000
+IN-AHM-02,Ahmedabad Mall Road,Ahmedabad,Gujarat,India,1,140000
+IN-AHM-03,Ahmedabad Station Road,Ahmedabad,Gujarat,India,1,140000
+IN-JAI-01,Jaipur Central,Jaipur,Rajasthan,India,2,100000
+IN-JAI-02,Jaipur Mall Road,Jaipur,Rajasthan,India,2,100000
+IN-JAI-03,Jaipur Station Road,Jaipur,Rajasthan,India,2,100000
+IN-LUC-01,Lucknow Central,Lucknow,Uttar Pradesh,India,2,100000
+IN-LUC-02,Lucknow Mall Road,Lucknow,Uttar Pradesh,India,2,100000
+IN-LUC-03,Lucknow Station Road,Lucknow,Uttar Pradesh,India,2,100000
+IN-IND-01,Indore Central,Indore,Madhya Pradesh,India,2,100000
+IN-IND-02,Indore Mall Road,Indore,Madhya Pradesh,India,2,100000
+IN-CHA-01,Chandigarh Central,Chandigarh,Punjab,India,2,100000
+IN-CHA-02,Chandigarh Mall Road,Chandigarh,Punjab,India,2,100000
+IN-KOC-01,Kochi Central,Kochi,Kerala,India,2,100000
+IN-KOC-02,Kochi Mall Road,Kochi,Kerala,India,2,100000
+IN-COI-01,Coimbatore Central,Coimbatore,Tamil Nadu,India,2,100000
+IN-COI-02,Coimbatore Mall Road,Coimbatore,Tamil Nadu,India,2,100000
+IN-NAG-01,Nagpur Central,Nagpur,Maharashtra,India,2,100000
+IN-NAG-02,Nagpur Mall Road,Nagpur,Maharashtra,India,2,100000
+IN-SUR-01,Surat Central,Surat,Gujarat,India,2,100000
+IN-SUR-02,Surat Mall Road,Surat,Gujarat,India,2,100000
+IN-PAT-01,Patna Central,Patna,Bihar,India,3,75000
+IN-PAT-02,Patna Mall Road,Patna,Bihar,India,3,75000
+IN-RAN-01,Ranchi Central,Ranchi,Jharkhand,India,3,75000
+IN-DEH-01,Dehradun Central,Dehradun,Uttarakhand,India,3,75000
+IN-MYS-01,Mysuru Central,Mysuru,Karnataka,India,3,75000
+IN-UDA-01,Udaipur Central,Udaipur,Rajasthan,India,3,75000
+IN-VAR-01,Varanasi Central,Varanasi,Uttar Pradesh,India,3,75000
+IN-VAR-02,Varanasi Mall Road,Varanasi,Uttar Pradesh,India,3,75000
+IN-GUW-01,Guwahati Central,Guwahati,Assam,India,3,75000
+IN-GUW-02,Guwahati Mall Road,Guwahati,Assam,India,3,75000
+IN-RAI-01,Raipur Central,Raipur,Chhattisgarh,India,3,75000
+IN-RAI-02,Raipur Mall Road,Raipur,Chhattisgarh,India,3,75000
+AE-DUB-01,Dubai Central,Dubai,Dubai,UAE,1,160000
+AE-DUB-02,Dubai Mall Road,Dubai,Dubai,UAE,1,160000
+AE-DUB-03,Dubai Station Road,Dubai,Dubai,UAE,1,160000
+AE-DUB-04,Dubai High Street,Dubai,Dubai,UAE,1,160000
+AE-ABU-01,Abu Dhabi Central,Abu Dhabi,Abu Dhabi,UAE,1,150000
+AE-ABU-02,Abu Dhabi Mall Road,Abu Dhabi,Abu Dhabi,UAE,1,150000
+SA-RIY-01,Riyadh Central,Riyadh,Riyadh,Saudi Arabia,1,150000
+SA-RIY-02,Riyadh Mall Road,Riyadh,Riyadh,Saudi Arabia,1,150000
+SA-RIY-03,Riyadh Station Road,Riyadh,Riyadh,Saudi Arabia,1,150000
+SA-RIY-04,Riyadh High Street,Riyadh,Riyadh,Saudi Arabia,1,150000
+SA-JED-01,Jeddah Central,Jeddah,Jeddah,Saudi Arabia,1,140000
+SA-JED-02,Jeddah Mall Road,Jeddah,Jeddah,Saudi Arabia,1,140000
+SG-SIN-01,Singapore Central,Singapore,Singapore,Singapore,1,180000
+SG-SIN-02,Singapore Mall Road,Singapore,Singapore,Singapore,1,180000
+SG-SIN-03,Singapore Station Road,Singapore,Singapore,Singapore,1,180000
+SG-SIN-04,Singapore High Street,Singapore,Singapore,Singapore,1,180000

@@ -1,0 +1,63 @@
+name: Lenskart leadership brief
+on:
+  schedule:
+    - cron: "15 3 * * *" # 08:45 IST every day (runs from the default branch)
+  push:
+    paths:
+      - "lenskart-tracker/data/inbox/**"
+      - "lenskart-tracker/scripts/**"
+      - "lenskart-tracker/app/**"
+      - ".github/workflows/lenskart-brief.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+  issues: write
+concurrency:
+  group: lenskart-brief
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    env:
+      SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Refresh data, run checks, score, build email and page
+        working-directory: lenskart-tracker
+        env:
+          APP_URL: https://www.kliquestart.com/lenskart-tracker/
+          DIGEST_CC: "@${{ github.repository_owner }}"
+        run: |
+          EXTRA=""
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$(TZ=Asia/Kolkata date +%u)" = "1" ]; then EXTRA="--rollover"; fi
+          node --no-warnings scripts/run.mjs --trigger ${{ github.event_name }} $EXTRA
+          cat digest/latest.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit the refreshed brief
+        run: |
+          git config user.name "lenskart-brief-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lenskart-tracker
+          git commit -m "Leadership brief $(TZ=Asia/Kolkata date +%F) (${{ github.event_name }})" || echo "No changes"
+          git pull --rebase origin ${{ github.ref_name }} && git push origin HEAD:${{ github.ref_name }}
+      - name: Email leadership via GitHub issue
+        working-directory: lenskart-tracker
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create leadership-brief --color B60205 --description "Daily leadership brief" --force
+          for n in $(gh issue list --label leadership-brief --state open --json number -q '.[].number'); do gh issue close "$n" --comment "Superseded by a newer brief."; done
+          gh issue create --title "$(cat digest/subject.txt)" --body-file digest/latest.md --label leadership-brief
+      - name: Email leadership via SMTP (runs once SMTP secrets are added)
+        if: ${{ env.SMTP_SERVER != '' }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT || 465 }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: file://lenskart-tracker/digest/subject.txt
+          to: ${{ secrets.DIGEST_TO }}
+          from: Leadership brief <${{ secrets.SMTP_USERNAME }}>
+          html_body: file://lenskart-tracker/digest/latest-email.html
